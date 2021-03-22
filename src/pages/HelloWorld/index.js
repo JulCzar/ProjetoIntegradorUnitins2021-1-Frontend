@@ -1,9 +1,15 @@
 import React from 'react'
-import { Container } from '../common/styles'
+import { Container, FlexCentered, Title } from '~/common/styles'
 
 const App = function _App() {
   return (
-    <Container>Seja bem vindo ao início do projeto</Container>
+    <Container>
+			<FlexCentered>
+				<Title>
+					Seja bem vindo ao início do projeto!
+				</Title>
+			</FlexCentered>
+		</Container>
   )
 }
 

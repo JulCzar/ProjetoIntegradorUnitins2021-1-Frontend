@@ -1,9 +1,15 @@
 import React from 'react'
-import { Container } from '~/pages/common/styles'
+import { Container, FlexCentered, Title } from '~/common/styles'
 
 const PageNotFound = function _PageNotFound() {
   return (
-    <Container>Página não encontrada</Container>
+    <Container>
+			<FlexCentered>
+				<Title>
+					Página não encontrada
+				</Title>
+			</FlexCentered>
+		</Container>
   )
 }
 
