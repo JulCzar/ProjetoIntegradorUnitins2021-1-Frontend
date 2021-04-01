@@ -6,7 +6,7 @@ const App = function _App() {
     <Container>
 			<FlexCentered>
 				<Title>
-					Sou eu, o Tiririca!
+					Pela Aliança!
 				</Title>
 			</FlexCentered>
 		</Container>
