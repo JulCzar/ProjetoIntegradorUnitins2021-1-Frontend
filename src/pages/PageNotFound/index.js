@@ -1,16 +1,16 @@
 import React from 'react'
 import { Container, FlexCentered, Title } from '~/common/styles'
 
-const App = function _App() {
+const PageNotFound = function _PageNotFound() {
   return (
     <Container>
 			<FlexCentered>
 				<Title>
-					Pela Aliança!
+					Página não encontrada
 				</Title>
 			</FlexCentered>
 		</Container>
   )
 }
 
-export default App
+export default PageNotFound
