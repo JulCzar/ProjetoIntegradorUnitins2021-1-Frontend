@@ -6,7 +6,7 @@ const App = function _App() {
     <Container>
 			<FlexCentered>
 				<Title>
-					Seja bem vindo ao início do projeto!
+					Esse é o projeto do Júlio!
 				</Title>
 			</FlexCentered>
 		</Container>
