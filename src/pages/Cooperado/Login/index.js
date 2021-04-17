@@ -17,8 +17,8 @@ const Login = () => {
 				<Card className='p-fluid' width={400}>
 					<CardHeader title='Login'/>
 					<UnForm onSubmit={login}>
-						<UnInput name='email' label='Email'/>
-						<UnInput type='password' name='password' label='Senha'/>
+						<UnInput name='email' label='Email' required/>
+						<UnInput type='password' name='password' label='Senha' required/>
 						<p>Não possui conta? <Link to='/cadastrar'>Cadastrar-se</Link></p>
 						<Link to='#'>Esqueceu sua senha?</Link>
 						<Button className='p-mt-3' type='submit' label='Logar'/>

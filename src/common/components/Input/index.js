@@ -22,6 +22,7 @@ const UnInput = ({ name, label, defaultInput, ...rest }) => {
 		<div className='p-field'>
 			<label htmlFor={name}>{label}</label>
 			<input
+				id={name}
 				name={name}
 				ref={inputRef}
 				className='p-inputtext p-component p-filled'
