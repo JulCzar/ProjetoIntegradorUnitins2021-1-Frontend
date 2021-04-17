@@ -4,7 +4,7 @@ import { Form } from '@unform/web'
 export const Container = styled('div')`
 	background: var(--surface-b);
 	display: flex;
-	height: 100vh;
+	min-height: 100vh;
 `
 
 export const Content = styled('div')`
@@ -23,6 +23,12 @@ export const Card = styled('div')`
 `
 
 export const UnForm = styled(Form)``
+
+export const InputWrapper = styled('div')`
+	display: grid;
+	grid-template-columns: repeat(${props => (props.columns || 1)}, 1fr);
+	gap: ${props => (props.gap || 0)};
+`
 
 export const Title = styled('h1')`
 	font-size: 1.25rem;

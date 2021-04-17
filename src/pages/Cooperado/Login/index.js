@@ -6,7 +6,8 @@ import { Card, Container, Content, UnForm } from '~/common/styles'
 import { Link } from 'react-router-dom'
 
 const Login = () => {
-	const login = form => {
+	function login(form) {
+		// eslint-disable-next-line no-console
 		console.log('login não implementado!', form)
 	}
 
