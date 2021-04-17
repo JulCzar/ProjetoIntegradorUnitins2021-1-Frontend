@@ -11,7 +11,7 @@ const Routes = function _Routes() {
 				<Route path='/' component={HelloWorld} exact/>
 				<Route path='/login' component={Login}/>
 				<Route path='/cadastrar' component={Cadastro}/>
-				<Route path='/*' component={PageNotFound}/>
+				<Route path='*' component={PageNotFound}/>
 			</Switch>
 		</BrowserRouter>
 	)
