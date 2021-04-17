@@ -1,14 +1,14 @@
 import React from 'react'
-import { Container, FlexCentered, Title } from '~/common/styles'
+import { Container, Content, Title } from '~/common/styles'
 
 const PageNotFound = function _PageNotFound() {
   return (
     <Container>
-			<FlexCentered>
-				<Title>
+			<Content className='p-d-flex p-jc-center p-ai-center layout-content'>
+				<Title className='p-fluid'>
 					Página não encontrada
 				</Title>
-			</FlexCentered>
+			</Content>
 		</Container>
   )
 }
