@@ -26,8 +26,8 @@ const Cadastro = () => {
 							<UnInput name='register' label='# do Registro' required/>
 							<UnInput name='group' label='Grupo de Usuário' required/>
 						</InputWrapper>
-						<UnInput name='password' label='Senha' requires/>
-						<UnInput name='passwordConfirm' label='Confirmação de Senha' required/>
+						<UnInput type='password' name='password' label='Senha' requires/>
+						<UnInput type='password' name='passwordConfirm' label='Confirmação de Senha' required/>
 						<Button type='submit' label='Cadastrar'/>
 					</UnForm>
 				</Card>
