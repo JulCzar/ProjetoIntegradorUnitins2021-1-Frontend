@@ -1,8 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { useField } from '@unform/core'
+import { InputText, InputMask } from '~/primereact'
 
-const UnInput = ({ name, label, defaultInput, ...rest }) => {
+const UnInput = ({ name, label, defaultInput, mask, ...rest }) => {
 	const inputRef = React.useRef(null)
 	const { fieldName, defaultValue, registerField } = useField(name)
 
@@ -21,14 +22,23 @@ const UnInput = ({ name, label, defaultInput, ...rest }) => {
 	return (
 		<div className='p-field'>
 			<label htmlFor={name}>{label}</label>
-			<input
-				id={name}
-				name={name}
-				ref={inputRef}
-				className='p-inputtext p-component p-filled'
-				defaultValue={defaultValue}
-				{...rest}
-			/>
+			{mask
+				?(<InputMask
+					id={name}
+					mask={mask}
+					name={name}
+					ref={inputRef}
+					defaultValue={defaultValue}
+					{...rest}
+				/>)
+				:(<InputText
+					id={name}
+					name={name}
+					ref={inputRef}
+					defaultValue={defaultValue}
+					{...rest}
+				/>)
+			}
 		</div>
 	)
 }
@@ -36,7 +46,8 @@ const UnInput = ({ name, label, defaultInput, ...rest }) => {
 UnInput.propTypes = {
 	name: PropTypes.string.isRequired,
 	label: PropTypes.string,
-	defaultInput: PropTypes.string
+	defaultInput: PropTypes.string,
+	mask: PropTypes.string
 }
 
 export default UnInput

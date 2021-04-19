@@ -2,6 +2,8 @@
 
 :root {
   --font-family: 'Montserrat', 'Open Sans', 'Roboto', sans-serif !important;
+	--scrollbar-thumb-width: 3px;
+	--scrollbar-thumb-BG: #0003;
 }
 
 * {
@@ -22,4 +24,27 @@ a:hover {
 body {
 	color: var(--text-color);
 	font-family: var(--font-family);
+	scrollbar-color: var(--scrollbar-thumb-BG) transparent;
+	scrollbar-width: thin;
+}
+
+::-webkit-scrollbar {
+	width: var(--scrollbar-thumb-width);
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+	background: var(--scrollbar-thumb-BG);
+	border-radius: var(--scrollbar-thumb-width);
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active {
+	-webkit-text-fill-color: var(--text-color) !important;
+	transition: background-color 5000s ease-in-out 0s;
 }
