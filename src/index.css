@@ -1,19 +1,25 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400;1,600;1,700;1,800&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
 
 :root {
-  --title_font: 'Montserrat', 'Open Sans', 'Roboto', sans-serif;
-	--body_font: 'Lato', 'Open Sans', sans-serif;
+  --font-family: 'Montserrat', 'Open Sans', 'Roboto', sans-serif !important;
 }
 
 * {
+  font-size: 100%;
   margin: 0;
   padding: 0;
-  font-size: 100%;
 }
 
-.App {
-	align-items: center;
-	display: flex;
-	justify-content: center;
-	height: 100vh;
+a {
+	color: unset;
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+body {
+	color: var(--text-color);
+	font-family: var(--font-family);
 }
