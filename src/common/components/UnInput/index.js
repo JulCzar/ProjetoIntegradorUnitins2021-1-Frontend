@@ -3,8 +3,9 @@ import PropTypes from 'prop-types'
 import { useField } from '@unform/core'
 import { InputText, InputMask } from '~/primereact'
 
-const UnInput = ({ name, label, defaultInput, mask, ...rest }) => {
+const UnInput = ({ name, label, defaultInput, mask, onChange = () => {}, ...rest }) => {
 	const inputRef = React.useRef(null)
+	const [value, setValue] = React.useState(null)
 	const { fieldName, defaultValue, registerField } = useField(name)
 
 	React.useEffect(() => {
@@ -15,7 +16,7 @@ const UnInput = ({ name, label, defaultInput, mask, ...rest }) => {
 		registerField({
 			name: fieldName,
 			ref: inputRef.current,
-			getValue: ref => ref.value
+			getValue: ref => (mask?ref.props.value:ref.value)
 		})
 	}, [fieldName, registerField])
 
@@ -29,12 +30,18 @@ const UnInput = ({ name, label, defaultInput, mask, ...rest }) => {
 					name={name}
 					ref={inputRef}
 					defaultValue={defaultValue}
+					value={value}
+					onChange={i => {
+						onChange(i)
+						setValue(i.value)
+					}}
 					{...rest}
 				/>)
 				:(<InputText
 					id={name}
 					name={name}
 					ref={inputRef}
+					onChange={onChange}
 					defaultValue={defaultValue}
 					{...rest}
 				/>)
@@ -47,7 +54,8 @@ UnInput.propTypes = {
 	name: PropTypes.string.isRequired,
 	label: PropTypes.string,
 	defaultInput: PropTypes.string,
-	mask: PropTypes.string
+	mask: PropTypes.string,
+	onChange: PropTypes.func
 }
 
 export default UnInput
