@@ -18,7 +18,7 @@ export const Card = styled('div')`
 	border-radius: 4px;
 	margin-bottom: 2rem;
 	padding: 2rem;
-	width: ${props => (props.width?`${props.width}px`:'auto')};
+	width: ${props => (props.width?props.width:'auto')};
 	-webkit-box-shadow: 0 2px 1px -1px rgb(0 0 0 / 20%), 0 1px 1px 0 rgb(0 0 0 / 14%), 0 1px 3px 0 rgb(0 0 0 / 12%);
 `
 
