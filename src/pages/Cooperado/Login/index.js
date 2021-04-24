@@ -14,13 +14,13 @@ const Login = () => {
 	return (
 		<Container >
 			<Content className='p-d-flex p-jc-center p-ai-center layout-content'>
-				<Card className='p-fluid' width={400}>
+				<Card className='p-fluid' width='400px'>
 					<CardHeader title='Login'/>
 					<UnForm onSubmit={login}>
 						<UnInput name='email' label='Email' required/>
 						<UnInput type='password' name='password' label='Senha' required/>
-						<p>Não possui conta? <Link to='/cadastrar'>Cadastrar-se</Link></p>
-						<Link to='#'>Esqueceu sua senha?</Link>
+						<p>Não possui conta? <Link to='/cooperado/cadastrar'>Cadastrar-se</Link></p>
+						<Link to='/recuperar-senha'>Esqueceu sua senha?</Link>
 						<Button className='p-mt-3' type='submit' label='Logar'/>
 					</UnForm>
 				</Card>

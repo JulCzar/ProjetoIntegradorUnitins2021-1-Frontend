@@ -24,16 +24,19 @@ a:hover {
 body {
 	color: var(--text-color);
 	font-family: var(--font-family);
-	scrollbar-color: var(--scrollbar-thumb-BG) transparent;
+	max-width: 100vw;
+	overflow-x: hidden;
+	scrollbar-color: var(--scrollbar-thumb-BG) var(--surface-e);
 	scrollbar-width: thin;
 }
 
 ::-webkit-scrollbar {
+	height: var(--scrollbar-thumb-width);
 	width: var(--scrollbar-thumb-width);
 }
 
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: var(--surface-e);
 }
 
 ::-webkit-scrollbar-thumb {
@@ -45,6 +48,10 @@ input:-webkit-autofill,
 input:-webkit-autofill:hover, 
 input:-webkit-autofill:focus, 
 input:-webkit-autofill:active {
+	transition: background-color 999999s ease-in-out 0s;
 	-webkit-text-fill-color: var(--text-color) !important;
-	transition: background-color 5000s ease-in-out 0s;
+}
+
+.container {
+	background: var(--surface-b);
 }
