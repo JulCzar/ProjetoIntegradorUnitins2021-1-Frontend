@@ -5,6 +5,7 @@ import { Button } from '~/primereact'
 
 function Cadastro() {
 	const register = form => {
+		// eslint-disable-next-line no-console
 		console.log(form)
 	}
 	return (

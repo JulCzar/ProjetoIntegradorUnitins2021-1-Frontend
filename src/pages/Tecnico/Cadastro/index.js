@@ -1,9 +1,11 @@
 import React from 'react'
 import { CardHeader, UnInput, UnSelect } from '~/common/components'
 import { Card, Container, Content, InputWrapper, UnForm } from '~/common/styles'
-import { Button } from '~/primereact'
+import { Button, Toast } from '~/primereact'
+import { verifyPassword } from '~/utils'
 
 const Cadastro = () => {
+	const toast = React.useRef(null)
 	const [groupOptions] = React.useState([
 		{label: 'Recanto', value: 1},
 		{label: 'Cargueiros', value: 2},
@@ -13,12 +15,27 @@ const Cadastro = () => {
 	])
 
 	function cadastrar(form) {
+		const { passwordConfirm, ...data } = form
+		const passwordCheck = verifyPassword(data.password, passwordConfirm)
+		
+		if (!passwordCheck.isValid) {
+			toast.current.show(passwordCheck.errors.map(error => ({
+				severity: 'info',
+				summary: error
+			})))
+
+			return
+		}
 		// eslint-disable-next-line no-console
-		console.log('cadastro não implementado', form)
+		toast.current.show({
+			severity: 'success',
+			summary: 'Cadastro realizado com sucesso!'
+		})
 	}
 
 	return (
 		<Container >
+			<Toast ref={toast} />
 			<Content className='p-d-flex p-jc-center p-ai-center layout-content'>
 				<Card className='p-fluid'>
 					<CardHeader title='Cadastro de Técnico'/>
