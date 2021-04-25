@@ -1,9 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { useField } from '@unform/core'
-import { Dropdown } from '~/primereact'
+import { Dropdown, Toast } from '~/primereact'
 
 const UnSelect = ({ name, label, options, ...rest }) => {
+	const toast = React.useRef(null)
 	const selectRef = React.useRef(null)
 	const [value, setValue] = React.useState(null)
 	const { fieldName, registerField } = useField(name)
@@ -20,12 +21,9 @@ const UnSelect = ({ name, label, options, ...rest }) => {
 		})
 	},[fieldName, registerField])
 
-	React.useCallback(() => {
-
-	}, [])
-
 	return (
 		<div className='p-field'>
+			<Toast ref={toast}/>
 			<label>{label}</label>
 			<Dropdown
 				ref={selectRef}

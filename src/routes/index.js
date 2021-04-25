@@ -1,7 +1,16 @@
 import React from 'react'
 import { Switch, Route, BrowserRouter } from 'react-router-dom'
 
-import { AlterarSenha, CadastroAdmin, CadastroTecn, HelloWorld, Login, PageNotFound, RecuperarSenha } from '~/pages'
+import {
+	AgendarVisita,
+	AlterarSenha,
+	CadastroAdmin,
+	CadastroTecn,
+	HelloWorld,
+	Login,
+	PageNotFound,
+	RecuperarSenha
+} from '~/pages'
 import Relatorio from '~/pages/Cooperado/Relatorio'
 
 const Routes = function _Routes() {
@@ -16,6 +25,8 @@ const Routes = function _Routes() {
 				<Route path='/admin/cadastrar' component={CadastroAdmin}/>
 				{/* Técnico */}
 				<Route path='/tecnico/cadastrar' component={CadastroTecn}/>
+				<Route path='/tecnico/agendar-visita' component={AgendarVisita}/>
+
 				{/* Genéricas */}
 				<Route path='/' component={HelloWorld} exact/>
 				<Route path='/recuperar-senha' component={RecuperarSenha}/>
