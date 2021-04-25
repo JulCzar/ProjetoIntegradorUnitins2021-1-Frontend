@@ -42,8 +42,8 @@ function Cadastro() {
 							<UnInput mask='999.999.999-99' name='cpf' label='CPF'/>
 						</InputWrapper>
 						<InputWrapper columns={2} gap='10px'>
-							<UnInput minLength='8' type='password' name='password' label='Senha'/>
-							<UnInput type='password' name='passwordConfirm' label='Confirmação de Senha'/>
+							<UnInput minLength='8' type='password' name='password' label='Senha' required/>
+							<UnInput type='password' name='passwordConfirm' label='Confirmação de Senha' required/>
 						</InputWrapper>
 						<Button type='submit' label='Cadastrar'/>
 					</UnForm>
