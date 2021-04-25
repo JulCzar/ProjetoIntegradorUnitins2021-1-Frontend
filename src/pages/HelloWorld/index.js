@@ -8,7 +8,7 @@ const App = function _App() {
 			<Content className='p-d-flex p-jc-center p-ai-center layout-content'>
 				<Title className='p-fluid'>
 					Bem vindo ao início do Projeto!<br/>
-					<Link to='login'>Logar</Link>
+					<Link to='/cooperado/login'>Logar</Link>
 				</Title>
 			</Content>
 		</Container>
