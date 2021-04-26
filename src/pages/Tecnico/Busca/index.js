@@ -1,15 +1,12 @@
 import React from 'react'
 
-import { CardHeader, UnInput, UnSelect } from '~/common/components'
-import { Card, Container, Content, InputWrapper, UnForm } from '~/common/styles'
-import { Button, Column, DataTable, InputText} from '~/primereact'
+import { Card, Container, Content, UnForm } from '~/common/styles'
+import { CardHeader, UnInput } from '~/common/components'
+import { Button, Column, DataTable } from '~/primereact'
+
 import data from './data.json'
 
 function Busca() {
-	const [groupOptions] = React.useState([
-		{label: 'Nome', value: 1},
-		{label: 'CPF', value: 2}
-	])
 
 	return (
 		<Container>
@@ -29,7 +26,7 @@ function Busca() {
                 <a>Desativar</a>
 							</div>
 						)}/>
-    			</DataTable>
+					</DataTable>
 					<Button label='Criar'/>
 				</Card>
 			</Content>

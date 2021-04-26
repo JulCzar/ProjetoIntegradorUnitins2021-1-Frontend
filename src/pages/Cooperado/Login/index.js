@@ -1,14 +1,17 @@
 import React from 'react'
+import PropType from 'prop-types'
+import * as action from '~/store/actions/auth'
+import { Link } from 'react-router-dom'
 
 import { Button } from '~/primereact'
 import { CardHeader, UnInput } from '~/common/components'
 import { Card, Container, Content, UnForm } from '~/common/styles'
-import { Link } from 'react-router-dom'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
 
-const Login = () => {
-	function login(form) {
-		// eslint-disable-next-line no-console
-		console.log('login não implementado!', form)
+const Login = ({ login }) => {
+	async function logar(form) {
+		await login(form)
 	}
 
 	return (
@@ -16,7 +19,7 @@ const Login = () => {
 			<Content className='p-d-flex p-jc-center p-ai-center layout-content'>
 				<Card className='p-fluid' width='400px'>
 					<CardHeader title='Login'/>
-					<UnForm onSubmit={login}>
+					<UnForm onSubmit={logar}>
 						<UnInput name='email' label='Email' required/>
 						<UnInput type='password' name='password' label='Senha' required/>
 						<p>Não possui conta? <Link to='/cooperado/cadastrar'>Cadastrar-se</Link></p>
@@ -29,4 +32,10 @@ const Login = () => {
 	)
 }
 
-export default Login
+Login.propTypes = {
+	login: PropType.func
+}
+
+export default connect(props => props.auth, dispatch => {
+	bindActionCreators(action, dispatch)
+})(Login)
