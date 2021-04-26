@@ -6,6 +6,7 @@ export { default as Login } from './Cooperado/Login'
 
 // Tecnico
 export { default as CadastroTecn } from './Tecnico/Cadastro'
+export { default as AgendarVisita } from './Tecnico/AgendarVisita'
 
 // Exports Gerais
 export { default as HelloWorld } from './HelloWorld'

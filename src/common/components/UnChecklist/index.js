@@ -13,6 +13,7 @@ function UnChecklist({
 	isMulti = false,
 	columns,
 	gap,
+	className,
 	...rest
 }) {
 	const inputRefs = React.useRef([])
@@ -56,7 +57,7 @@ function UnChecklist({
 	}
 
 	return (
-		<div className='p-field'>
+		<div className={`p-field ${className}`}>
 			<CardHeader title={label}/>
 			<ListOfOptions col={columns} gap={gap}>
 				{options.map(({label, value}, i) => {
@@ -92,7 +93,8 @@ UnChecklist.propTypes = { name, label,
 	isMulti: PropTypes.bool,
 	options: PropTypes.arrayOf(option).isRequired,
 	columns: PropTypes.number,
-	gap: PropTypes.string
+	gap: PropTypes.string,
+	className: PropTypes.string
 }
 
 export default UnChecklist
