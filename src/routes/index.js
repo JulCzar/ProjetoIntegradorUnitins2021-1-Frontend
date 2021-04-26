@@ -11,6 +11,7 @@ import {
 	HelloWorld,
 	Login,
 	PageNotFound,
+	PerfilAdmin,
 	RecuperarSenha
 } from '~/pages'
 
@@ -27,6 +28,7 @@ const Routes = function _Routes() {
 
 				{/* Administrador */}
 				<Route path='/admin/cadastrar' component={CadastroAdmin}/>
+				<Route path='/admin/perfil' component={PerfilAdmin}/>
 				
 				{/* Técnico */}
 				<Route path='/tecnico/cadastrar' component={CadastroTecn}/>
