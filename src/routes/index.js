@@ -15,7 +15,8 @@ import {
 	MotivoVisita,
 	PageNotFound,
 	PerfilAdmin,
-	RecuperarSenha
+	RecuperarSenha,
+	HistoricoVisitas
 } from '~/pages'
 
 import Relatorio from '~/pages/Cooperado/Relatorio'
@@ -32,15 +33,16 @@ const Routes = function _Routes() {
 				{/* Administrador */}
 				<Route path='/admin/cadastrar' component={CadastroAdmin}/>
 				<Route path='/admin/perfil' component={PerfilAdmin}/>
-				
+
 				{/* Técnico */}
 				<Route path='/tecnico/cadastrar' component={CadastroTecn}/>
 				<Route path='/tecnico/agendar-visita' component={AgendarVisita}/>
 				<Route path='/tecnico/detalhes-visita' component={DetalhesVisita}/>
+				<Route path='/tecnico' component={BuscaTecnico} exact/>
 
 				{/* Histórico */}
 				<Route path='/historico/visita' component={DadosVisita}/>
-				<Route path='/tecnico' component={BuscaTecnico} exact/>
+				<Route path='/historico' component={HistoricoVisitas} exact/>
 
 				{/* Genéricas */}
 				<Route path='/' component={HelloWorld} exact/>
