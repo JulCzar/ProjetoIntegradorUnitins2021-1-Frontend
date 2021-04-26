@@ -30,7 +30,7 @@ function EditarGrupos() {
 					<InputWrapper columns={3} gap='10px'>
 						<Button label='Excluir'/>
 						<Button label='Salvar'/>
-						<Button onClick={()=>{history.goBack()}} label='Cancelar'/>
+						<Button onClick={() => {history.goBack()}} label='Cancelar'/>
 					</InputWrapper>
 				</Card>
 			</Content>
