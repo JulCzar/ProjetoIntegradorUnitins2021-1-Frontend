@@ -9,18 +9,22 @@ import {
 	CadastroAdmin,
 	CadastroCooperado,
 	CadastroTecn,
+	DadosVisita,
 	CriarGrupo,
 	EditarGrupo,
 	DetalhesVisita,
 	HelloWorld,
 	Login,
+	MotivoVisita,
 	PageNotFound,
 	PerfilAdmin,
+	RecuperarSenha,
+	HistoricoVisitas,
 	PerfilCooperado,
 	PerfilTecnico,
 	RecuperarSenha,
 	RelatorioLanding,
-	RelatorioLandingTecnico,
+	RelatorioLandingTecnico
 } from '~/pages'
 
 import Relatorio from '~/pages/Cooperado/Relatorio'
@@ -40,7 +44,7 @@ const Routes = function _Routes() {
 				{/* Administrador */}
 				<Route path='/admin/cadastrar' component={CadastroAdmin}/>
 				<Route path='/admin/perfil' component={PerfilAdmin}/>
-				
+
 				{/* Técnico */}
 				<Route path='/tecnico/cadastrar' component={CadastroTecn}/>
 				<Route path='/tecnico/agendar-visita' component={AgendarVisita}/>
@@ -48,11 +52,16 @@ const Routes = function _Routes() {
 				<Route path='/tecnico/detalhes-visita' component={DetalhesVisita}/>
 				<Route path='/tecnico/relatorio' component={RelatorioLandingTecnico}/>
 				<Route path='/tecnico' component={BuscaTecnico} exact/>
-    
+
+				{/* Histórico */}
+				<Route path='/historico/visita' component={DadosVisita}/>
+				<Route path='/historico' component={HistoricoVisitas} exact/>
+
 				{/* Genéricas */}
 				<Route path='/' component={HelloWorld} exact/>
 				<Route path='/recuperar-senha' component={RecuperarSenha}/>
 				<Route path='/alterar-senha' component={AlterarSenha}/>
+				<Route path='/motivos' component={MotivoVisita}/>
 
 				{/* Grupo */}
 				<Route path='/criar-grupo' component={CriarGrupo}/>

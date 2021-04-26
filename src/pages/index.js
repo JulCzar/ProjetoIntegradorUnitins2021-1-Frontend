@@ -21,8 +21,9 @@ export { default as RelatorioLandingTecnico } from './Tecnico/RelatorioLanding'
 export { default as HelloWorld } from './HelloWorld'
 export { default as RecuperarSenha } from './RecuperarSenha'
 export { default as AlterarSenha } from './AlterarSenha'
-export { default as PageNotFound } from './PageNotFound'
-
-// Grupo
+export { default as DadosVisita } from './Historico/DadosVisita'
+export { default as MotivoVisita } from './MotivoVisita'
+export { default as HistoricoVisitas } from './Historico/Visitas'
 export { default as CriarGrupo } from './CriarGrupo'
 export { default as EditarGrupo } from './EditarGrupo'
+export { default as PageNotFound } from './PageNotFound'
