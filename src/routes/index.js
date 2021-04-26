@@ -34,7 +34,6 @@ const Routes = function _Routes() {
 		<BrowserRouter>
 			<Switch>
 				{/* Cooperado */}
-				<Route path='/cooperado/login' component={Login}/>
 				<Route path='/cooperado/relatorio/:id' component={Relatorio}/>
 				<Route path='/cooperado' component={BuscaCooperado} exact/>
 				<Route path='/cooperado/perfil' component={PerfilCooperado}/>
@@ -46,6 +45,7 @@ const Routes = function _Routes() {
 				<Route path='/admin/perfil' component={PerfilAdmin}/>
 
 				{/* Técnico */}
+				<Route path='/tecnico/login' component={Login}/>
 				<Route path='/tecnico/cadastrar' component={CadastroTecn}/>
 				<Route path='/tecnico/agendar-visita' component={AgendarVisita}/>
 				<Route path='/tecnico/perfil' component={PerfilTecnico}/>
