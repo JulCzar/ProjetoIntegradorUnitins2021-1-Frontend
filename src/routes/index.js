@@ -12,6 +12,7 @@ import {
 	Login,
 	PageNotFound,
 	PerfilAdmin,
+	PerfilTecnico,
 	RecuperarSenha
 } from '~/pages'
 
@@ -33,6 +34,7 @@ const Routes = function _Routes() {
 				{/* Técnico */}
 				<Route path='/tecnico/cadastrar' component={CadastroTecn}/>
 				<Route path='/tecnico/agendar-visita' component={AgendarVisita}/>
+				<Route path='/tecnico/perfil' component={PerfilTecnico}/>
 				<Route path='/tecnico' component={BuscaTecnico} exact/>
 
 				{/* Genéricas */}
