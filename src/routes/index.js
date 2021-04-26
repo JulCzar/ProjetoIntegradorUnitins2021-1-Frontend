@@ -4,15 +4,21 @@ import { Switch, Route, BrowserRouter } from 'react-router-dom'
 import {
 	AgendarVisita,
 	AlterarSenha,
+	BuscaCooperado,
+	BuscaTecnico,
 	CadastroAdmin,
 	CadastroTecn,
 	CriarGrupo,
 	EditarGrupo,
+	DetalhesVisita,
 	HelloWorld,
 	Login,
 	PageNotFound,
+	PerfilAdmin,
+	PerfilTecnico,
 	RecuperarSenha
 } from '~/pages'
+
 import Relatorio from '~/pages/Cooperado/Relatorio'
 
 const Routes = function _Routes() {
@@ -22,13 +28,19 @@ const Routes = function _Routes() {
 				{/* Cooperado */}
 				<Route path='/cooperado/login' component={Login}/>
 				<Route path='/cooperado/relatorio' component={Relatorio}/>
+				<Route path='/cooperado' component={BuscaCooperado} exact/>
 
 				{/* Administrador */}
 				<Route path='/admin/cadastrar' component={CadastroAdmin}/>
+				<Route path='/admin/perfil' component={PerfilAdmin}/>
+				
 				{/* Técnico */}
 				<Route path='/tecnico/cadastrar' component={CadastroTecn}/>
 				<Route path='/tecnico/agendar-visita' component={AgendarVisita}/>
-
+				<Route path='/tecnico/perfil' component={PerfilTecnico}/>
+				<Route path='/tecnico/detalhes-visita' component={DetalhesVisita}/>
+				<Route path='/tecnico' component={BuscaTecnico} exact/>
+    
 				{/* Genéricas */}
 				<Route path='/' component={HelloWorld} exact/>
 				<Route path='/recuperar-senha' component={RecuperarSenha}/>
