@@ -3,14 +3,14 @@ import { CardHeader, UnInput, UnInputDateTime, UnSelect } from '~/common/compone
 import { Card, Container, Content, InputWrapper, UnForm } from '~/common/styles'
 import { Button, Toast } from '~/primereact'
 
-const groupOptions = [
-	{value: 1, label: 'teste1'},
-	{value: 2, label: 'teste2'},
-	{value: 3, label: 'teste3'},
-	{value: 4, label: 'teste4'},
-	{value: 5, label: 'teste5'},
-	{value: 6, label: 'teste6'},
-] 
+	const groupOptions = [
+		{value: 1, label: 'teste1'},
+		{value: 2, label: 'teste2'},
+		{value: 3, label: 'teste3'},
+		{value: 4, label: 'teste4'},
+		{value: 5, label: 'teste5'},
+		{value: 6, label: 'teste6'},
+	] 
 
 function DetalhesVisita() {
 	const [editing, setEditing] = React.useState(true)
