@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { useField } from '@unform/core'
 import { Dropdown, Toast } from '~/primereact'
 
-const UnSelect = ({ name, label, options, ...rest }) => {
+const UnSelect = ({ name, label, options, className, ...rest }) => {
 	const toast = React.useRef(null)
 	const selectRef = React.useRef(null)
 	const [value, setValue] = React.useState(null)
@@ -22,7 +22,7 @@ const UnSelect = ({ name, label, options, ...rest }) => {
 	},[fieldName, registerField])
 
 	return (
-		<div className='p-field'>
+		<div className={`p-field ${className}`}>
 			<Toast ref={toast}/>
 			<label>{label}</label>
 			<Dropdown
@@ -45,7 +45,8 @@ UnSelect.propTypes = {
 			PropTypes.number
 		]),
 		label: PropTypes.string
-	}))
+	})),
+	className: PropTypes.string
 }
 
 export default UnSelect

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { useField } from '@unform/core'
 import { Calendar } from '~/primereact'
 
-const UnInputDateTime = ({ name, label, onChange = () => {}, ...rest }) => {
+const UnInputDateTime = ({ name, label, className, onChange = () => {}, ...rest }) => {
 	const inputRef = React.useRef(null)
 	const [value, setValue] = React.useState(null)
 	const { fieldName, registerField } = useField(name)
@@ -22,7 +22,7 @@ const UnInputDateTime = ({ name, label, onChange = () => {}, ...rest }) => {
 	}, [fieldName, registerField])
 
 	return (
-		<div className='p-field'>
+		<div className={`p-field ${className}`}>
 			<label htmlFor={name}>{label}</label>
 			<Calendar
 				ref={inputRef}
@@ -41,7 +41,8 @@ UnInputDateTime.propTypes = {
 	name: PropTypes.string.isRequired,
 	label: PropTypes.string,
 	defaultInput: PropTypes.string,
-	onChange: PropTypes.func
+	onChange: PropTypes.func,
+	className: PropTypes.string
 }
 
 export default UnInputDateTime

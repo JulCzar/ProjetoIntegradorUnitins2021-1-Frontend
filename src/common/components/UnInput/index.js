@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { useField } from '@unform/core'
 import { InputText, InputMask } from '~/primereact'
 
-const UnInput = ({ name, label, defaultInput, mask, onChange = () => {}, ...rest }) => {
+const UnInput = ({ name, label, defaultInput, mask, className, onChange = () => {}, ...rest }) => {
 	const inputRef = React.useRef(null)
 	const [value, setValue] = React.useState(null)
 	const { fieldName, defaultValue, registerField } = useField(name)
@@ -21,7 +21,7 @@ const UnInput = ({ name, label, defaultInput, mask, onChange = () => {}, ...rest
 	}, [fieldName, registerField])
 
 	return (
-		<div className='p-field'>
+		<div className={`p-field ${className}`}>
 			<label htmlFor={name}>{label}</label>
 			{mask
 				?(<InputMask
@@ -55,7 +55,8 @@ UnInput.propTypes = {
 	label: PropTypes.string,
 	defaultInput: PropTypes.string,
 	mask: PropTypes.string,
-	onChange: PropTypes.func
+	onChange: PropTypes.func,
+	className: PropTypes.string
 }
 
 export default UnInput
