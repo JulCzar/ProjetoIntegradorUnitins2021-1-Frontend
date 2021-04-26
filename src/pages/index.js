@@ -7,6 +7,7 @@ export { default as Login } from './Cooperado/Login'
 export { default as BuscaCooperado } from './Cooperado/Busca'
 export { default as PerfilCooperado } from './Cooperado/Perfil'
 export { default as RelatorioLanding} from './Cooperado/RelatorioLanding'
+export { default as CadastroCooperado} from './Cooperado/Cadastro'
 
 // Tecnico
 export { default as CadastroTecn } from './Tecnico/Cadastro'
