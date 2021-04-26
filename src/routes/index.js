@@ -17,6 +17,7 @@ import {
 	PerfilTecnico,
 	RecuperarSenha,
 	RelatorioLanding,
+	RelatorioLandingTecnico,
 } from '~/pages'
 
 import Relatorio from '~/pages/Cooperado/Relatorio'
@@ -41,6 +42,7 @@ const Routes = function _Routes() {
 				<Route path='/tecnico/agendar-visita' component={AgendarVisita}/>
 				<Route path='/tecnico/perfil' component={PerfilTecnico}/>
 				<Route path='/tecnico/detalhes-visita' component={DetalhesVisita}/>
+				<Route path='/tecnico/relatorio' component={RelatorioLandingTecnico}/>
 				<Route path='/tecnico' component={BuscaTecnico} exact/>
     
 				{/* Genéricas */}

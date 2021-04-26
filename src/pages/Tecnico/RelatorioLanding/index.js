@@ -20,18 +20,14 @@ function RelatorioLanding() {
   <Container >
 			<Content className='p-d-flex p-jc-center p-ai-center layout-content'>
 				<Card className='p-fluid'>
-					<CardHeader title='Relatório de Cooperado e Propriedade'/>
+					<CardHeader title='Relatório de Técnico'/>
 					<UnForm onSubmit={enviar}>
 						<InputWrapper columns={2} gap='10px'>
 							<UnInputDateTime name='inicio' label='Inicio'/>
 							<UnInputDateTime name='fim' label='Fim'/>
 						</InputWrapper>
-						<UnSelect name='cooperado' label='Cooperado' options={groupOptions}/>
 						<UnSelect name='tecnico' label='Técnico' options={groupOptions}/>
-            <InputWrapper columns={2} gap='10px'>
-						  <Button type='submit' label='Relatório Geral'/>
-					    <Button type='submit' label='Relatório da Propriedade'/>
-            </InputWrapper>
+						  <Button type='submit' label='Gerar Relatório'/>
 					</UnForm>
 				</Card>
 			</Content>
