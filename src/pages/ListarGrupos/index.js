@@ -23,7 +23,7 @@ function ListarGrupos() {
 							</div>
 						)}/>
 					</DataTable>
-					<Button onClick={()=>{history.push('/criar-grupo')}} label='Criar'/>
+					<Button onClick={() => {history.push('/criar-grupo')}} label='Criar'/>
 				</Card>
 			</Content>
 		</Container>
