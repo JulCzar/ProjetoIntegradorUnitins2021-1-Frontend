@@ -39,7 +39,7 @@ const Routes = function _Routes() {
 				<Route path='/cooperado' component={BuscaCooperado} exact/>
 				<Route path='/cooperado/perfil' component={PerfilCooperado}/>
 				<Route path='/cooperado/relatorio' component={RelatorioLanding}/>
-				<Route path='/cooperado/cadastro' component={CadastroCooperado}/>
+				<Route path='/cooperado/cadastrar' component={CadastroCooperado}/>
 
 				{/* Administrador */}
 				<Route path='/admin/cadastrar' component={CadastroAdmin}/>
