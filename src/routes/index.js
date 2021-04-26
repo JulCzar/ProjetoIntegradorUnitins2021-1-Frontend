@@ -7,6 +7,7 @@ import {
 	BuscaCooperado,
 	BuscaTecnico,
 	CadastroAdmin,
+	CadastroCooperado,
 	CadastroTecn,
 	CriarGrupo,
 	EditarGrupo,
@@ -19,6 +20,7 @@ import {
 	PerfilTecnico,
 	RecuperarSenha,
 	RelatorioLanding,
+	RelatorioLandingTecnico,
 } from '~/pages'
 
 import Relatorio from '~/pages/Cooperado/Relatorio'
@@ -33,6 +35,7 @@ const Routes = function _Routes() {
 				<Route path='/cooperado' component={BuscaCooperado} exact/>
 				<Route path='/cooperado/perfil' component={PerfilCooperado}/>
 				<Route path='/cooperado/relatorio' component={RelatorioLanding}/>
+				<Route path='/cooperado/cadastro' component={CadastroCooperado}/>
 
 				{/* Administrador */}
 				<Route path='/admin/cadastrar' component={CadastroAdmin}/>
@@ -43,6 +46,7 @@ const Routes = function _Routes() {
 				<Route path='/tecnico/agendar-visita' component={AgendarVisita}/>
 				<Route path='/tecnico/perfil' component={PerfilTecnico}/>
 				<Route path='/tecnico/detalhes-visita' component={DetalhesVisita}/>
+				<Route path='/tecnico/relatorio' component={RelatorioLandingTecnico}/>
 				<Route path='/tecnico' component={BuscaTecnico} exact/>
     
 				{/* Genéricas */}
