@@ -6,6 +6,7 @@ export { default as PerfilAdmin } from './Administrador/Perfil'
 export { default as Login } from './Cooperado/Login'
 export { default as BuscaCooperado } from './Cooperado/Busca'
 export { default as PerfilCooperado } from './Cooperado/Perfil'
+export { default as RelatorioLanding} from './Cooperado/RelatorioLanding'
 
 // Tecnico
 export { default as CadastroTecn } from './Tecnico/Cadastro'
