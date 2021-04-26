@@ -12,6 +12,7 @@ import {
 	Login,
 	PageNotFound,
 	PerfilAdmin,
+	PerfilCooperado,
 	PerfilTecnico,
 	RecuperarSenha
 } from '~/pages'
@@ -26,6 +27,7 @@ const Routes = function _Routes() {
 				<Route path='/cooperado/login' component={Login}/>
 				<Route path='/cooperado/relatorio' component={Relatorio}/>
 				<Route path='/cooperado' component={BuscaCooperado} exact/>
+				<Route path='/cooperado/perfil' component={PerfilCooperado}/>
 
 				{/* Administrador */}
 				<Route path='/admin/cadastrar' component={CadastroAdmin}/>
