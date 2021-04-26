@@ -17,6 +17,7 @@ import {
 	Login,
 	MotivoVisita,
 	PageNotFound,
+	PainelExibicao,
 	PerfilAdmin,
 	RecuperarSenha,
 	HistoricoVisitas,
@@ -60,8 +61,9 @@ const Routes = function _Routes() {
 				<Route path='/' component={HelloWorld} exact/>
 				<Route path='/recuperar-senha' component={RecuperarSenha}/>
 				<Route path='/alterar-senha' component={AlterarSenha}/>
+				<Route path='/painel-exibicao' component={PainelExibicao}/>
 				<Route path='/motivos' component={MotivoVisita}/>
-
+    
 				{/* Grupo */}
 				<Route path='/criar-grupo' component={CriarGrupo}/>
 				<Route path='/editar-grupo' component={EditarGrupo}/>
