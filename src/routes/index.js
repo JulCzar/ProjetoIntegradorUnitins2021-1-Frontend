@@ -22,7 +22,6 @@ import {
 	HistoricoVisitas,
 	PerfilCooperado,
 	PerfilTecnico,
-	RecuperarSenha,
 	RelatorioLanding,
 	RelatorioLandingTecnico
 } from '~/pages'
