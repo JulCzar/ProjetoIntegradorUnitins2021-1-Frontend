@@ -13,6 +13,7 @@ import {
 	HelloWorld,
 	Login,
 	PageNotFound,
+	PainelExibicao,
 	PerfilAdmin,
 	PerfilCooperado,
 	PerfilTecnico,
@@ -51,6 +52,7 @@ const Routes = function _Routes() {
 				<Route path='/' component={HelloWorld} exact/>
 				<Route path='/recuperar-senha' component={RecuperarSenha}/>
 				<Route path='/alterar-senha' component={AlterarSenha}/>
+				<Route path='/painel-exibicao' component={PainelExibicao}/>
 
 				{/* Page Not Found, Precisa ser a ultima rota! */}
 				<Route path='*' component={PageNotFound}/>
