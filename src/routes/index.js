@@ -6,6 +6,7 @@ import {
 	AlterarSenha,
 	CadastroAdmin,
 	CadastroTecn,
+	DadosVisita,
 	DetalhesVisita,
 	HelloWorld,
 	Login,
@@ -24,10 +25,14 @@ const Routes = function _Routes() {
 
 				{/* Administrador */}
 				<Route path='/admin/cadastrar' component={CadastroAdmin}/>
+
 				{/* Técnico */}
 				<Route path='/tecnico/cadastrar' component={CadastroTecn}/>
 				<Route path='/tecnico/agendar-visita' component={AgendarVisita}/>
 				<Route path='/tecnico/detalhes-visita' component={DetalhesVisita}/>
+
+				{/* Histórico */}
+				<Route path='/historico/visita' component={DadosVisita}/>
 
 				{/* Genéricas */}
 				<Route path='/' component={HelloWorld} exact/>
