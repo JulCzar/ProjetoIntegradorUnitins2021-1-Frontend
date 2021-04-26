@@ -1,9 +1,11 @@
 import React from 'react'
+import { useHistory } from 'react-router'
 import { CardHeader, UnChecklist, UnInput } from '~/common/components'
 import { Card, Container, Content, InputWrapper, UnForm } from '~/common/styles'
 import { Button } from '~/primereact'
 
-function EditarGrupo() {
+function EditarGrupos() {
+	const history= useHistory()
 	const groupOptions = [
 		{label: 'Recanto', value: 1},
 		{label: 'Cargueiros', value: 2},
@@ -24,16 +26,16 @@ function EditarGrupo() {
 					<UnForm onSubmit={request}>
 						<UnInput name='nome' label='Nome' required={true}/>
 						<UnChecklist name='roles' label='Permissões' options={groupOptions} gap='20px' columns={2} isMulti/>
-						<InputWrapper columns={3} gap='10px'>
-							<Button type='excluir' label='Excluir'/>
-							<Button type='salvar' label='Salvar'/>
-							<Button type='cancelar' label='Cancelar'/>
-						</InputWrapper>
 					</UnForm>
+					<InputWrapper columns={3} gap='10px'>
+						<Button label='Excluir'/>
+						<Button label='Salvar'/>
+						<Button onClick={()=>{history.goBack()}} label='Cancelar'/>
+					</InputWrapper>
 				</Card>
 			</Content>
 		</Container>
 	)
 }
 
-export default EditarGrupo
+export default EditarGrupos
