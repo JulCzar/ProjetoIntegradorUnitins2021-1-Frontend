@@ -36,6 +36,7 @@ Login.propTypes = {
 	login: PropType.func
 }
 
-export default connect(props => props.auth, dispatch => {
-	bindActionCreators(action, dispatch)
-})(Login)
+export default connect(
+	props => props.auth,
+	dispatch => bindActionCreators(action, dispatch)
+)(Login)
