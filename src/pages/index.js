@@ -10,6 +10,7 @@ export { default as PerfilCooperado } from './Cooperado/Perfil'
 // Tecnico
 export { default as CadastroTecn } from './Tecnico/Cadastro'
 export { default as AgendarVisita } from './Tecnico/AgendarVisita'
+export { default as DetalhesVisita } from './Tecnico/DetalhesVisita'
 export { default as BuscaTecnico } from './Tecnico/Busca'
 export { default as PerfilTecnico } from './Tecnico/Perfil'
 
