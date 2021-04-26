@@ -9,6 +9,7 @@ import {
 	CadastroAdmin,
 	CadastroTecn,
 	CriarGrupo,
+	EditarGrupo,
 	DetalhesVisita,
 	HelloWorld,
 	Login,
@@ -47,6 +48,7 @@ const Routes = function _Routes() {
 
 				{/* Grupo */}
 				<Route path='/criar-grupo' component={CriarGrupo}/>
+				<Route path='/editar-grupo' component={EditarGrupo}/>
 
 				{/* Page Not Found, Precisa ser a ultima rota! */}
 				<Route path='*' component={PageNotFound}/>

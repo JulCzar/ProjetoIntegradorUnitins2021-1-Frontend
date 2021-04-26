@@ -19,5 +19,6 @@ export { default as RecuperarSenha } from './RecuperarSenha'
 export { default as AlterarSenha } from './AlterarSenha'
 export { default as PageNotFound } from './PageNotFound'
 
-// Criar Grupo
+// Grupo
 export { default as CriarGrupo } from './CriarGrupo'
+export { default as EditarGrupo } from './EditarGrupo'
