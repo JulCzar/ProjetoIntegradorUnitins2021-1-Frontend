@@ -8,6 +8,7 @@ import {
 	BuscaTecnico,
 	CadastroAdmin,
 	CadastroTecn,
+	DetalhesVisita,
 	HelloWorld,
 	Login,
 	PageNotFound,
@@ -33,8 +34,9 @@ const Routes = function _Routes() {
 				{/* Técnico */}
 				<Route path='/tecnico/cadastrar' component={CadastroTecn}/>
 				<Route path='/tecnico/agendar-visita' component={AgendarVisita}/>
+				<Route path='/tecnico/detalhes-visita' component={DetalhesVisita}/>
 				<Route path='/tecnico' component={BuscaTecnico} exact/>
-
+    
 				{/* Genéricas */}
 				<Route path='/' component={HelloWorld} exact/>
 				<Route path='/recuperar-senha' component={RecuperarSenha}/>
