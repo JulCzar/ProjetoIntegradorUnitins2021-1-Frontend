@@ -15,8 +15,10 @@ import {
 	Login,
 	PageNotFound,
 	PerfilAdmin,
+	PerfilCooperado,
 	PerfilTecnico,
-	RecuperarSenha
+	RecuperarSenha,
+	RelatorioLanding,
 } from '~/pages'
 
 import Relatorio from '~/pages/Cooperado/Relatorio'
@@ -27,8 +29,10 @@ const Routes = function _Routes() {
 			<Switch>
 				{/* Cooperado */}
 				<Route path='/cooperado/login' component={Login}/>
-				<Route path='/cooperado/relatorio' component={Relatorio}/>
+				<Route path='/cooperado/relatorio/:id' component={Relatorio}/>
 				<Route path='/cooperado' component={BuscaCooperado} exact/>
+				<Route path='/cooperado/perfil' component={PerfilCooperado}/>
+				<Route path='/cooperado/relatorio' component={RelatorioLanding}/>
 
 				{/* Administrador */}
 				<Route path='/admin/cadastrar' component={CadastroAdmin}/>
