@@ -6,6 +6,7 @@ import {
 	AlterarSenha,
 	CadastroAdmin,
 	CadastroTecn,
+	CriarGrupo,
 	HelloWorld,
 	Login,
 	PageNotFound,
@@ -31,6 +32,9 @@ const Routes = function _Routes() {
 				<Route path='/' component={HelloWorld} exact/>
 				<Route path='/recuperar-senha' component={RecuperarSenha}/>
 				<Route path='/alterar-senha' component={AlterarSenha}/>
+
+				{/* Grupo */}
+				<Route path='/criar-grupo' component={CriarGrupo}/>
 
 				{/* Page Not Found, Precisa ser a ultima rota! */}
 				<Route path='*' component={PageNotFound}/>
