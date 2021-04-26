@@ -6,6 +6,7 @@ import {
 	AlterarSenha,
 	CadastroAdmin,
 	CadastroTecn,
+	DetalhesVisita,
 	HelloWorld,
 	Login,
 	PageNotFound,
@@ -26,6 +27,7 @@ const Routes = function _Routes() {
 				{/* Técnico */}
 				<Route path='/tecnico/cadastrar' component={CadastroTecn}/>
 				<Route path='/tecnico/agendar-visita' component={AgendarVisita}/>
+				<Route path='/tecnico/detalhes-visita' component={DetalhesVisita}/>
 
 				{/* Genéricas */}
 				<Route path='/' component={HelloWorld} exact/>

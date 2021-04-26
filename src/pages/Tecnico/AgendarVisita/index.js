@@ -21,6 +21,7 @@ function AgendarVisita() {
 			severity: 'warn',
 			summary: 'Ainda há campos para serem selecionados'
 		}) 
+		// eslint-disable-next-line no-console
 		console.log(form)
 	}
 
