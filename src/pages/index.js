@@ -3,7 +3,7 @@ export { default as CadastroAdmin } from './Administrador/Cadastro'
 export { default as PerfilAdmin } from './Administrador/Perfil'
 
 //Cooperado
-export { default as Login } from './Cooperado/Login'
+export { default as Login } from './Tecnico/Login'
 export { default as BuscaCooperado } from './Cooperado/Busca'
 export { default as PerfilCooperado } from './Cooperado/Perfil'
 export { default as RelatorioLanding} from './Cooperado/RelatorioLanding'
@@ -28,3 +28,4 @@ export { default as MotivoVisita } from './MotivoVisita'
 export { default as HistoricoVisitas } from './Historico/Visitas'
 export { default as CriarGrupo } from './CriarGrupo'
 export { default as EditarGrupo } from './EditarGrupo'
+export { default as ListarGrupos } from './ListarGrupos'
