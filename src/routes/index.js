@@ -40,6 +40,7 @@ const Routes = function _Routes() {
 				<Route path='/admin/grupos' component={ListarGrupos} exact/>
 				<Route path='/admin/grupos/criar' component={CriarGrupo}/>
 				<Route path='/admin/grupos/editar' component={EditarGrupo}/>
+				<Route path='/admin/motivos' component={MotivoVisita}/>
 
 				{/* Cooperado */}
 				<Route path='/cooperado/relatorio/:id' component={Relatorio}/>
@@ -66,7 +67,6 @@ const Routes = function _Routes() {
 				<Route path='/recuperar-senha' component={RecuperarSenha}/>
 				<Route path='/alterar-senha' component={AlterarSenha}/>
 				<Route path='/painel-exibicao' component={PainelExibicao}/>
-				<Route path='/motivos' component={MotivoVisita}/>
     
 				{/* Grupo */}
 
