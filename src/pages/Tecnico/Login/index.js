@@ -22,7 +22,7 @@ const Login = ({ login }) => {
 					<UnForm onSubmit={logar}>
 						<UnInput name='email' label='Email' required/>
 						<UnInput type='password' name='password' label='Senha' required/>
-						<p>Não possui conta? <Link to='/cooperado/cadastrar'>Cadastrar-se</Link></p>
+						<p>Não possui conta? <Link to='/cadastrar/tecnico'>Cadastrar-se</Link></p>
 						<Link to='/recuperar-senha'>Esqueceu sua senha?</Link>
 						<Button className='p-mt-3' type='submit' label='Logar'/>
 					</UnForm>

@@ -8,7 +8,6 @@ export const Container = styled('div')`
 `
 
 export const Content = styled('div')`
-	padding-top: 70px;
 	width: 100vw;
 `
 
