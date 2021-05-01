@@ -24,7 +24,8 @@ import {
 	PerfilCooperado,
 	PerfilTecnico,
 	RelatorioLanding,
-	RelatorioLandingTecnico
+	RelatorioLandingTecnico,
+	ListarGrupos
 } from '~/pages'
 
 import Relatorio from '~/pages/Cooperado/Relatorio'
@@ -33,16 +34,19 @@ const Routes = function _Routes() {
 	return (
 		<BrowserRouter>
 			<Switch>
+				{/* Administrador */}
+				<Route path='/admin/cadastrar' component={CadastroAdmin}/>
+				<Route path='/admin/perfil' component={PerfilAdmin}/>
+				<Route path='/admin/grupos' component={ListarGrupos} exact/>
+				<Route path='/admin/grupos/criar' component={CriarGrupo}/>
+				<Route path='/admin/grupos/editar' component={EditarGrupo}/>
+
 				{/* Cooperado */}
 				<Route path='/cooperado/relatorio/:id' component={Relatorio}/>
 				<Route path='/cooperado' component={BuscaCooperado} exact/>
 				<Route path='/cooperado/perfil' component={PerfilCooperado}/>
 				<Route path='/cooperado/relatorio' component={RelatorioLanding}/>
 				<Route path='/cooperado/cadastrar' component={CadastroCooperado}/>
-
-				{/* Administrador */}
-				<Route path='/admin/cadastrar' component={CadastroAdmin}/>
-				<Route path='/admin/perfil' component={PerfilAdmin}/>
 
 				{/* Técnico */}
 				<Route path='/tecnico/login' component={Login}/>
@@ -65,8 +69,6 @@ const Routes = function _Routes() {
 				<Route path='/motivos' component={MotivoVisita}/>
     
 				{/* Grupo */}
-				<Route path='/criar-grupo' component={CriarGrupo}/>
-				<Route path='/editar-grupo' component={EditarGrupo}/>
 
 				{/* Page Not Found, Precisa ser a ultima rota! */}
 				<Route path='*' component={PageNotFound}/>

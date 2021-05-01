@@ -10,7 +10,7 @@ function CriarGrupo() {
 		{label: 'Brejão', value: 3},
 		{label: 'Veredas', value: 4},
 		{label: 'Itabinhas', value: 5}
-	  ]
+	]
 	const request = form => {
 		// eslint-disable-next-line no-console
 		console.log(form)
@@ -23,6 +23,7 @@ function CriarGrupo() {
 					<CardHeader title='Criar Grupo'/>
 					<UnForm onSubmit={request}>
 						<UnInput name='nome' label='Nome' required={true}/>
+						<UnChecklist name='roles' label='Permissões' options={groupOptions} gap='20px' columns={2} isMulti/>
 						<InputWrapper columns={2} gap='10px'>
 							<Button type='criar' label='Criar'/>
 							<Button type='cancelar' label='Cancelar'/>

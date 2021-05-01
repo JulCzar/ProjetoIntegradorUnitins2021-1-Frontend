@@ -1,6 +1,9 @@
 // Administrador
 export { default as CadastroAdmin } from './Administrador/Cadastro'
 export { default as PerfilAdmin } from './Administrador/Perfil'
+export { default as ListarGrupos } from './Administrador/ListarGrupos'
+export { default as CriarGrupo } from './Administrador/CriarGrupo'
+export { default as EditarGrupo } from './Administrador/EditarGrupo'
 
 //Cooperado
 export { default as Login } from './Tecnico/Login'
@@ -26,5 +29,3 @@ export { default as PainelExibicao } from './Geral/PainelExibicao'
 export { default as DadosVisita } from './Geral/Historico/DadosVisita'
 export { default as MotivoVisita } from './Administrador/MotivoVisita'
 export { default as HistoricoVisitas } from './Geral/Historico/Visitas'
-export { default as CriarGrupo } from './Administrador/CriarGrupo'
-export { default as EditarGrupo } from './Administrador/EditarGrupo'
