@@ -5,7 +5,6 @@ import { Card, Container, Content } from '~/common/styles'
 import { Button, Column, DataTable } from '~/primereact'
 import data from './data.json'
 
-
 function ListarGrupos() {
 	const history = useHistory()
 	return (
@@ -14,7 +13,7 @@ function ListarGrupos() {
 				<Card className='p-fluid' width='500px'>
 					<CardHeader title='Grupos'/>
 					<DataTable value={data}>
-						<Column field="name" header="Name"/>
+						<Column field="name" header="Nome"/>
 						<Column headerStyle={{textAlign: 'center'}} header="Ações" body={teste => (
 							<div className='p-d-flex p-jc-around'>
 								<Link to='/admin/grupos/editar'>Editar</Link>
