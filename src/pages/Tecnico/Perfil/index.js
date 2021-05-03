@@ -1,6 +1,6 @@
 import React from 'react'
 import { CardHeader, UnInput } from '~/common/components'
-import { Block, Card, Container, Content, InputWrapper, UnForm } from '~/common/styles'
+import { Block, InputWrapper, UnForm } from '~/common/styles'
 import { Button} from '~/primereact'
 import Template from '~/template'
 

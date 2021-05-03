@@ -72,6 +72,11 @@ const Routes = function _Routes() {
 				<Route path='/tecnico/visitas/agendar' component={AgendarVisita}/>
 				<Route path='/tecnico/visitas/detalhes' component={DetalhesVisita}/>
     
+				{/* Grupo */}
+				<Route path='/criar-grupo' component={CriarGrupo}/>
+				<Route path='/editar-grupo' component={EditarGrupo}/>
+				<Route path='/listar-grupos' component={ListarGrupos}/>
+
 				{/* Page Not Found, Precisa ser a ultima rota! */}
 				<Route path='*' component={PageNotFound}/>
 			</Switch>

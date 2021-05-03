@@ -23,9 +23,9 @@ function EditarGrupo() {
 						<UnChecklist name='roles' label='Permissões' options={groupOptions} gap='20px' columns={2} isMulti/>
 					</UnForm>
 					<InputWrapper columns={3} gap='10px'>
-						<Button onClick={() => history.goBack()} type='cancelar' label='Cancelar'/>
-						<Button type='excluir' label='Excluir'/>
-						<Button type='salvar' label='Salvar'/>
+						<Button onClick={() => {history.goBack()}} label='Cancelar'/>
+						<Button label='Excluir'/>
+						<Button label='Salvar'/>
 					</InputWrapper>
 				</Card>
 			</Content>
