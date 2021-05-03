@@ -1,7 +1,8 @@
-const erros = {
+const error = {
 	DOESNT_MATCH: 'Senhas não coincidem',
 	LETTER_MISSING: 'A senha deve conter pelo menos uma letra',
-	NUMBER_MISSING: 'A senha deve conter pelo menos um número'
+	NUMBER_MISSING: 'A senha deve conter pelo menos um número',
+	NOT_EMPTY: 'A senha não pode conter apenas espaços em branco'
 }
 
 const letters = 'abcdefghijklmnopqrstuvwxyz'
@@ -34,10 +35,11 @@ export const verifyPassword = (password, passwordConfirm) => {
 	}
 
 	const [pass, confPassword] = [password, passwordConfirm].map(i => i.trim())
-
-	if (pass !== confPassword) setPasswordInvalid(erros.DOESNT_MATCH)
-	if (!containLetters(pass)) setPasswordInvalid(erros.LETTER_MISSING)
-	if (!containNumbers(pass)) setPasswordInvalid(erros.NUMBER_MISSING)
+	
+	if (!pass) setPasswordInvalid(error.NOT_EMPTY)
+	if (pass !== confPassword) setPasswordInvalid(error.DOESNT_MATCH)
+	if (!containLetters(pass)) setPasswordInvalid(error.LETTER_MISSING)
+	if (!containNumbers(pass)) setPasswordInvalid(error.NUMBER_MISSING)
 
 	return result
 }

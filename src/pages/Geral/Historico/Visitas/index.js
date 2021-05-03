@@ -6,7 +6,7 @@ import data from './data.json'
 
 function Visita() {
 	return (
-		<Container >
+		<Container className='p-d-flex'>
 			<Content className='p-d-flex p-jc-center p-ai-center layout-content'>
 				<Card className='p-fluid' width='1000px'>
 					<CardHeader title='Histórico de Visitas'/>

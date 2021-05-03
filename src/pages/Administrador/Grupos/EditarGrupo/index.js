@@ -3,23 +3,18 @@ import { useHistory } from 'react-router'
 import { CardHeader, UnChecklist, UnInput } from '~/common/components'
 import { Card, Container, Content, InputWrapper, UnForm } from '~/common/styles'
 import { Button } from '~/primereact'
+import { groupOptions } from '../groupOptions'
 
-function EditarGrupos() {
-	const history= useHistory()
-	const groupOptions = [
-		{label: 'Recanto', value: 1},
-		{label: 'Cargueiros', value: 2},
-		{label: 'Brejão', value: 3},
-		{label: 'Veredas', value: 4},
-		{label: 'Itabinhas', value: 5}
-	  ]
+function EditarGrupo() {
+	const history = useHistory()
+
 	const request = form => {
 		// eslint-disable-next-line no-console
 		console.log(form)
 	}
 
-    return (
-		<Container>
+	return (
+		<Container className='p-d-flex'>
 			<Content className='p-grid p-d-flex p-jc-center p-ai-center'>
 				<Card className='p-fluid' width='500px'>
 					<CardHeader title='Editar Grupo'/>
@@ -28,9 +23,9 @@ function EditarGrupos() {
 						<UnChecklist name='roles' label='Permissões' options={groupOptions} gap='20px' columns={2} isMulti/>
 					</UnForm>
 					<InputWrapper columns={3} gap='10px'>
+						<Button onClick={() => {history.goBack()}} label='Cancelar'/>
 						<Button label='Excluir'/>
 						<Button label='Salvar'/>
-						<Button onClick={() => {history.goBack()}} label='Cancelar'/>
 					</InputWrapper>
 				</Card>
 			</Content>
@@ -38,4 +33,4 @@ function EditarGrupos() {
 	)
 }
 
-export default EditarGrupos
+export default EditarGrupo
