@@ -13,8 +13,8 @@ function ListarGrupos() {
 				<Card className='p-fluid' width='500px'>
 					<CardHeader title='Listar Grupos'/>
 					<UnForm>
-                        	<UnInput name='.' placeholder='Pesquisar' />
-                    	</UnForm>
+						<UnInput name='.' placeholder='Pesquisar' />
+					</UnForm>
 					<DataTable value={data}>
 						<Column field="nome" header="Nome"/>
 						<Column headerStyle={{textAlign: 'center'}} header="Ações" body={() => (
