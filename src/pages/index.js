@@ -1,6 +1,10 @@
 // Administrador
 export { default as CadastroAdmin } from './Administrador/Cadastro'
 export { default as PerfilAdmin } from './Administrador/Perfil'
+export { default as ListarGrupos } from './Administrador/Grupos/ListarGrupos'
+export { default as CriarGrupo } from './Administrador/Grupos/CriarGrupo'
+export { default as EditarGrupo } from './Administrador/Grupos/EditarGrupo'
+export { default as VisitasMarcadas } from './Tecnico/VisitasMarcadas'
 
 //Cooperado
 export { default as Login } from './Tecnico/Login'
@@ -18,14 +22,11 @@ export { default as PerfilTecnico } from './Tecnico/Perfil'
 export { default as RelatorioLandingTecnico } from './Tecnico/RelatorioLanding'
 
 // Exports Gerais
-export { default as HelloWorld } from './HelloWorld'
-export { default as RecuperarSenha } from './RecuperarSenha'
-export { default as AlterarSenha } from './AlterarSenha'
-export { default as PageNotFound } from './PageNotFound'
+export { default as HelloWorld } from './Geral/HelloWorld'
+export { default as RecuperarSenha } from './Geral/RecuperarSenha'
+export { default as AlterarSenha } from './Geral/AlterarSenha'
+export { default as PageNotFound } from './Geral/PageNotFound'
 export { default as PainelExibicao } from './Geral/PainelExibicao'
-export { default as DadosVisita } from './Historico/DadosVisita'
-export { default as MotivoVisita } from './MotivoVisita'
-export { default as HistoricoVisitas } from './Historico/Visitas'
-export { default as CriarGrupo } from './CriarGrupo'
-export { default as EditarGrupo } from './EditarGrupo'
-export { default as ListarGrupos } from './ListarGrupos'
+export { default as DadosVisita } from './Geral/Historico/DadosVisita'
+export { default as MotivoVisita } from './Administrador/MotivoVisita'
+export { default as HistoricoVisitas } from './Geral/Historico/Visitas'

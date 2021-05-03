@@ -3,12 +3,10 @@ import { Form } from '@unform/web'
 
 export const Container = styled('div')`
 	background: var(--surface-b);
-	display: flex;
 	min-height: 100vh;
 `
 
 export const Content = styled('div')`
-	padding-top: 70px;
 	width: 100vw;
 `
 
@@ -34,4 +32,9 @@ export const Title = styled('h1')`
 	font-size: 1.25rem;
 	font-weight: 700;
 	text-align: center;
+`
+
+export const Block = styled('div')`
+	background: var(--surface-e);
+	border-radius: 4px;
 `

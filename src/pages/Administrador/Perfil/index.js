@@ -7,7 +7,7 @@ function Perfil() {
   const [editing, setEditing] = React.useState(true)
 
 	return (
-		<Container>
+		<Container className='p-d-flex'>
 			<Content className='p-grid p-d-flex p-jc-center p-ai-center'>
 				<Card className='p-fluid' width='600px'>
 					<CardHeader title='Perfil'/>
