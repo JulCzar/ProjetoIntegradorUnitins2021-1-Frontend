@@ -1,6 +1,5 @@
 import React from 'react'
 import { CardHeader } from '~/common/components'
-import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 
