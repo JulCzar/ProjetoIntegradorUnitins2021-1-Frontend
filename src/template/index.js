@@ -7,7 +7,6 @@ import { Container, Header, Content, Footer, ContainerLimiter, HeaderMenu } from
 import { menuItems } from './data'
 
 function Template({
-	activeItem,
 	children,
 	contentClassName,
 	contentStyle,
@@ -27,7 +26,7 @@ function Template({
 				<ContainerLimiter className='p-d-flex p-mx-auto p-jc-between p-ai-center'>
 					<h1 className="title">SIMOV</h1>
 					<HeaderMenu>
-						<TabMenu className='desktop' model={menuItems} activeItem={activeItem} onTabChange={handleTabChange}/>
+						<TabMenu className='desktop' model={menuItems} activeItem=' ' onTabChange={handleTabChange}/>
 						<Button className='mobile' type="button" icon='fas fa-bars' onClick={e => op.current.toggle(e)} />
 
 						<OverlayPanel ref={op} className='mobile'>
@@ -52,7 +51,6 @@ function Template({
 
 Template.propTypes = {
 	children: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
-	activeItem: PropTypes.string,
 	contentClassName: PropTypes.string,
 	contentContainerClassName: PropTypes.string,
 	contentStyle: PropTypes.any,

@@ -33,3 +33,8 @@ export const Title = styled('h1')`
 	font-weight: 700;
 	text-align: center;
 `
+
+export const Block = styled('div')`
+	background: var(--surface-e);
+	border-radius: 4px;
+`

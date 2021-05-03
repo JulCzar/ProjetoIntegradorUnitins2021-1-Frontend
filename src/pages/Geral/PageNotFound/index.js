@@ -10,7 +10,7 @@ const Container = styled('div')`
 
 const PageNotFound = function _PageNotFound() {
   return (
-    <Template activeItem={null} contentClassName='p-d-flex p-ai-center p-jc-center'>
+    <Template contentClassName='p-d-flex p-ai-center p-jc-center'>
 			<Container className='p-mt-5 p-d-flex p-ai-center'>
 				Página não encontrada
 			</Container>

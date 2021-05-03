@@ -1,5 +1,5 @@
 import React from 'react'
-import { Switch, Route, BrowserRouter } from 'react-router-dom'
+import { Switch, Route, BrowserRouter, Redirect } from 'react-router-dom'
 
 import {
 	AgendarVisita,
@@ -36,7 +36,9 @@ const Routes = function _Routes() {
 		<BrowserRouter>
 			<Switch>
 				{/* Genéricas */}
-				<Route path='/' component={HelloWorld} exact/>
+				<Route path='/' exact>
+					<Redirect to='/painel'/>
+				</Route>
 				<Route path='/recuperar-senha' component={RecuperarSenha}/>
 				<Route path='/alterar-senha' component={AlterarSenha}/>
 				<Route path='/painel' component={PainelExibicao}/>
