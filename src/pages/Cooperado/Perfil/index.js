@@ -10,7 +10,7 @@ function Perfil() {
   const [modalVisibility, setModalVisibility] = React.useState(false)
 
 	return (
-		<Container>
+		<Container className='p-d-flex'>
 			<Content className='p-grid p-d-flex p-jc-center p-ai-center'>
 				<Card className='p-fluid' width='1000px'>
 					<CardHeader title='Perfil'/>

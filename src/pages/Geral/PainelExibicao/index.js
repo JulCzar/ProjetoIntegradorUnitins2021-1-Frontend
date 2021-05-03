@@ -5,7 +5,7 @@ import { Column, DataTable } from '~/primereact'
 import data from './data.json'
 
 const Painel = () => (
-    <Container >
+    <Container className='p-d-flex'>
 			<Content className='p-d-flex p-jc-center p-ai-center layout-content'>
 				<Card className='p-fluid' width='1600px'>
           <CardHeader title='Painel de Exibição'/>

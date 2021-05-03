@@ -1,15 +1,20 @@
 import React from 'react'
-import { Container, Content, Title } from '~/common/styles'
+import styled from 'styled-components'
+import Template from '~/template'
+
+const Container = styled('div')`
+	height: 70vh;
+	font-size: 2rem;
+	text-align: center;
+`
 
 const PageNotFound = function _PageNotFound() {
   return (
-    <Container>
-			<Content className='p-d-flex p-jc-center p-ai-center layout-content'>
-				<Title className='p-fluid'>
-					Página não encontrada
-				</Title>
-			</Content>
-		</Container>
+    <Template activeItem={null} contentClassName='p-d-flex p-ai-center p-jc-center'>
+			<Container className='p-mt-5 p-d-flex p-ai-center'>
+				Página não encontrada
+			</Container>
+		</Template>
   )
 }
 

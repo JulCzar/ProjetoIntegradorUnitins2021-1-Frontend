@@ -17,7 +17,7 @@ function RelatorioLanding() {
   }
 
   return (
-  <Container >
+  <Container className='p-d-flex'>
 			<Content className='p-d-flex p-jc-center p-ai-center layout-content'>
 				<Card className='p-fluid'>
 					<CardHeader title='Relatório de Cooperado e Propriedade'/>

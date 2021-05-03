@@ -3,7 +3,6 @@ import { Form } from '@unform/web'
 
 export const Container = styled('div')`
 	background: var(--surface-b);
-	display: flex;
 	min-height: 100vh;
 `
 

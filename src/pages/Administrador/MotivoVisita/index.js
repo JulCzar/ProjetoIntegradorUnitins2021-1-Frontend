@@ -12,7 +12,7 @@ function MotivoVisita() {
 	const [editModalVisibility, setEditModalVisibility] = React.useState(false)
 
 	return (
-		<Container >
+		<Container className='p-d-flex'>
 			<Dialog
 				header={() => <h2>Editar Grupo</h2>}
 				draggable={false}

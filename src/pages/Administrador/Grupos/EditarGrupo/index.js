@@ -14,7 +14,7 @@ function EditarGrupo() {
 	}
 
 	return (
-		<Container>
+		<Container className='p-d-flex'>
 			<Content className='p-grid p-d-flex p-jc-center p-ai-center'>
 				<Card className='p-fluid' width='500px'>
 					<CardHeader title='Editar Grupo'/>

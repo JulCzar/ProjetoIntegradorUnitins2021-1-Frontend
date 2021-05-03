@@ -26,7 +26,7 @@ function VisitasMarcadas() {
 	const [events, setEvents] = React.useState([])
 
 	return (
-		<Container>
+		<Container className='p-d-flex'>
 			<Content>
 				<Card>
 					<CardHeader title='Visitas Marcadas'/>
