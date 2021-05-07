@@ -4,14 +4,14 @@ import React, { StyleHTMLAttributes } from 'react'
 
 import { Button, ListBox, OverlayPanel, TabMenu } from '~/primereact'
 import { Container, Header, Content, Footer, ContainerLimiter, HeaderMenu } from './styles'
-import { menuItems } from './data'
+import { menuItems } from './menuItems'
 
 function Template({
 	children,
-	contentClassName,
-	contentStyle,
-	contentContainerClassName,
-	contentContainerStyle
+	contentClassName = '',
+	contentStyle = {},
+	contentContainerClassName ='',
+	contentContainerStyle = {}
 }) {
 	const op = React.useRef(null)
 	const history = useHistory()

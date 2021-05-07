@@ -1,4 +1,13 @@
-const getMenuItem = ({label, destination, ...rest}) => ({label, destination, value: {destination}, ...rest})
+function MenuItem(label, destination) {
+	this.label = label
+	this.destination = destination
+	this.value = this
+}
+
+const getMenuItem = ({label, destination, ...rest}) => ({
+	...(new MenuItem(label, destination)),
+	...rest
+})
 
 const items = [
 	{label: 'Home', destination:'/'},

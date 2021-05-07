@@ -26,7 +26,11 @@ const containNumbers = getAlphabetChecker([...numbers])
 export const verifyPassword = (password, passwordConfirm) => {
 	const result = {
 		isValid: true,
-		errors: []
+		errors: (function () {
+			const list = ['']
+			list.pop()
+			return list
+		})()
 	}
 
 	const setPasswordInvalid = reason => {
@@ -42,4 +46,20 @@ export const verifyPassword = (password, passwordConfirm) => {
 	if (!containNumbers(pass)) setPasswordInvalid(error.NUMBER_MISSING)
 
 	return result
+}
+
+/**
+ * @param {string} phoneNumber 
+ */
+export const getPhoneObject = phoneNumber => {
+	const phoneRegex = /\([1-9]{2}\) [1-9]{1} [1-9]{4}-[1-9]{4}/g
+
+	const isAValidNumber = phoneRegex.test(phoneNumber)
+	if (!isAValidNumber) return
+
+	const area = phoneNumber.substr(1, 2)
+	const numero = phoneNumber.substr(5)
+	return {
+		area, numero
+	}
 }

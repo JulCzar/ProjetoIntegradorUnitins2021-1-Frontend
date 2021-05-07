@@ -11,7 +11,7 @@ import { Link } from 'react-router-dom'
 function Busca() {
 
 	return (
-		<Template activeItem='tecnico' contentClassName='p-fluid p-mt-5'>
+		<Template contentClassName='p-fluid p-mt-5'>
 			<Block className="p-p-3">
 				<CardHeader title='Buscar Técnico'/>
 				<UnForm>
