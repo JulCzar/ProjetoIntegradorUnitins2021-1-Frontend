@@ -5,6 +5,7 @@ import { CardHeader, UnInput, UnSelect } from '~/common/components'
 import { api, getToastInstance } from '~/services'
 import { Button, Toast } from '~/primereact'
 import { verifyPassword, getPhoneObject } from '~/utils'
+import { ContainerWithCard } from '~/template'
 
 const Cadastro = () => {
 	const toastRef = React.useRef(null)
@@ -35,32 +36,27 @@ const Cadastro = () => {
 	}
 
 	return (
-		<Container className='p-d-flex'>
-			<Toast ref={toastRef} />
-			<Content className='p-d-flex p-jc-center p-ai-center layout-content'>
-				<Card className='p-fluid'>
-					<CardHeader title='Cadastro de Técnico'/>
-					<UnForm ref={formRef} onSubmit={cadastrar}>
-						<InputWrapper columns={2} gap='10px'>
-							<UnInput name='nome' label='Nome' required/>
-							<UnInput name='lastname' label='Sobrenome'/>
-						</InputWrapper>
-						<UnInput name='email' label='Email'/>
-						<InputWrapper columns={2} gap='10px'>
-							<UnInput name='cpf' mask='999.999.999-99' label='CPF' required/>
-							<UnInput name='phone' mask='(99) 9 9999-9999' label='Telefone' required/>
-						</InputWrapper>
-						<InputWrapper columns={2} gap='10px'>
-							<UnInput name='registro' label='# do Registro' required/>
-							<UnSelect name='grupo' label='Grupo de Usuário' options={groupOptions} required/>
-						</InputWrapper>
-						<UnInput type='password' name='senha' label='Senha' required/>
-						<UnInput type='password' name='passwordConfirm' label='Confirmação de Senha' required/>
-						<Button type='submit' label='Cadastrar'/>
-					</UnForm>
-				</Card>
-			</Content>
-		</Container>
+		<ContainerWithCard cardClassName='p-fluid' >
+			<CardHeader title='Cadastro de Técnico'/>
+				<UnForm ref={formRef} onSubmit={cadastrar}>
+					<InputWrapper columns={2} gap='10px'>
+						<UnInput name='nome' label='Nome' required/>
+						<UnInput name='lastname' label='Sobrenome'/>
+					</InputWrapper>
+					<UnInput name='email' label='Email'/>
+					<InputWrapper columns={2} gap='10px'>
+						<UnInput name='cpf' mask='999.999.999-99' label='CPF' required/>
+						<UnInput name='phone' mask='(99) 9 9999-9999' label='Telefone' required/>
+					</InputWrapper>
+					<InputWrapper columns={2} gap='10px'>
+						<UnInput name='registro' label='# do Registro' required/>
+						<UnSelect name='grupo' label='Grupo de Usuário' options={groupOptions} required/>
+					</InputWrapper>
+					<UnInput type='password' name='senha' label='Senha' required/>
+					<UnInput type='password' name='passwordConfirm' label='Confirmação de Senha' required/>
+					<Button type='submit' label='Cadastrar'/>
+				</UnForm>
+		</ContainerWithCard>
 	)
 }
 

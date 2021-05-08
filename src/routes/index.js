@@ -13,7 +13,6 @@ import {
 	CriarGrupo,
 	EditarGrupo,
 	DetalhesVisita,
-	HelloWorld,
 	Login,
 	MotivoVisita,
 	PageNotFound,
@@ -42,6 +41,7 @@ const Routes = function _Routes() {
 				<Route path='/recuperar-senha' component={RecuperarSenha}/>
 				<Route path='/alterar-senha' component={AlterarSenha}/>
 				<Route path='/painel' component={PainelExibicao}/>
+				<Route path='/login' component={Login}/>
 
 				{/* Cadastros */}
 				<Route path='/cadastrar/admin' component={CadastroAdmin}/>
@@ -65,7 +65,6 @@ const Routes = function _Routes() {
 
 				{/* Técnico */}
 				<Route path='/tecnico' component={BuscaTecnico} exact/>
-				<Route path='/tecnico/login' component={Login}/>
 				<Route path='/tecnico/relatorio' component={RelatorioLandingTecnico}/>
 				<Route path='/tecnico/perfil' component={PerfilTecnico}/>
 				<Route path='/tecnico/visitas' component={VisitasMarcadas} exact/>

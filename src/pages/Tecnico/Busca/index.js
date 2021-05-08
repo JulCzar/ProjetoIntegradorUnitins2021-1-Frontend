@@ -5,13 +5,13 @@ import { Button, Column, DataTable } from '~/primereact'
 import { Block, InputWrapper, UnForm } from '~/common/styles'
 
 import data from './data.json'
-import Template from '~/template'
 import { Link } from 'react-router-dom'
+import { ContainerWithTemplate } from '~/template'
 
 function Busca() {
 
 	return (
-		<Template contentClassName='p-fluid p-mt-5'>
+		<ContainerWithTemplate contentClassName='p-fluid p-mt-5'>
 			<Block className="p-p-3">
 				<CardHeader title='Buscar Técnico'/>
 				<UnForm>
@@ -37,7 +37,7 @@ function Busca() {
 					</Link>
 				</InputWrapper>
 			</Block>
-		</Template>
+		</ContainerWithTemplate>
 	)
 }
 

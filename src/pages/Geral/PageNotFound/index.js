@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import Template from '~/template'
+import { ContainerWithTemplate } from '~/template'
 
 const Container = styled('div')`
 	height: 70vh;
@@ -10,11 +10,11 @@ const Container = styled('div')`
 
 const PageNotFound = function _PageNotFound() {
   return (
-    <Template contentClassName='p-d-flex p-ai-center p-jc-center'>
+    <ContainerWithTemplate contentClassName='p-d-flex p-ai-center p-jc-center'>
 			<Container className='p-mt-5 p-d-flex p-ai-center'>
 				Página não encontrada
 			</Container>
-		</Template>
+		</ContainerWithTemplate>
   )
 }
 

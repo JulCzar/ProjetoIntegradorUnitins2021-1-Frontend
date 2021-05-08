@@ -4,14 +4,14 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 
+import { ContainerWithTemplate } from '~/template'
+import { CalendarContainer } from './styles'
 import { FullCalendar } from '~/primereact'
 import { Block } from '~/common/styles'
 
 import '@fullcalendar/common/main.css'
 import '@fullcalendar/daygrid/main.css'
 import '@fullcalendar/timegrid/main.css'
-import Template from '~/template'
-import { CalendarContainer } from './styles'
 
 const options = {
 	plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
@@ -36,14 +36,14 @@ function VisitasMarcadas() {
 	const [events, setEvents] = React.useState([])
 
 	return (
-		<Template contentClassName='p-fluid p-mt-5'>
+		<ContainerWithTemplate contentClassName='p-fluid p-mt-5'>
 			<CalendarContainer>
 				<Block className='p-p-3 p-fluid'>
 					<CardHeader title='Visitas Marcadas'/>
 					<FullCalendar initialView='timeGridDay' ref={calendarRef} events={events} options={options}/>
 				</Block>
 			</CalendarContainer>
-		</Template>
+		</ContainerWithTemplate>
 	)
 }
 

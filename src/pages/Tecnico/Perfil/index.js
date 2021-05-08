@@ -2,7 +2,7 @@ import React from 'react'
 import { CardHeader, UnInput } from '~/common/components'
 import { Block, InputWrapper, UnForm } from '~/common/styles'
 import { Button} from '~/primereact'
-import Template from '~/template'
+import { ContainerWithTemplate } from '~/template'
 
 function Perfil() {
   const [editing, setEditing] = React.useState(true)
@@ -15,7 +15,7 @@ function Perfil() {
 	])
 
 	return (
-		<Template contentClassName='p-mt-5'>
+		<ContainerWithTemplate contentClassName='p-mt-5'>
 			<Block className="p-p-3 p-fluid">
 				<CardHeader title='Perfil'/>
 				<UnForm>
@@ -39,7 +39,7 @@ function Perfil() {
 					:<Button onClick={() => setEditing(true)} label='Salvar'/>}
 				</InputWrapper>
 			</Block>
-		</Template>
+		</ContainerWithTemplate>
 	)
 }
 

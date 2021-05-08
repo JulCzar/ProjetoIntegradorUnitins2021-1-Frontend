@@ -4,12 +4,12 @@ import { Link } from 'react-router-dom'
 import { CardHeader, UnInput } from '~/common/components'
 import { Block, UnForm } from '~/common/styles'
 import { Button, Column, DataTable } from '~/primereact'
-import Template from '~/template'
+import { ContainerWithTemplate } from '~/template'
 import data from './data.json'
 
 function Busca() {
 	return (
-		<Template contentClassName='p-fluid p-mt-5'>	
+		<ContainerWithTemplate contentClassName='p-fluid p-mt-5'>	
 			<Block className='p-p-3'>
 				<CardHeader title='Buscar Cooperado'/>
 				<UnForm>
@@ -30,7 +30,7 @@ function Busca() {
 					<Button className='p-mt-3' label='Novo'/>
 				</Link>
 			</Block>
-		</Template>
+		</ContainerWithTemplate>
 	)
 }
 

@@ -4,11 +4,11 @@ import { CardHeader, UnInputDateTime } from '~/common/components'
 import { Column, DataTable } from '~/primereact'
 import { Block, UnForm} from '~/common/styles'
 
-import Template from '~/template'
 import data from './data.json'
+import { ContainerWithTemplate } from '~/template'
 
 const Painel = () => (
-    <Template contentClassName='p-fluid p-mt-5'>
+    <ContainerWithTemplate contentClassName='p-fluid p-mt-5'>
 			<Block className='p-p-3'>
 				<CardHeader title='Painel de Exibição'/>
 				<UnForm>
@@ -24,7 +24,7 @@ const Painel = () => (
 					</DataTable>
 				</UnForm>
 			</Block>
-		</Template>
+		</ContainerWithTemplate>
   )
 
 export default Painel
