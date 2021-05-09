@@ -11,7 +11,7 @@ function Perfil() {
   const [modalVisibility, setModalVisibility] = React.useState(false)
 
 	return (
-		<ContainerWithTemplate contentClassName='p-fluid p-mt-5'>
+		<ContainerWithTemplate loading={editing} contentClassName='p-fluid p-mt-5'>
 			<Block className='p-p-3'>
 				<CardHeader title='Perfil'/>
 				<UnForm>
@@ -28,8 +28,8 @@ function Perfil() {
 					<InputWrapper columns={2} gap='10px'>
 					<Button type='submit' label='Desativar Perfil'/>
 					{!editing
-					?<Button onClick={() => setEditing(true)} label='Editar Perfil'/>
-					:<Button onClick={() => setEditing(false)} label='Salvar'/>}
+						?<Button onClick={() => setEditing(true)} label='Editar Perfil'/>
+						:<Button onClick={() => setEditing(false)} label='Salvar'/>}
 				</InputWrapper>
 			</Block>   
 		

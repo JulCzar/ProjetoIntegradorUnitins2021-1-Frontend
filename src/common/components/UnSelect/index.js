@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { useField } from '@unform/core'
 import { Dropdown, Toast } from '~/primereact'
 
-const UnSelect = ({ name, label, options, className, value, ...rest }) => {
+const UnSelect = ({ name, label, options, className, value, isMulti, ...rest }) => {
 	const toast = React.useRef(null)
 	const selectRef = React.useRef(null)
 	const [selectValue, setValue] = React.useState(null)
@@ -47,7 +47,8 @@ UnSelect.propTypes = {
 		label: PropTypes.string
 	})),
 	className: PropTypes.string,
-	value: PropTypes.any
+	value: PropTypes.any,
+	isMulti: PropTypes.bool
 }
 
 export default UnSelect
