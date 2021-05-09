@@ -63,3 +63,12 @@ export const getPhoneObject = phoneNumber => {
 		area, numero
 	}
 }
+
+/**
+ * 
+ * @param {string} str 
+ * @returns 
+ */
+export const getStringNormalized = str => str
+	.normalize('NFD')
+	.replace(/[^a-zA-Z1-9s]/g, '')

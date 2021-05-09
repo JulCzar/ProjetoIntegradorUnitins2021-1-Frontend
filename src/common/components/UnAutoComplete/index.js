@@ -2,9 +2,11 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import { AutoComplete } from '~/primereact'
+import { useField } from '@unform/core'
 
 function UnAutoComplete({
 	name,
+	field,
 	label,
 	className,
 	onChange = () => {},
@@ -19,7 +21,6 @@ function UnAutoComplete({
 
 	React.useEffect(() => {
 		if (!name) throw new Error('O nome do input não pode ficar vazio!')
-		setValue(new Date())
 	}, [])
 	
 	React.useCallback(() => { setInputValue(value) }, [value])
@@ -28,7 +29,7 @@ function UnAutoComplete({
 		registerField({
 			name: fieldName,
 			ref: inputRef.current,
-			getValue: ref => ref.value
+			getValue: ref => ref.props.value
 		})
 	}, [fieldName, registerField])
 
@@ -37,10 +38,10 @@ function UnAutoComplete({
 			<label htmlFor={name}>{label}</label>
 			<AutoComplete
 				ref={inputRef}
-				field={name}
+				field={field}
 				suggestions={suggestions}
 				completeMethod={completeMethod}
-				value={inputValue}
+				value={value||inputValue}
 				onChange={e => {
 					setInputValue(e.value)
 					onChange(e)
@@ -55,6 +56,7 @@ const value = PropTypes.any
 
 UnAutoComplete.propTypes = {
 	name: PropTypes.string.isRequired,
+	field: PropTypes.string,
 	label: PropTypes.string,
 	defaultInput: PropTypes.string,
 	onChange: PropTypes.func,

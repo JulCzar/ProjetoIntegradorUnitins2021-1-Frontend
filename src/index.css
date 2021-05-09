@@ -5,6 +5,7 @@
   --font-family: 'Montserrat', 'Open Sans', 'Roboto', sans-serif !important;
 	--scrollbar-thumb-width: 3px;
 	--scrollbar-thumb-BG: #0003;
+	--max-container-width: 1100px;
 }
 
 * {

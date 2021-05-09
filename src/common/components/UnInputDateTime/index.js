@@ -17,7 +17,7 @@ const UnInputDateTime = ({ name, label, className, onChange = () => {}, ...rest 
 		registerField({
 			name: fieldName,
 			ref: inputRef.current,
-			getValue: ref => ref.value
+			getValue: ref => ref.props.value
 		})
 	}, [fieldName, registerField])
 

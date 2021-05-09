@@ -13,8 +13,9 @@ const items = [
 	{label: 'Home', destination:'/'},
 	{label: 'Cooperado', destination:'/cooperado'},
 	{label: 'Tecnico', destination:'/tecnico'},
+	{label: 'Visitas', destination: '/tecnico/visitas'},
 	{label: 'Gestão', destination:'/admin'},
-	{label: 'login', destination:'/login', icon: 'pi pi-fw pi-sign-in'}
+	{label: 'login', destination:'/login', icon:'pi pi-fw pi-sign-in'},
 ]
 
 export const menuItems = items.map(getMenuItem)

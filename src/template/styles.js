@@ -40,7 +40,7 @@ export const HeaderMenu = styled('div')`
 `
 
 export const ContainerLimiter = styled('div')`
-	max-width: 1100px;
+	max-width: var(--max-container-width);
 `
 
 export const Content = styled('div')`

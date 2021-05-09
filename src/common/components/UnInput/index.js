@@ -1,11 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { useField } from '@unform/core'
-import { InputText, InputMask } from '~/primereact'
+import { InputText, InputMask, Password } from '~/primereact'
 
-const UnInput = ({ name, label, defaultInput, mask, className, onChange = () => {}, ...rest }) => {
+const UnInput = ({ type, name, label, defaultInput, mask, value, className, onChange = () => {}, ...rest }) => {
 	const inputRef = React.useRef(null)
-	const [value, setValue] = React.useState(null)
+	const [inputValue, setValue] = React.useState(null)
 	const { fieldName, defaultValue, registerField } = useField(name)
 
 	React.useEffect(() => {
@@ -23,25 +23,41 @@ const UnInput = ({ name, label, defaultInput, mask, className, onChange = () => 
 	return (
 		<div className={`p-field ${className}`}>
 			<label htmlFor={name}>{label}</label>
-			{mask
+			{type==='password'
+			?<Password
+				id={name}
+				name={name}
+				ref={inputRef}
+				defaultValue={defaultValue}
+				value={value||inputValue}
+				onChange={e => {
+					onChange(e)
+					setValue(e.target.value)
+				}}
+				{...rest}
+			/>
+			:mask
 				?(<InputMask
 					id={name}
+					type={type}
 					mask={mask}
 					name={name}
 					ref={inputRef}
 					defaultValue={defaultValue}
-					value={value}
-					onChange={i => {
-						onChange(i)
-						setValue(i.value)
+					value={value||inputValue}
+					onChange={e => {
+						onChange(e)
+						setValue(e.value)
 					}}
 					{...rest}
 				/>)
 				:(<InputText
 					id={name}
+					type={type}
 					name={name}
 					ref={inputRef}
 					onChange={onChange}
+					value={value||inputValue}
 					defaultValue={defaultValue}
 					{...rest}
 				/>)
@@ -56,7 +72,9 @@ UnInput.propTypes = {
 	defaultInput: PropTypes.string,
 	mask: PropTypes.string,
 	onChange: PropTypes.func,
-	className: PropTypes.string
+	className: PropTypes.string,
+	value: PropTypes.string,
+	type: PropTypes.any
 }
 
 export default UnInput

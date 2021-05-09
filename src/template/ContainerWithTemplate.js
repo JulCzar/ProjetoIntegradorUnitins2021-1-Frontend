@@ -50,7 +50,7 @@ function ContainerWithTemplate({
 }
 
 ContainerWithTemplate.propTypes = {
-	children: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
+	children: PropTypes.any,
 	contentClassName: PropTypes.string,
 	contentContainerClassName: PropTypes.string,
 	contentStyle: PropTypes.any,

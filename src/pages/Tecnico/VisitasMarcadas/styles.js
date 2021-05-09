@@ -2,7 +2,7 @@ import styled from 'styled-components'
 
 export const CalendarContainer = styled('div')`
 width: 100vw;
-max-width: 1100px;
+max-width: var(--max-container-width);
 
 @media (max-width: 770px) {
 	.fc-button-group {

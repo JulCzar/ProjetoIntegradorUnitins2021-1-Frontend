@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Card, Container, Content, InputWrapper, UnForm } from '~/common/styles'
+import { InputWrapper, UnForm } from '~/common/styles'
 import { CardHeader, UnInput, UnSelect } from '~/common/components'
 import { api, getToastInstance } from '~/services'
 import { Button, Toast } from '~/primereact'
@@ -17,14 +17,12 @@ const Cadastro = () => {
 	async function cadastrar(form) {
 		const { passwordConfirm, phone, ...data } = form
 		const passwordCheck = verifyPassword(data.senha, passwordConfirm)
+		const telefone = getPhoneObject(phone)
 		
 		if (!passwordCheck.isValid) return toast.showInfos(passwordCheck.errors)
+		if (!telefone) return toast.showError('O número de telefone providenciado é inválido')
 		
 		try {
-			const telefone = getPhoneObject(phone)
-
-			if (!telefone) return toast.showError('O número de telefone providenciado é inválido')
-
 			await api.post('/tecnico/store', {...data, telefone})
 
 			toast.showSuccess('Cadastro Realizado com Sucesso!')
@@ -37,6 +35,7 @@ const Cadastro = () => {
 
 	return (
 		<ContainerWithCard cardClassName='p-fluid' >
+			<Toast ref={toastRef}/>
 			<CardHeader title='Cadastro de Técnico'/>
 				<UnForm ref={formRef} onSubmit={cadastrar}>
 					<InputWrapper columns={2} gap='10px'>
@@ -52,8 +51,8 @@ const Cadastro = () => {
 						<UnInput name='registro' label='# do Registro' required/>
 						<UnSelect name='grupo' label='Grupo de Usuário' options={groupOptions} required/>
 					</InputWrapper>
-					<UnInput type='password' name='senha' label='Senha' required/>
-					<UnInput type='password' name='passwordConfirm' label='Confirmação de Senha' required/>
+					<UnInput type='password' name='senha' label='Senha' required toggleMask/>
+					<UnInput type='password' name='passwordConfirm' label='Confirmação de Senha' required toggleMask feedback={false}/>
 					<Button type='submit' label='Cadastrar'/>
 				</UnForm>
 		</ContainerWithCard>
