@@ -54,4 +54,5 @@ export const Footer = styled('footer')`
 	background: var(--surface-a);
 	padding: 1rem 1.5rem;
 	margin-top: auto;
+	color: #ffffff;
 `

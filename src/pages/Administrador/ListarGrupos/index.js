@@ -17,11 +17,12 @@ function ListarGrupos() {
 					</UnForm>
 					<DataTable value={data}>
 						<Column field="nome" header="Nome"/>
-						<Column headerStyle={{textAlign: 'center'}} header="Ações" body={() => (
-							<div className='p-d-flex p-jc-around'>
+						<Column
+							headerStyle={{textAlign: 'center'}}
+							header='Ações'
+							body={() => (
 								<Link to='/editar-grupo'>Detalhes</Link>
-							</div>
-						)}/>
+							)}/>
 					</DataTable>
 					<Button onClick={() => {history.push('/criar-grupo')}} label='Criar'/>
 				</Card>

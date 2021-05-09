@@ -21,7 +21,7 @@ const items = [
 	{label: 'Histórico', destination:'/admin/historico'},
 	{label: 'Grupos', destination:'/admin/grupos'},
 	{label: 'Motivos', destination: '/admin/motivos'},
-	{label: 'Cadastrar Novo', destination:'/cadastrar/admin'},
+	{label: 'Cadastrar Administrador', destination:'/cadastrar/admin'},
 ]
 
 export const lateralMenuItems = items.map(parseMenuItem)

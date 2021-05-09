@@ -16,15 +16,16 @@ function MotivoVisita() {
 		<AdminTemplate title='Motivos de Visita'>
 			<DataTable value={data}>
 				<Column field="name" header="Name"/>
-				<Column headerStyle={{textAlign: 'center'}} header="Ações" body={teste => (
-					<div className='p-d-flex p-jc-around'>
-						<a onClick={() => {
-							setState(teste)
-							setEditModalVisibility(true)
-						}}>Editar</a>
-						<a>Excluir</a>
-					</div>
-				)}/>
+				<Column
+					bodyClassName='p-d-flex p-jc-around'
+					headerStyle={{textAlign: 'center'}}
+					header="Ações"
+					body={() => (
+						<React.Fragment>
+							<a onClick={() => setEditModalVisibility(true)}>Editar</a>
+							<a>Excluir</a>
+						</React.Fragment>
+					)}/>
 			</DataTable>
 			<Button onClick={() => setModalVisibility(true)} label='Criar Novo'/>
 			<Dialog
@@ -48,7 +49,7 @@ function MotivoVisita() {
 			</Dialog>
 			<Dialog
 				draggable={false}
-				header={() => <h2>Criar Grupo</h2> }
+				header={<h2>Criar Motivo</h2>}
 				closable={false}
 				className='p-fluid'
 				visible={modalVisibility}
