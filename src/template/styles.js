@@ -16,7 +16,7 @@ export const Header = styled('div')`
 	padding: 1rem 1.5rem;
 
 	.title {
-		font-family: 'Raleway';
+		font-family: Raleway;
 		font-size: 2rem;
 		padding-right: 1.5rem;
 		margin: 0;

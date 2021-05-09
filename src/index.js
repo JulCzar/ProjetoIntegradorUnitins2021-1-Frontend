@@ -9,7 +9,7 @@ import { store, persistor } from '~/store'
 import history from '~/routes/history'
 import Routes from '~/routes'
 
-import 'primereact/resources/themes/bootstrap4-dark-purple/theme.css'
+import '~/theme/style.css'
 import 'primereact/resources/primereact.min.css'
 import 'primeicons/primeicons.css'
 import 'primeflex/primeflex.css'

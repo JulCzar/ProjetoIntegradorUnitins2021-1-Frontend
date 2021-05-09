@@ -10,7 +10,7 @@ export default function auth(state = INITIAL_STATE, actionRequested) {
 
 	const reducer = reducers[type]
 
-	if (reducer) return reducer(state, actionRequested)
+	if (!reducer) return state
 
-	return state
+	return reducer(state, actionRequested)
 }

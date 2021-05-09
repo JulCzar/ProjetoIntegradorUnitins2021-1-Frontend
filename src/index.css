@@ -53,3 +53,7 @@ input:-webkit-autofill:active {
 .container {
 	background: var(--surface-b);
 }
+
+#tabmenu-nopadding .p-overlaypanel .p-overlaypanel-content {
+	padding: 0 !important;
+}

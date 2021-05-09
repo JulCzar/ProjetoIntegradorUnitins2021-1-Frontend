@@ -48,7 +48,7 @@ const Cadastro = () => {
 						<UnInput name='phone' mask='(99) 9 9999-9999' label='Telefone' required/>
 					</InputWrapper>
 					<InputWrapper columns={2} gap='10px'>
-						<UnInput name='registro' label='# do Registro' required/>
+						<UnInput name='registro' label='Número do Conselho' required/>
 						<UnSelect name='grupo' label='Grupo de Usuário' options={groupOptions} required/>
 					</InputWrapper>
 					<UnInput type='password' name='senha' label='Senha' required toggleMask/>

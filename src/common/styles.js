@@ -26,6 +26,11 @@ export const InputWrapper = styled('div')`
 	display: grid;
 	grid-template-columns: repeat(${props => (props.columns || 1)}, 1fr);
 	gap: ${props => (props.gap || 0)};
+
+	@media (max-width: 750px) {
+		grid-template-columns: 1fr;
+		gap: 0;
+	}
 `
 
 export const Title = styled('h1')`

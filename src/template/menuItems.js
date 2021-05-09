@@ -6,31 +6,37 @@ function MenuItem(label, destination) {
 	this.value = this
 }
 
-const getMenuItem = ({label, destination, ...rest}) => ({
+/**
+ * 
+ * @param {*} param0 
+ * @returns {MenuItem}
+ */
+const parseMenuItem = ({label, destination, ...rest}) => ({
 	...(new MenuItem(label, destination)),
 	...rest
 })
 
+/**
+ * @returns {{label: string, destination: string, icon?: string}[]}
+ */
 function getMenuItems() {
 	const { auth } = store.getState()
-	const AllItems = [
+	
+	const allItems = [
 		{label: 'Home', destination:'/'},
 		{label: 'Cooperado', destination:'/cooperado'},
 		{label: 'Tecnico', destination:'/tecnico'},
 		{label: 'Visitas', destination: '/tecnico/visitas'},
 		{label: 'Gestão', destination:'/admin'},
 		{label: 'login', destination:'/login', icon:'pi pi-fw pi-sign-in'},
+		{label: auth.user.name, destination: '/tecnico/perfil'}
 	]
 
+	const checkPermissions = () => {}
+	
+	return allItems.filter(i => i.label)
 }
 
-const items = [
-	{label: 'Home', destination:'/'},
-	{label: 'Cooperado', destination:'/cooperado'},
-	{label: 'Tecnico', destination:'/tecnico'},
-	{label: 'Visitas', destination: '/tecnico/visitas'},
-	{label: 'Gestão', destination:'/admin'},
-	{label: 'login', destination:'/login', icon:'pi pi-fw pi-sign-in'},
-]
+const items = getMenuItems()
 
-export const menuItems = items.map(getMenuItem)
+export const menuItems = items.map(parseMenuItem)
