@@ -1,5 +1,6 @@
 import React from 'react'
 import { CardHeader, UnInput, UnInputDateTime, UnSelect } from '~/common/components'
+import UnTextArea from '~/common/components/UnTextArea'
 import { Card, Container, Content, InputWrapper, UnForm } from '~/common/styles'
 import { Button } from '~/primereact'
 
@@ -28,6 +29,7 @@ function DadosVisita() {
 							<UnInputDateTime disabled timeOnly  name='horaEstimada' label='Hora Estimada' mask='99:99'/>
 						</InputWrapper>
 						<UnSelect disabled name='motivo' label='Motivo da Visita' options={groupOptions}/>
+						<UnTextArea disabled name='observacoes' label='Observações' autoResize />
 					</UnForm>
 					<Button label='Imprimir'/>
 				</Card>

@@ -35,9 +35,7 @@ const Routes = function _Routes() {
 		<BrowserRouter>
 			<Switch>
 				{/* Genéricas */}
-				<Route path='/' exact>
-					<Redirect to='/painel'/>
-				</Route>
+				<Route path='/' exact><Redirect to='/painel'/></Route>
 				<Route path='/recuperar-senha' component={RecuperarSenha}/>
 				<Route path='/alterar-senha' component={AlterarSenha}/>
 				<Route path='/painel' component={PainelExibicao}/>

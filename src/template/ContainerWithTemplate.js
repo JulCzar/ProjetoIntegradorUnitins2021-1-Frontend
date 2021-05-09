@@ -1,6 +1,7 @@
 import { useHistory } from 'react-router'
 import PropTypes from 'prop-types'
 import React, { StyleHTMLAttributes } from 'react'
+import logo from '~/assets/logo.svg'
 
 import { Button, ListBox, OverlayPanel, TabMenu } from '~/primereact'
 import { Container, Header, Content, Footer, ContainerLimiter, HeaderMenu } from './styles'
@@ -24,7 +25,7 @@ function ContainerWithTemplate({
 		<Container>
 			<Header>
 				<ContainerLimiter className='p-d-flex p-mx-auto p-jc-between p-ai-center'>
-					<h1 className="title">SIMOV</h1>
+					<img src={logo} alt='Logo do sistema SIMOV' height='50'/>
 					<HeaderMenu>
 						<TabMenu className='desktop' model={menuItems} activeItem=' ' onTabChange={handleTabChange}/>
 						<Button className='mobile' type="button" icon='fas fa-bars' onClick={e => op.current.toggle(e)} />
