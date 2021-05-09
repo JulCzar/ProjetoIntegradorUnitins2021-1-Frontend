@@ -28,7 +28,7 @@ function ContainerWithTemplate({
 			{loading && <Loading/>}
 			<Header>
 				<ContainerLimiter className='p-d-flex p-mx-auto p-jc-between p-ai-center'>
-					<img src={logo} alt='Logo do sistema SIMOV' height='50'/>
+					<img draggable={false} src={logo} alt='Logo do sistema SIMOV' height='50'/>
 					<HeaderMenu>
 						<TabMenu className='desktop' model={menuItems} activeItem=' ' onTabChange={handleTabChange}/>
 						<Button className='mobile' type="button" icon='fas fa-bars' onClick={e => op.current.toggle(e)} />
