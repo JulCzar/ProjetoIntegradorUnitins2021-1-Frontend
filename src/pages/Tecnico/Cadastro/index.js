@@ -17,7 +17,7 @@ const Cadastro = () => {
 
 	async function cadastrar(form) {
 		setLoading(true)
-		const { passwordConfirm, phone, ...data } = form
+		const { passwordConfirm, phone, id_grupo, ...data } = form
 		const passwordCheck = verifyPassword(data.senha, passwordConfirm)
 		const telefone = getPhoneObject(phone)
 		
@@ -44,7 +44,7 @@ const Cadastro = () => {
 				<UnForm ref={formRef} onSubmit={cadastrar}>
 					<InputWrapper columns={2} gap='10px'>
 						<UnInput name='nome' label='Nome' required/>
-						<UnInput name='lastname' label='Sobrenome'/>
+						<UnInput name='sobrenome' label='Sobrenome'/>
 					</InputWrapper>
 					<UnInput name='email' label='Email'/>
 					<InputWrapper columns={2} gap='10px'>
@@ -52,7 +52,7 @@ const Cadastro = () => {
 						<UnInput name='phone' mask='(99) 9 9999-9999' label='Telefone' required/>
 					</InputWrapper>
 					<InputWrapper columns={2} gap='10px'>
-						<UnInput name='registro' label='Número do Conselho' required/>
+						<UnInput name='numero_registro' label='Número do Conselho' required/>
 						<UnSelect name='id_grupo' label='Grupo de Usuário' options={groupOptions} required/>
 					</InputWrapper>
 					<UnInput type='password' name='senha' label='Senha' required toggleMask/>
