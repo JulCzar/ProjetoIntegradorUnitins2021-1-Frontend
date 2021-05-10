@@ -16,4 +16,5 @@ const createAction = function _createAction(actionType) {
 
 export const login = createAction('login')
 export const loginSuccess = createAction('login_success')
+export const cadastrarTecnico = createAction('cadastrar_tecnico')
 export const logout = createAction('logout')

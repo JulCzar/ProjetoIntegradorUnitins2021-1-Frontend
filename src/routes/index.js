@@ -13,7 +13,6 @@ import {
 	CriarGrupo,
 	EditarGrupo,
 	DetalhesVisita,
-	HelloWorld,
 	Login,
 	MotivoVisita,
 	PageNotFound,
@@ -36,12 +35,11 @@ const Routes = function _Routes() {
 		<BrowserRouter>
 			<Switch>
 				{/* Genéricas */}
-				<Route path='/' exact>
-					<Redirect to='/painel'/>
-				</Route>
+				<Route path='/' exact><Redirect to='/painel'/></Route>
 				<Route path='/recuperar-senha' component={RecuperarSenha}/>
 				<Route path='/alterar-senha' component={AlterarSenha}/>
 				<Route path='/painel' component={PainelExibicao}/>
+				<Route path='/login' component={Login}/>
 
 				{/* Cadastros */}
 				<Route path='/cadastrar/admin' component={CadastroAdmin}/>
@@ -49,7 +47,7 @@ const Routes = function _Routes() {
 				<Route path='/cadastrar/cooperado' component={CadastroCooperado}/>
 
 				{/* Administrador */}
-				<Route path='/admin/perfil' component={PerfilAdmin}/>
+				<Route path='/admin' component={PerfilAdmin} exact/>
 				<Route path='/admin/grupos' component={ListarGrupos} exact/>
 				<Route path='/admin/motivos' component={MotivoVisita}/>
 				<Route path='/admin/historico' component={HistoricoVisitas} exact/>
@@ -65,7 +63,6 @@ const Routes = function _Routes() {
 
 				{/* Técnico */}
 				<Route path='/tecnico' component={BuscaTecnico} exact/>
-				<Route path='/tecnico/login' component={Login}/>
 				<Route path='/tecnico/relatorio' component={RelatorioLandingTecnico}/>
 				<Route path='/tecnico/perfil' component={PerfilTecnico}/>
 				<Route path='/tecnico/visitas' component={VisitasMarcadas} exact/>
