@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom'
 import { ContainerWithTemplate } from '~/template'
 
 function Busca() {
-
+	
 	return (
 		<ContainerWithTemplate contentClassName='p-fluid p-mt-5'>
 			<Block className="p-p-3">

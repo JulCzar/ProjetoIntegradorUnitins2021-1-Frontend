@@ -29,10 +29,10 @@ const UnInput = ({ type, name, label, defaultInput, mask, value, className, onCh
 					name={name}
 					ref={inputRef}
 					defaultValue={defaultValue}
-					value={value||inputValue}
+					value={inputValue}
 					onChange={e => {
 						onChange(e)
-						setValue(e.target.value)
+						setValue(value || e.target.value)
 					}} {...rest}/>
 				:mask
 					?(<InputMask
@@ -42,10 +42,10 @@ const UnInput = ({ type, name, label, defaultInput, mask, value, className, onCh
 						name={name}
 						ref={inputRef}
 						defaultValue={defaultValue}
-						value={value||inputValue}
+						value={inputValue}
 						onChange={e => {
 							onChange(e)
-							setValue(e.value)
+							setValue(value || e.value)
 						}} {...rest}/>)
 					:(<InputText
 						id={name}
@@ -54,7 +54,7 @@ const UnInput = ({ type, name, label, defaultInput, mask, value, className, onCh
 						ref={inputRef}
 						onChange={e => {
 							onChange(e)
-							setValue(e.target.value)
+							setValue(value || e.target.value)
 						}}
 						value={value||inputValue}
 						defaultValue={defaultValue}

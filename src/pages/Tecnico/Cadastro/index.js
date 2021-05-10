@@ -53,7 +53,7 @@ const Cadastro = () => {
 					</InputWrapper>
 					<InputWrapper columns={2} gap='10px'>
 						<UnInput name='registro' label='Número do Conselho' required/>
-						<UnSelect name='grupo' label='Grupo de Usuário' options={groupOptions} required/>
+						<UnSelect name='id_grupo' label='Grupo de Usuário' options={groupOptions} required/>
 					</InputWrapper>
 					<UnInput type='password' name='senha' label='Senha' required toggleMask/>
 					<UnInput type='password' name='passwordConfirm' label='Confirmação de Senha' required toggleMask feedback={false}/>

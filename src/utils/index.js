@@ -57,11 +57,10 @@ export const getPhoneObject = phoneNumber => {
 	const isAValidNumber = phoneRegex.test(phoneNumber)
 	if (!isAValidNumber) return
 
-	const area = phoneNumber.substr(1, 2)
+	const codigo_area = phoneNumber.substr(1, 2)
 	const numero = phoneNumber.substr(5)
-	return {
-		area, numero
-	}
+	
+	return { codigo_area, numero }
 }
 
 /**
