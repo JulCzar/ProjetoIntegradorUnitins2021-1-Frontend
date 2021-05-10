@@ -3,21 +3,20 @@ import PropTypes from 'prop-types'
 import { useField } from '@unform/core'
 import { Calendar } from '~/primereact'
 
-const UnInputDateTime = ({ name, label, className, onChange = () => {}, ...rest }) => {
+const UnInputDateTime = ({ name, label, value, className, onChange = () => {}, ...rest }) => {
 	const inputRef = React.useRef(null)
-	const [value, setValue] = React.useState(null)
+	const [inputValue, setValue] = React.useState(null)
 	const { fieldName, registerField } = useField(name)
 
 	React.useEffect(() => {
 		if (!name) throw new Error('O nome do input não pode ficar vazio!')
-		setValue(new Date())
 	}, [])
 
 	React.useEffect(() => {
 		registerField({
 			name: fieldName,
 			ref: inputRef.current,
-			getValue: ref => ref.value
+			getValue: ref => ref.props.value
 		})
 	}, [fieldName, registerField])
 
@@ -26,7 +25,7 @@ const UnInputDateTime = ({ name, label, className, onChange = () => {}, ...rest 
 			<label htmlFor={name}>{label}</label>
 			<Calendar
 				ref={inputRef}
-				value={value}
+				value={value||inputValue}
 				onChange={e => {
 					setValue(e.value)
 					onChange(e)
@@ -42,7 +41,8 @@ UnInputDateTime.propTypes = {
 	label: PropTypes.string,
 	defaultInput: PropTypes.string,
 	onChange: PropTypes.func,
-	className: PropTypes.string
+	className: PropTypes.string,
+	value: PropTypes.any
 }
 
 export default UnInputDateTime

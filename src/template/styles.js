@@ -16,7 +16,7 @@ export const Header = styled('div')`
 	padding: 1rem 1.5rem;
 
 	.title {
-		font-family: 'Raleway';
+		font-family: Raleway;
 		font-size: 2rem;
 		padding-right: 1.5rem;
 		margin: 0;
@@ -40,7 +40,7 @@ export const HeaderMenu = styled('div')`
 `
 
 export const ContainerLimiter = styled('div')`
-	max-width: 1100px;
+	max-width: var(--max-container-width);
 `
 
 export const Content = styled('div')`
@@ -54,4 +54,5 @@ export const Footer = styled('footer')`
 	background: var(--surface-a);
 	padding: 1rem 1.5rem;
 	margin-top: auto;
+	color: #ffffff;
 `

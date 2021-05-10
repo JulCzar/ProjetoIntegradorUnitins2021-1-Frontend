@@ -1,7 +1,8 @@
 import React from 'react'
-import { CardHeader, UnInput } from '~/common/components'
-import { Card, Container, Content, InputWrapper, UnForm } from '~/common/styles'
+import { UnInput } from '~/common/components'
+import { InputWrapper, UnForm } from '~/common/styles'
 import { Button, Column, DataTable, Dialog } from '~/primereact'
+import { AdminTemplate } from '~/template'
 import data from './data.json'
 
 function MotivoVisita() {
@@ -12,7 +13,21 @@ function MotivoVisita() {
 	const [editModalVisibility, setEditModalVisibility] = React.useState(false)
 
 	return (
-		<Container className='p-d-flex'>
+		<AdminTemplate title='Motivos de Visita'>
+			<DataTable value={data}>
+				<Column field="name" header="Name"/>
+				<Column
+					bodyClassName='p-d-flex p-jc-around'
+					headerStyle={{textAlign: 'center'}}
+					header="Ações"
+					body={() => (
+						<React.Fragment>
+							<a onClick={() => setEditModalVisibility(true)}>Editar</a>
+							<a>Excluir</a>
+						</React.Fragment>
+					)}/>
+			</DataTable>
+			<Button onClick={() => setModalVisibility(true)} label='Criar Novo'/>
 			<Dialog
 				header={() => <h2>Editar Grupo</h2>}
 				draggable={false}
@@ -33,7 +48,8 @@ function MotivoVisita() {
 				</InputWrapper>
 			</Dialog>
 			<Dialog
-			header={() => <h2>Criar Grupo</h2> }
+				draggable={false}
+				header={<h2>Criar Motivo</h2>}
 				closable={false}
 				className='p-fluid'
 				visible={modalVisibility}
@@ -48,25 +64,7 @@ function MotivoVisita() {
 					<Button onClick={() => setModalVisibility(false)} label='Cancelar'/>
 				</InputWrapper>
 			</Dialog>
-			<Content className='p-d-flex p-jc-center p-ai-center layout-content'>
-				<Card className='p-fluid' width='500px'>
-					<CardHeader title='Motivos de Visita'/>
-					<DataTable value={data}>
-						<Column field="name" header="Name"/>
-						<Column headerStyle={{textAlign: 'center'}} header="Ações" body={teste => (
-							<div className='p-d-flex p-jc-around'>
-								<a onClick={() => {
-									setState(teste)
-									setEditModalVisibility(true)
-								}}>Editar</a>
-								<a>Excluir</a>
-							</div>
-						)}/>
-					</DataTable>
-					<Button onClick={() => setModalVisibility(true)} label='Criar Novo'/>
-				</Card>
-			</Content>
-		</Container>
+		</AdminTemplate>
 	)
 }
 
