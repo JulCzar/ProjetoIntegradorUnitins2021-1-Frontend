@@ -10,11 +10,13 @@ import { ContainerWithCard } from '~/template'
 const Cadastro = () => {
 	const toastRef = React.useRef(null)
 	const formRef = React.useRef(null)
+	const [loading, setLoading] = React.useState(false)
 	const [groupOptions] = React.useState([{label: 'Cooperado', value: 1}])
 
 	const toast = getToastInstance(toastRef)
 
 	async function cadastrar(form) {
+		setLoading(true)
 		const { passwordConfirm, phone, ...data } = form
 		const passwordCheck = verifyPassword(data.senha, passwordConfirm)
 		const telefone = getPhoneObject(phone)
@@ -30,11 +32,13 @@ const Cadastro = () => {
 			formRef.current.reset()
 		}catch ({ response }) {
 			toast.showInfo(response.data.message)
+		}finally {
+			setLoading(false)
 		}
 	}
 
 	return (
-		<ContainerWithCard cardClassName='p-fluid' >
+		<ContainerWithCard loading={loading} cardClassName='p-fluid' >
 			<Toast ref={toastRef}/>
 			<CardHeader title='Cadastro de Técnico'/>
 				<UnForm ref={formRef} onSubmit={cadastrar}>

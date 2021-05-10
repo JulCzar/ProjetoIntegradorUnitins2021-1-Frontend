@@ -16,7 +16,7 @@ const UnInput = ({ type, name, label, defaultInput, mask, value, className, onCh
 		registerField({
 			name: fieldName,
 			ref: inputRef.current,
-			getValue: ref => (mask?ref.props.value:ref.value)
+			getValue: ref => (mask||(type==='password')?ref.props.value:ref.value)
 		})
 	}, [fieldName, registerField])
 
@@ -24,43 +24,41 @@ const UnInput = ({ type, name, label, defaultInput, mask, value, className, onCh
 		<div className={`p-field ${className}`}>
 			<label htmlFor={name}>{label}</label>
 			{type==='password'
-			?<Password
-				id={name}
-				name={name}
-				ref={inputRef}
-				defaultValue={defaultValue}
-				value={value||inputValue}
-				onChange={e => {
-					onChange(e)
-					setValue(e.target.value)
-				}}
-				{...rest}
-			/>
-			:mask
-				?(<InputMask
+				?<Password
 					id={name}
-					type={type}
-					mask={mask}
 					name={name}
 					ref={inputRef}
 					defaultValue={defaultValue}
 					value={value||inputValue}
 					onChange={e => {
 						onChange(e)
-						setValue(e.value)
-					}}
-					{...rest}
-				/>)
-				:(<InputText
-					id={name}
-					type={type}
-					name={name}
-					ref={inputRef}
-					onChange={onChange}
-					value={value||inputValue}
-					defaultValue={defaultValue}
-					{...rest}
-				/>)
+						setValue(e.target.value)
+					}} {...rest}/>
+				:mask
+					?(<InputMask
+						id={name}
+						type={type}
+						mask={mask}
+						name={name}
+						ref={inputRef}
+						defaultValue={defaultValue}
+						value={value||inputValue}
+						onChange={e => {
+							onChange(e)
+							setValue(e.value)
+						}} {...rest}/>)
+					:(<InputText
+						id={name}
+						type={type}
+						name={name}
+						ref={inputRef}
+						onChange={e => {
+							onChange(e)
+							setValue(e.target.value)
+						}}
+						value={value||inputValue}
+						defaultValue={defaultValue}
+						{...rest}/>)
 			}
 		</div>
 	)

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link, useHistory } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { UnChecklist, UnInput } from '~/common/components'
 import { InputWrapper, UnForm } from '~/common/styles'
 import { Button, Column, DataTable, Dialog } from '~/primereact'
@@ -8,9 +8,9 @@ import { groupOptions } from '../groupOptions'
 import data from './data.json'
 
 function ListarGrupos() {
-	const [modalVisibility, setModalVisibility] = React.useState(false)
+	const [registerModalVisibility, setModalVisibility] = React.useState(false)
+	const [editModalVisibility, setEditModalVisibility] = React.useState(false)
 	const registerFormRef = React.useRef(null)
-	const history = useHistory()
 
 	const register = form => {}
 
@@ -20,18 +20,18 @@ function ListarGrupos() {
 				<Column field="name" header="Nome"/>
 				<Column bodyClassName='p-d-flex p-jc-around' headerStyle={{textAlign: 'center'}} header="Ações" body={() => (
 					<React.Fragment>
-						<Link to='/admin/grupos/editar'>Editar</Link>
+						<Link onClick={() => setEditModalVisibility(true)}>Editar</Link>
 						<a>Excluir</a>
 					</React.Fragment>
 				)}/>
 			</DataTable>
-			<Button onClick={() => history.push('/admin/grupos/criar')} label='Criar Novo'/>
+			<Button onClick={() => setModalVisibility(true)} label='Criar Novo'/>
 			<Dialog
 				draggable={false}
-				header={<h2>Criar Motivo</h2>}
+				header={<h2>Criar Grupo</h2>}
 				closable={false}
 				className='p-fluid'
-				visible={modalVisibility}
+				visible={registerModalVisibility}
 				onHide={() => setState(null)}
 				breakpoints={{'1300px': '75vw', '640px': '100vw'}}
 				style={{width: '40vw'}}>
@@ -39,8 +39,25 @@ function ListarGrupos() {
 					<UnInput name='nome' label='Nome' required/>
 					<UnChecklist name='roles' label='Permissões' options={groupOptions} gap='20px' columns={2} isMulti/>
 					<InputWrapper columns={2} gap='10px'>
-						<Button onClick={() => history.goBack()} type='cancelar' label='Cancelar'/>
-						<Button type='criar' label='Criar'/>
+						<Button type='button' onClick={() => setModalVisibility(false)} label='Cancelar'/>
+						<Button label='Criar'/>
+					</InputWrapper>
+				</UnForm>
+			</Dialog>
+			<Dialog
+				draggable={false}
+				header={<h2>Editar Grupo</h2>}
+				closable={false}
+				className='p-fluid'
+				visible={editModalVisibility}
+				breakpoints={{'1300px': '75vw', '640px': '100vw'}}
+				style={{width: '40vw'}}>
+				<UnForm ref={registerFormRef} onSubmit={register}>
+					<UnInput name='nome' label='Nome' required/>
+					<UnChecklist name='roles' label='Permissões' options={groupOptions} gap='20px' columns={2} isMulti/>
+					<InputWrapper columns={2} gap='10px'>
+						<Button type='button' onClick={() => setEditModalVisibility(false)} label='Cancelar'/>
+						<Button label='Criar'/>
 					</InputWrapper>
 				</UnForm>
 			</Dialog>

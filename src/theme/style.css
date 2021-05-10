@@ -54,7 +54,8 @@
   src: local("Roboto Bold"), local("Roboto-Bold"), url("./fonts/roboto-v20-latin-ext_latin-700.woff2") format("woff2"), url("./fonts/roboto-v20-latin-ext_latin-700.woff") format("woff");
   /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */ }
 * {
-  box-sizing: border-box; }
+  box-sizing: border-box;
+}
 
 .p-component {
   font-family: Roboto, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;

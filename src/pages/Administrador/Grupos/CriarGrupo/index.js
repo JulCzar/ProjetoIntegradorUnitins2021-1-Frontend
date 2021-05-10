@@ -20,14 +20,6 @@ function CriarGrupo() {
 			<Content className='p-grid p-d-flex p-jc-center p-ai-center'>
 				<Card className='p-fluid' width='500px'>
 					<CardHeader title='Criar Grupo'/>
-					<UnForm ref={formRef} onSubmit={request}>
-						<UnInput name='nome' label='Nome' required/>
-						<UnChecklist name='roles' label='Permissões' options={groupOptions} gap='20px' columns={2} isMulti/>
-						<InputWrapper columns={2} gap='10px'>
-							<Button onClick={() => history.goBack()} type='cancelar' label='Cancelar'/>
-							<Button type='criar' label='Criar'/>
-						</InputWrapper>
-					</UnForm>
 				</Card>
 			</Content>
 		</Container>

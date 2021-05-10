@@ -1,7 +1,7 @@
 // Administrador
 export { default as CadastroAdmin } from './Administrador/Cadastro'
 export { default as PerfilAdmin } from './Administrador/Perfil'
-export { default as ListarGrupos } from './Administrador/Grupos/ListarGrupos'
+export { default as ListarGrupos } from './Administrador/Grupos/Listar'
 export { default as CriarGrupo } from './Administrador/Grupos/CriarGrupo'
 export { default as EditarGrupo } from './Administrador/Grupos/EditarGrupo'
 export { default as DadosVisita } from './Administrador/Historico/DadosVisita'
