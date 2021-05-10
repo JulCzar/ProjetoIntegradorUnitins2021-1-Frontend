@@ -6,8 +6,8 @@ import { getToastInstance } from '~/services'
 import { AdminTemplate } from '~/template'
 
 function Perfil() {
-  const [editing, setEditing] = React.useState(false)
 	const toastRef = React.useRef(null)
+  const [editing, setEditing] = React.useState(false)
 	const formRef = React.useRef(null)
 	const toast = getToastInstance(toastRef)
 
@@ -22,7 +22,7 @@ function Perfil() {
 
 	return (
 		<AdminTemplate title='Perfil'>
-			<Toast toastRef={toastRef}/>
+			<Toast ref={toastRef}/>
 			<UnForm ref={formRef} onSubmit={editProfile}>
 				<InputWrapper columns={2} gap='10px'>
 					<UnInput disabled={!editing} name='name' label='Nome'/>

@@ -20,6 +20,7 @@ function Cadastro() {
 	}
 	return (
 		<AdminTemplate title='Cadastrar Administrador'>
+			<Toast ref={toastRef}/>
 			<UnForm onSubmit={register}>
 				<InputWrapper columns={2} gap='10px'>
 					<UnInput name='name' label='Nome' required={true}/>

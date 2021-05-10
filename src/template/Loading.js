@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import { ProgressSpinner } from '~/primereact'
 
 const Container = styled('div')`
 	align-items: center;
@@ -17,7 +18,7 @@ const Container = styled('div')`
 function Loading() {
 	return (
 		<Container>
-			<i className="fas fa-circle-notch fa-spin fa-7x"></i>
+			<ProgressSpinner/>
 		</Container>
 	)
 }

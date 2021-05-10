@@ -1,6 +1,6 @@
 import React from 'react'
-import { CardHeader, UnInput } from '~/common/components'
-import { Card, Container, Content, InputWrapper, UnForm } from '~/common/styles'
+import { UnInput } from '~/common/components'
+import { InputWrapper, UnForm } from '~/common/styles'
 import { Button, Column, DataTable, Dialog } from '~/primereact'
 import { AdminTemplate } from '~/template'
 import data from './data.json'

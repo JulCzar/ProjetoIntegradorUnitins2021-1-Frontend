@@ -5,7 +5,7 @@ import { InputText, InputMask, Password } from '~/primereact'
 
 const UnInput = ({ type, name, label, defaultInput, mask, value, className, onChange = () => {}, ...rest }) => {
 	const inputRef = React.useRef(null)
-	const [inputValue, setValue] = React.useState(null)
+	const [inputValue, setValue] = React.useState('')
 	const { fieldName, defaultValue, registerField } = useField(name)
 
 	React.useEffect(() => {
