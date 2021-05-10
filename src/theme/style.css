@@ -2,36 +2,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Raleway&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400;1,600;1,700;1,800&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css');
 
-:root {
-  --surface-a:#202426;
-  --surface-b:#c3c3c3;
-  --surface-c:rgba(0,0,0,.04);
-  --surface-d:rgba(0,0,0,.12);
-  --surface-e:#f2f2f2;
-  --surface-f:#c3c3c3;
-  --text-color:rgba(0, 0, 0, 0.87);
-  --text-color-secondary:textSecondaryColor;
-  --primary-color:#3ab64a;
-  --primary-color-text:#ffffff;
-  --font-family:Roboto, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;
-  --surface-0: #ffffff;
-  --surface-50: #FAFAFA;
-  --surface-100: #F5F5F5;
-  --surface-200: #EEEEEE;
-  --surface-300: #E0E0E0;
-  --surface-400: #BDBDBD;
-  --surface-500: #9E9E9E;
-  --surface-600: #757575;
-  --surface-700: #616161;
-  --surface-800: #424242;
-  --surface-900: #212121;
-  --content-padding:1rem;
-  --inline-spacing:0.5rem;
-	--scrollbar-thumb-width: 3px;
-	--scrollbar-thumb-BG: #0003;
-	--max-container-width: 1100px;
-}
-
 /* roboto-regular - latin-ext_latin */
 @font-face {
   font-family: 'Roboto';
@@ -53,8 +23,87 @@
   font-weight: 700;
   src: local("Roboto Bold"), local("Roboto-Bold"), url("./fonts/roboto-v20-latin-ext_latin-700.woff2") format("woff2"), url("./fonts/roboto-v20-latin-ext_latin-700.woff") format("woff");
   /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */ }
+
+:root {
+  --surface-a:#202426;
+  --surface-b:#c3c3c3;
+  --surface-c:rgba(0,0,0,.04);
+  --surface-d:rgba(0,0,0,.12);
+  --surface-e:#f2f2f2;
+  --surface-f:#c3c3c3;
+  --text-color:rgba(0, 0, 0, 0.87);
+  --text-color-secondary:textSecondaryColor;
+  --primary-color:#3ab64a;
+  --primary-color-text:#ffffff;
+  --font-family: Montserrat, 'Open Sans', Roboto, sans-serif;
+  --surface-0: #ffffff;
+  --surface-50: #FAFAFA;
+  --surface-100: #F5F5F5;
+  --surface-200: #EEEEEE;
+  --surface-300: #E0E0E0;
+  --surface-400: #BDBDBD;
+  --surface-500: #9E9E9E;
+  --surface-600: #757575;
+  --surface-700: #616161;
+  --surface-800: #424242;
+  --surface-900: #212121;
+  --content-padding:1rem;
+  --inline-spacing:0.5rem;
+	--scrollbar-thumb-width: 3px;
+	--scrollbar-thumb-BG: #0003;
+	--max-container-width: 1100px;
+}
+
+body {
+	color: var(--text-color);
+	font-family: var(--font-family);
+	max-width: 100vw;
+	overflow-x: hidden;
+	scrollbar-color: var(--scrollbar-thumb-BG) var(--surface-e);
+	scrollbar-width: thin;
+  margin: 0;
+  padding: 0;
+}
+
+a {
+	color: unset;
+	text-decoration: none;
+}
+
+a:hover {
+	cursor: pointer;
+	text-decoration: underline;
+}::-webkit-scrollbar {
+	height: var(--scrollbar-thumb-width);
+	width: var(--scrollbar-thumb-width);
+}
+
+::-webkit-scrollbar-track {
+  background: var(--surface-e);
+}
+
+::-webkit-scrollbar-thumb {
+	background: var(--scrollbar-thumb-BG);
+	border-radius: var(--scrollbar-thumb-width);
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active {
+	transition: background-color 999999s ease-in-out 0s;
+	-webkit-text-fill-color: var(--text-color) !important;
+}
+
 * {
   box-sizing: border-box;
+}
+.container {
+	background: var(--surface-b);
+}
+
+#tabmenu-nopadding .p-overlaypanel .p-overlaypanel-content {
+	padding: 0 !important;
 }
 
 .p-component {
