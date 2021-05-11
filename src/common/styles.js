@@ -3,12 +3,10 @@ import { Form } from '@unform/web'
 
 export const Container = styled('div')`
 	background: var(--surface-b);
-	display: flex;
 	min-height: 100vh;
 `
 
 export const Content = styled('div')`
-	padding-top: 70px;
 	width: 100vw;
 `
 
@@ -28,10 +26,19 @@ export const InputWrapper = styled('div')`
 	display: grid;
 	grid-template-columns: repeat(${props => (props.columns || 1)}, 1fr);
 	gap: ${props => (props.gap || 0)};
+
+	@media (max-width: 750px) {
+		grid-template-columns: 1fr;
+	}
 `
 
 export const Title = styled('h1')`
 	font-size: 1.25rem;
 	font-weight: 700;
 	text-align: center;
+`
+
+export const Block = styled('div')`
+	background: var(--surface-e);
+	border-radius: 4px;
 `

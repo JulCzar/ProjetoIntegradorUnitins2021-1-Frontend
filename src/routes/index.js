@@ -1,5 +1,5 @@
 import React from 'react'
-import { Switch, Route, BrowserRouter } from 'react-router-dom'
+import { Switch, Route, BrowserRouter, Redirect } from 'react-router-dom'
 
 import {
 	AgendarVisita,
@@ -13,7 +13,6 @@ import {
 	CriarGrupo,
 	EditarGrupo,
 	DetalhesVisita,
-	HelloWorld,
 	Login,
 	MotivoVisita,
 	PageNotFound,
@@ -24,7 +23,9 @@ import {
 	PerfilCooperado,
 	PerfilTecnico,
 	RelatorioLanding,
-	RelatorioLandingTecnico
+	RelatorioLandingTecnico,
+	ListarGrupos,
+	VisitasMarcadas
 } from '~/pages'
 
 import Relatorio from '~/pages/Cooperado/Relatorio'
@@ -33,40 +34,45 @@ const Routes = function _Routes() {
 	return (
 		<BrowserRouter>
 			<Switch>
+				{/* Genéricas */}
+				<Route path='/' exact><Redirect to='/painel'/></Route>
+				<Route path='/recuperar-senha' component={RecuperarSenha}/>
+				<Route path='/alterar-senha' component={AlterarSenha}/>
+				<Route path='/painel' component={PainelExibicao}/>
+				<Route path='/login' component={Login}/>
+
+				{/* Cadastros */}
+				<Route path='/cadastrar/admin' component={CadastroAdmin}/>
+				<Route path='/cadastrar/tecnico' component={CadastroTecn}/>
+				<Route path='/cadastrar/cooperado' component={CadastroCooperado}/>
+
+				{/* Administrador */}
+				<Route path='/admin' component={PerfilAdmin} exact/>
+				<Route path='/admin/grupos' component={ListarGrupos} exact/>
+				<Route path='/admin/motivos' component={MotivoVisita}/>
+				<Route path='/admin/historico' component={HistoricoVisitas} exact/>
+				<Route path='/admin/grupos/criar' component={CriarGrupo}/>
+				<Route path='/admin/grupos/editar' component={EditarGrupo}/>
+				<Route path='/admin/historico/visita' component={DadosVisita}/>
+
 				{/* Cooperado */}
-				<Route path='/cooperado/login' component={Login}/>
-				<Route path='/cooperado/relatorio/:id' component={Relatorio}/>
 				<Route path='/cooperado' component={BuscaCooperado} exact/>
 				<Route path='/cooperado/perfil' component={PerfilCooperado}/>
 				<Route path='/cooperado/relatorio' component={RelatorioLanding}/>
-				<Route path='/cooperado/cadastrar' component={CadastroCooperado}/>
-
-				{/* Administrador */}
-				<Route path='/admin/cadastrar' component={CadastroAdmin}/>
-				<Route path='/admin/perfil' component={PerfilAdmin}/>
+				<Route path='/cooperado/relatorio/:id' component={Relatorio}/>
 
 				{/* Técnico */}
-				<Route path='/tecnico/cadastrar' component={CadastroTecn}/>
-				<Route path='/tecnico/agendar-visita' component={AgendarVisita}/>
-				<Route path='/tecnico/perfil' component={PerfilTecnico}/>
-				<Route path='/tecnico/detalhes-visita' component={DetalhesVisita}/>
-				<Route path='/tecnico/relatorio' component={RelatorioLandingTecnico}/>
 				<Route path='/tecnico' component={BuscaTecnico} exact/>
-
-				{/* Histórico */}
-				<Route path='/historico/visita' component={DadosVisita}/>
-				<Route path='/historico' component={HistoricoVisitas} exact/>
-
-				{/* Genéricas */}
-				<Route path='/' component={HelloWorld} exact/>
-				<Route path='/recuperar-senha' component={RecuperarSenha}/>
-				<Route path='/alterar-senha' component={AlterarSenha}/>
-				<Route path='/painel-exibicao' component={PainelExibicao}/>
-				<Route path='/motivos' component={MotivoVisita}/>
+				<Route path='/tecnico/relatorio' component={RelatorioLandingTecnico}/>
+				<Route path='/tecnico/perfil' component={PerfilTecnico}/>
+				<Route path='/tecnico/visitas' component={VisitasMarcadas} exact/>
+				<Route path='/tecnico/visitas/agendar' component={AgendarVisita}/>
+				<Route path='/tecnico/visitas/detalhes' component={DetalhesVisita}/>
     
 				{/* Grupo */}
 				<Route path='/criar-grupo' component={CriarGrupo}/>
 				<Route path='/editar-grupo' component={EditarGrupo}/>
+				<Route path='/listar-grupos' component={ListarGrupos}/>
 
 				{/* Page Not Found, Precisa ser a ultima rota! */}
 				<Route path='*' component={PageNotFound}/>

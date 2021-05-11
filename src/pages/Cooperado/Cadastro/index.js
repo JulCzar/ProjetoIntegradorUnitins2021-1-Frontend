@@ -1,55 +1,76 @@
 import React from 'react'
-import { CardHeader, UnInput, UnSelect } from '~/common/components'
-import { Card, Container, Content, InputWrapper, UnForm } from '~/common/styles'
-import { Button, Dialog} from '~/primereact'
+import { CardHeader, UnInput } from '~/common/components'
+import { InputWrapper, UnForm } from '~/common/styles'
+import { Button, Dialog, ListBox, Toast} from '~/primereact'
+import { getToastInstance } from '~/services'
+import { ContainerWithCard } from '~/template'
 
 const Cadastro = () => {
+	const toastRef = React.useRef(null)
 	const [modalVisibility, setModalVisibility] = React.useState(false)
-	const [groupOptions] = React.useState([
-		{label: 'Recanto', value: 1},
-		{label: 'Cargueiros', value: 2},
-		{label: 'Brejão', value: 3},
-		{label: 'Veredas', value: 4},
-		{label: 'Itabinhas', value: 5}
-	])
+	const [properties, setProperties] = React.useState([])
+	const toast = getToastInstance(toastRef)
 
-	function cadastrar(form) {}
+	const hideModal = () => setModalVisibility(false)
+	const showModal = () => setModalVisibility(true)
+
+	function addProperty(form) {
+		setProperties([...properties, form])
+		hideModal()
+	}
+
+	function cadastrar(form) {
+		if (!properties.length) return toast.showWarn('É necessário inserir pelo menos uma propriedade')
+		console.log({...form, properties}) // eslint-disable-line
+	}
 
 	return (
-		<Container >
-			<Content className='p-d-flex p-jc-center p-ai-center layout-content'>
-				<Card className='p-fluid'>
-					<CardHeader title='Cadastro de Cooperado'/>
-					<UnForm onSubmit={cadastrar}>
+		<ContainerWithCard cardClassName='p-fluid'>
+			<Toast ref={toastRef}/>
+			<CardHeader title='Cadastro de Cooperado'/>
+			<UnForm onSubmit={cadastrar}>
+				<InputWrapper columns={2} gap='10px'>
+					<UnInput name='name' label='Nome' required/>
+					<UnInput name='lastname' label='Sobrenome'/>
+				</InputWrapper>
+				<UnInput name='email' label='Email'/>
+				<InputWrapper columns={2} gap='10px'>
+					<UnInput name='cpf' mask='999.999.999-99' label='CPF' required/>
+					<UnInput name='phone' mask='(99) 9 9999-9999' label='Telefone' required/>
+				</InputWrapper>
+				<h2>Propriedades</h2>
+				{properties.length
+					?<ListBox
+						className='p-mb-5'
+						options={properties}
+						style={{background: '#20262e'}}
+						optionLabel={opt => opt.nome}/>
+					:<h3>É Necessário adicionar pelo menos uma propriedade</h3>
+				}
+				<InputWrapper columns={2} gap='10px'>
+					<Button type='button' label='Adicionar Propriedade' onClick={showModal}/>
+					<Button label='Cadastrar'/>
+				</InputWrapper>
+				<Dialog className='p-fluid' header={<h3>Dados da Propriedade</h3>}
+					breakpoints={{'960px': '75vw', '640px': '100vw'}}
+					visible={modalVisibility}
+					onHide={hideModal}>
+					{/* eslint-disable-next-line */}
+					<UnForm onSubmit={addProperty}>
 						<InputWrapper columns={2} gap='10px'>
-							<UnInput name='name' label='Nome' required/>
-							<UnInput name='lastname' label='Sobrenome'/>
+							<UnInput name='nome' label='Nome'/>
+							<UnInput name='area' label='Tamanho (hectares)'/>
 						</InputWrapper>
-						<UnInput name='email' label='Email'/>
+						<UnInput name='localidade' label='Localidade' />
 						<InputWrapper columns={2} gap='10px'>
-							<UnInput name='cpf' mask='999.999.999-99' label='CPF' required/>
-							<UnInput name='phone' mask='(99) 9 9999-9999' label='Telefone' required/>
+							<UnInput name='registro' label='# da Matrícula'/>
+							<UnInput name='grupo' label='Técnico Responsável'/>
 						</InputWrapper>
+						<Button type='submit' label='Adicionar'/>
 					</UnForm>
-						<Button type='submit' label='Continuar' onClick={() => setModalVisibility(true)}/>
-				</Card>
-			</Content>
-			<Dialog className='p-fluid' visible={modalVisibility} onHide={() => setModalVisibility(false)} breakpoints={{'960px': '75vw', '640px': '100vw'}} style={{width: '50vw'}}>
-				<CardHeader title='Dados da Propriedade'/>
-				<UnForm>
-					<InputWrapper columns={2} gap='10px'>
-						<UnInput name='nome' label='Nome'/>
-						<UnInput name='area' label='Tamanho'/>
-					</InputWrapper>
-					<UnInput name='localidade' label='Localidade' />
-					<InputWrapper columns={2} gap='10px'>
-						<UnInput name='registro' label='# da Matrícula'/>
-						<UnInput name='grupo' label='Técnico Responsável'/>
-					</InputWrapper>
-				</UnForm>
-					<Button label='Enviar'/>
-			</Dialog>
-		</Container>
+				</Dialog>
+			</UnForm>
+		</ContainerWithCard>
 	)
 }
 

@@ -1,7 +1,8 @@
-const erros = {
+const error = {
 	DOESNT_MATCH: 'Senhas não coincidem',
 	LETTER_MISSING: 'A senha deve conter pelo menos uma letra',
-	NUMBER_MISSING: 'A senha deve conter pelo menos um número'
+	NUMBER_MISSING: 'A senha deve conter pelo menos um número',
+	NOT_EMPTY: 'A senha não pode conter apenas espaços em branco'
 }
 
 const letters = 'abcdefghijklmnopqrstuvwxyz'
@@ -25,7 +26,11 @@ const containNumbers = getAlphabetChecker([...numbers])
 export const verifyPassword = (password, passwordConfirm) => {
 	const result = {
 		isValid: true,
-		errors: []
+		errors: (function () {
+			const list = ['']
+			list.pop()
+			return list
+		})()
 	}
 
 	const setPasswordInvalid = reason => {
@@ -34,10 +39,35 @@ export const verifyPassword = (password, passwordConfirm) => {
 	}
 
 	const [pass, confPassword] = [password, passwordConfirm].map(i => i.trim())
-
-	if (pass !== confPassword) setPasswordInvalid(erros.DOESNT_MATCH)
-	if (!containLetters(pass)) setPasswordInvalid(erros.LETTER_MISSING)
-	if (!containNumbers(pass)) setPasswordInvalid(erros.NUMBER_MISSING)
+	
+	if (!pass) setPasswordInvalid(error.NOT_EMPTY)
+	if (pass !== confPassword) setPasswordInvalid(error.DOESNT_MATCH)
+	if (!containLetters(pass)) setPasswordInvalid(error.LETTER_MISSING)
+	if (!containNumbers(pass)) setPasswordInvalid(error.NUMBER_MISSING)
 
 	return result
 }
+
+/**
+ * @param {string} phoneNumber 
+ */
+export const getPhoneObject = phoneNumber => {
+	const phoneRegex = /\([1-9]{2}\) [1-9]{1} [1-9]{4}-[1-9]{4}/g
+
+	const isAValidNumber = phoneRegex.test(phoneNumber)
+	if (!isAValidNumber) return
+
+	const codigo_area = phoneNumber.substr(1, 2)
+	const numero = phoneNumber.substr(5)
+	
+	return { codigo_area, numero }
+}
+
+/**
+ * 
+ * @param {string} str 
+ * @returns 
+ */
+export const getStringNormalized = str => str
+	.normalize('NFD')
+	.replace(/[^a-zA-Z1-9s]/g, '')

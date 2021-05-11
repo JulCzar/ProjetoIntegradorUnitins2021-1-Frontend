@@ -1,39 +1,51 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
-import { CardHeader, UnInput, UnSelect } from '~/common/components'
-import { Card, Container, Content, InputWrapper, UnForm } from '~/common/styles'
-import { Button, Column, DataTable, InputText} from '~/primereact'
-import data from './data.json'
+import { CardHeader, UnInput } from '~/common/components'
+import { Block, UnForm } from '~/common/styles'
+import { Button, Column, DataTable } from '~/primereact'
+import { api } from '~/services'
+import { ContainerWithTemplate } from '~/template'
 
 function Busca() {
-	const [groupOptions] = React.useState([
-		{label: 'Nome', value: 1},
-		{label: 'CPF', value: 2}
-	])
+	const [cooperados, setCooperados] = React.useState([])
+	const [loading, setLoading] = React.useState(false)
 
+	React.useEffect(() => {
+		(async () => {
+			setLoading(true)
+			try {
+				const { data } = await api.get('/cooperado/index')
+				setCooperados(data)
+			} catch (err) {}
+			finally {
+				setLoading(false)
+			}
+		})()
+	}, [])
 	return (
-		<Container>
-			<Content className='p-grid p-d-flex p-jc-center p-ai-center'>
-				<Card className='p-fluid' width='1000px'>
-					<CardHeader title='Buscar Cooperado'/>
-					<UnForm>
-						<UnInput name='.' placeholder='Pesquisar por nome ou cpf' />
-					</UnForm>
-					<DataTable value={data} className="p-datatable-striped">
-            <Column field="name" header="Nome"/>
-            <Column field="code" header="CPF"/>
-						<Column header='Ações' body={() => (
-							<div className='p-d-flex p-jc-between'>
-								<a>Detalhes</a>
-                <a>Editar</a>
-                <a>Desativar</a>
-							</div>
-						)}/>
-    			</DataTable>
-					<Button label='Criar'/>
-				</Card>
-			</Content>
-		</Container>
+		<ContainerWithTemplate loading={loading} contentClassName='p-fluid p-mt-5'>	
+			<Block className='p-p-3'>
+				<CardHeader title='Buscar Cooperado'/>
+				<UnForm>
+					<UnInput name='.' placeholder='Pesquisar por nome ou cpf' />
+				</UnForm>
+				<DataTable value={cooperados} className="p-datatable-striped">
+					<Column field="nome_cooperado" header="Nome"/>
+					<Column field="cpf_cooperado" header="CPF"/>
+					<Column bodyClassName='p-d-flex p-jc-around' headerClassName='p-d-flex p-jc-center' header='Ações' body={() => (
+						<React.Fragment>
+							<Link to='/cooperado/perfil'>Detalhes</Link>
+							<a>Desativar</a>
+						</React.Fragment>
+					)}/>
+				</DataTable>
+				
+				<Link to='/cadastrar/cooperado'>
+					<Button className='p-mt-3' label='Novo'/>
+				</Link>
+			</Block>
+		</ContainerWithTemplate>
 	)
 }
 

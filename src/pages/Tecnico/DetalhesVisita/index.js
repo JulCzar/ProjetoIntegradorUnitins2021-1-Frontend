@@ -1,7 +1,10 @@
 import React from 'react'
 import { CardHeader, UnInput, UnInputDateTime, UnSelect } from '~/common/components'
-import { Card, Container, Content, InputWrapper, UnForm } from '~/common/styles'
+import UnTextArea from '~/common/components/UnTextArea'
+import { Block, Card, Container, Content, InputWrapper, UnForm } from '~/common/styles'
 import { Button, Toast } from '~/primereact'
+import { getToastInstance } from '~/services'
+import { ContainerWithTemplate } from '~/template'
 
 	const groupOptions = [
 		{value: 1, label: 'teste1'},
@@ -13,47 +16,62 @@ import { Button, Toast } from '~/primereact'
 	] 
 
 function DetalhesVisita() {
-	const [editing, setEditing] = React.useState(true)
+	const [editing, setEditing] = React.useState(false)
+	const toastRef = React.useRef(null)
+	const formRef = React.useRef(null)
+	const toast = getToastInstance(toastRef)
 
-	const toast = React.useRef(null)
 	const cooperado = 'Miguel Teixeira'
 	const terreno = 'Recanto'
 
-	const agendar = form => {
-		const {cooperado, propriedade, motivo} = form
-		if ([propriedade, motivo, cooperado].includes(null)) toast.current.show({
-			severity: 'warn',
-			summary: 'Ainda há campos para serem selecionados'
-		}) 
-		// eslint-disable-next-line no-console
-		console.log(form)
+	const submitForm = () => {
+		formRef.current.submitForm()
+		setEditing(false)
+	}
+
+	const validateForm = form => {
+		const { cooperado, propriedade, motivo } = form
+		const { value } = cooperado || { value: null }
+		
+		if (![propriedade, motivo, value].includes(null))
+			return true
+
+		return false
+	}
+
+	const salvar = form => {
+		const isValid = validateForm(form)
+		
+		if (!isValid) return toast.showWarn('Você está deixando campos requeridos vazios!')
+		
+		setEditing(false)
+		console.log(form) // eslint-disable-line no-console
 	}
 
 	return (
-		<Container >
-			<Toast ref={toast} />
-			<Content className='p-d-flex p-jc-center p-ai-center layout-content'>
-				<Card className='p-fluid' width='500px'>
-					<CardHeader title='Detalhes da Visita'/>
-					<UnForm onSubmit={agendar}>
-						<UnInput disabled name='cooperado' label='Cooperado' value={cooperado}/>
-						<UnInput disabled name='propriedade' label='Propriedade'  value={terreno}/>
-						<InputWrapper columns={2} gap='10px'>
-							<UnInputDateTime disabled={editing} name='data' label='Data' dateFormat='dd/mm/yy' mask='99/99/9999' showIcon required/>
-							<UnInputDateTime disabled={editing} timeOnly  name='horaEstimada' label='Hora Estimada' mask='99:99'/>
-						</InputWrapper>
-						<UnSelect disabled={editing} name='motivo' label='Motivo da Visita' options={groupOptions}/>
-					</UnForm>
-					<InputWrapper columns={3} gap='10px'>
-						<Button label='Cancelar Visita'/>
-						{editing
-							?<Button onClick={() => setEditing(false)} label='Editar Visita'/>
-							:<Button onClick={() => setEditing(true)} label='Salvar'/>}
-						<Button label='Concluir Visita'/>
+		<ContainerWithTemplate contentClassName='p-mt-5'>
+			<Block className='p-p-3 p-fluid'>
+				<Toast ref={toastRef} />
+				<CardHeader title='Detalhes da Visita'/>
+				<UnForm ref={formRef} onSubmit={salvar}>
+					<UnInput disabled name='cooperado' label='Cooperado' value={cooperado}/>
+					<UnInput disabled name='propriedade' label='Propriedade' value={terreno}/>
+					<InputWrapper columns={2} gap='10px'>
+						<UnInputDateTime disabled={!editing} name='data' label='Data' dateFormat='dd/mm/yy' mask='99/99/9999' showIcon required/>
+						<UnInputDateTime disabled={!editing} timeOnly  name='horaEstimada' label='Hora Estimada' mask='99:99'/>
 					</InputWrapper>
-				</Card>
-			</Content>
-		</Container>
+					<UnSelect disabled={!editing} value={2} name='motivo' label='Motivo da Visita' options={groupOptions}/>
+					<UnTextArea disabled={!editing} name='observacoes' label='Observações' autoResize />
+					<InputWrapper type='button' columns={3} gap='10px'>
+						<Button type='button' label='Cancelar Visita'/>
+						{!editing
+							?<Button type='button' onClick={() => setEditing(true)} label='Editar Visita'/>
+							:<Button type='button' onClick={submitForm} label='Salvar'/>}
+						<Button type='button' label='Concluir Visita'/>
+					</InputWrapper>
+				</UnForm>
+			</Block>
+		</ContainerWithTemplate>
 	)
 }
 
