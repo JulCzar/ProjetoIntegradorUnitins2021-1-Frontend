@@ -26,11 +26,7 @@ const containNumbers = getAlphabetChecker([...numbers])
 export const verifyPassword = (password, passwordConfirm) => {
 	const result = {
 		isValid: true,
-		errors: (function () {
-			const list = ['']
-			list.pop()
-			return list
-		})()
+		errors: (() => [''].splice(0, 1))()
 	}
 
 	const setPasswordInvalid = reason => {

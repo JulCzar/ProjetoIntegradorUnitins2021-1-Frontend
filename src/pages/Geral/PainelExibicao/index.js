@@ -1,14 +1,15 @@
-import React from 'react'
+import React, { useLayoutEffect } from 'react'
 import { format } from 'date-fns'
 
 import { CardHeader } from '~/common/components'
 import { Block, InputWrapper, UnForm} from '~/common/styles'
-import { Calendar, Column, DataTable, InputText } from '~/primereact'
+import { Button, Calendar, Column, DataTable, InputText } from '~/primereact'
 
 import { ContainerWithTemplate } from '~/template'
 import { api } from '~/services'
 
 function Painel() {
+	const blockRef = React.useRef(null)
 	const [lastTimeoutId, setTimeoutId] = React.useState(0)
 	const [loading, setLoading] = React.useState(false)
 	const [visitas, setVisitas] = React.useState([])
@@ -54,17 +55,29 @@ function Painel() {
 		setTimeoutId(setTimeout(getVisitas, 500))
 	},[nomeCooperado, nomePropriedade, nomeTecnico, dataVisita, motivoVisita])
 
+	const enterFullscreen = () => {
+		const isNotFullscreen = !document.fullscreenElement
+
+		if (isNotFullscreen)
+			return blockRef.current.requestFullscreen()
+
+		document.exitFullscreen()
+	}
+
 	return (
 		<ContainerWithTemplate loading={loading} contentClassName='p-fluid p-mt-5'>
-			<Block className='p-p-3'>
-				<CardHeader title='Painel de Exibição'/>
+			<Block ref={blockRef} className='p-p-3'>
+				<div className="p-d-flex p-ai-center">
+					<CardHeader title='Painel de Exibição'/>
+					<Button className='p-ml-3' icon='fas fa-expand' onClick={enterFullscreen}/>
+				</div>
 				<UnForm>
-					<InputWrapper className='p-my-3' columns={5} gap='10px'>
+					<InputWrapper className='p-mb-3' columns={5} gap='10px'>
 						<InputText value={nomeCooperado} placeholder='Cooperado' onChange={e => setNomeCooperado(e.target.value)}/>
 						<InputText value={nomePropriedade} placeholder='Propriedade' onChange={e => setNomePropriedade(e.target.value)}/>
 						<InputText value={nomeTecnico} placeholder='Tecnico' onChange={e => setNomeTecnico(e.target.value)}/>
 						<InputText value={motivoVisita} placeholder='Motivo da Visita' onChange={e => setMotivoVisita(e.target.value)}/>
-						<Calendar value={dataVisita} dateFormat='dd/mm/yy' placeholder='Selecione o Dia' onChange={e => setDataVisita(e.value)}/>
+						<Calendar value={dataVisita} mask='99/99/9999' dateFormat='dd/mm/yy' placeholder='Selecione o Dia' onChange={e => setDataVisita(e.value)}/>
 					</InputWrapper>
 					<DataTable value={visitas} className="p-datatable-striped" paginator rows={7}>
 						<Column field="nome_cooperado" header="Cooperado"/>
