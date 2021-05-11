@@ -5,6 +5,7 @@ import { Provider } from 'react-redux'
 import ReactDOM from 'react-dom'
 import React from 'react'
 
+import { locale, addLocale } from '~/primereact'
 import { store, persistor } from '~/store'
 import history from '~/routes/history'
 import Routes from '~/routes'
@@ -14,7 +15,11 @@ import 'primeicons/primeicons.css'
 import 'primeflex/primeflex.css'
 import '~/theme/style.css'
 
+import ptBr from '~/assets/pt-br.json'
+
 PrimeReact.ripple = true
+addLocale('pt-br', ptBr)
+locale('pt-br')
 
 const App = () => (
 	<Provider store={store}>

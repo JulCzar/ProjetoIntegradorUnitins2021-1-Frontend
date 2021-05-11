@@ -77,7 +77,7 @@ function Painel() {
 						<InputText value={nomePropriedade} placeholder='Propriedade' onChange={e => setNomePropriedade(e.target.value)}/>
 						<InputText value={nomeTecnico} placeholder='Tecnico' onChange={e => setNomeTecnico(e.target.value)}/>
 						<InputText value={motivoVisita} placeholder='Motivo da Visita' onChange={e => setMotivoVisita(e.target.value)}/>
-						<Calendar value={dataVisita} mask='99/99/9999' dateFormat='dd/mm/yy' placeholder='Selecione o Dia' onChange={e => setDataVisita(e.value)}/>
+						<Calendar value={dataVisita} mask='99/99/9999' placeholder='Selecione o Dia' onChange={e => setDataVisita(e.value)}/>
 					</InputWrapper>
 					<DataTable value={visitas} className="p-datatable-striped" paginator rows={7}>
 						<Column field="nome_cooperado" header="Cooperado"/>

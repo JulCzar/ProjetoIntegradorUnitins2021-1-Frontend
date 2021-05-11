@@ -1,10 +1,9 @@
-import React from 'react'
 import { CardHeader } from '~/common/components'
-import dayGridPlugin from '@fullcalendar/daygrid'
-import timeGridPlugin from '@fullcalendar/timegrid'
-import interactionPlugin from '@fullcalendar/interaction'
+import { useHistory } from 'react-router'
+import React from 'react'
 
 import { ContainerWithTemplate } from '~/template'
+import { options } from './fullcalendarOptions'
 import { CalendarContainer } from './styles'
 import { FullCalendar } from '~/primereact'
 import { Block } from '~/common/styles'
@@ -12,22 +11,6 @@ import { Block } from '~/common/styles'
 import '@fullcalendar/common/main.css'
 import '@fullcalendar/daygrid/main.css'
 import '@fullcalendar/timegrid/main.css'
-import { useHistory } from 'react-router'
-
-const options = {
-	plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
-	locale: 'pt-br',
-	editable: false,
-	droppable: false,
-	allDaySlot: false,
-	businessHours: false,
-	initialView: 'dayGridWeek',
-	headerToolbar: {
-		left: 'today,prev,next',
-		center: 'title',
-		right: 'dayGridMonth,dayGridWeek,timeGridDay',
-	}
-}
 
 function VisitasMarcadas() {
 	const history = useHistory()
