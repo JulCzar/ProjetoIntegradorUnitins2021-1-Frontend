@@ -1,22 +1,23 @@
-import React from 'react'
+import React, { useLayoutEffect } from 'react'
 import { format } from 'date-fns'
 
 import { CardHeader } from '~/common/components'
 import { Block, InputWrapper, UnForm} from '~/common/styles'
-import { Calendar, Column, DataTable, InputText } from '~/primereact'
+import { Button, Calendar, Column, DataTable, InputText } from '~/primereact'
 
 import { ContainerWithTemplate } from '~/template'
 import { api } from '~/services'
 
 function Painel() {
+	const blockRef = React.useRef(null)
+	const [lastTimeoutId, setTimeoutId] = React.useState(0)
 	const [loading, setLoading] = React.useState(false)
 	const [visitas, setVisitas] = React.useState([])
-	const [nomeCooperado, setNomeCooperado] = React.useState(null)
-	const [nomePropriedade, setNomePropriedade] = React.useState(null)
-	const [nomeTecnico, setNomeTecnico] = React.useState(null)
-	const [dataVisita, setDataVisita] = React.useState(null)
-	const [motivoVisita, setMotivoVisita] = React.useState(null)
-	const [lastTimeoutId, setTimeoutId] = React.useState(0)
+	const [nomePropriedade, setNomePropriedade] = React.useState('')
+	const [nomeCooperado, setNomeCooperado] = React.useState('')
+	const [motivoVisita, setMotivoVisita] = React.useState('')
+	const [nomeTecnico, setNomeTecnico] = React.useState('')
+	const [dataVisita, setDataVisita] = React.useState('')
 
 	React.useEffect(() => {
 		clearTimeout(lastTimeoutId)
@@ -40,11 +41,9 @@ function Painel() {
 	
 		const getVisitas = async () => {
 			setLoading(true)
-			const params = getParams()
-			const config = { params }
-
+			
 			try {
-				const { data: result } = await api.get('/painel', config)
+				const { data: result } = await api.get('/painel', { params: getParams() })
 
 				setVisitas(result)
 			} catch (err) {}
@@ -56,17 +55,29 @@ function Painel() {
 		setTimeoutId(setTimeout(getVisitas, 500))
 	},[nomeCooperado, nomePropriedade, nomeTecnico, dataVisita, motivoVisita])
 
+	const enterFullscreen = () => {
+		const isNotFullscreen = !document.fullscreenElement
+
+		if (isNotFullscreen)
+			return blockRef.current.requestFullscreen()
+
+		document.exitFullscreen()
+	}
+
 	return (
 		<ContainerWithTemplate loading={loading} contentClassName='p-fluid p-mt-5'>
-			<Block className='p-p-3'>
-				<CardHeader title='Painel de Exibição'/>
+			<Block ref={blockRef} className='p-p-3'>
+				<div className="p-d-flex p-ai-center">
+					<CardHeader title='Painel de Exibição'/>
+					<Button className='p-ml-3' icon='fas fa-expand' onClick={enterFullscreen}/>
+				</div>
 				<UnForm>
-					<InputWrapper className='p-my-3' columns={5} gap='10px'>
-						<InputText value={nomeCooperado} placeholder='Cooperado' onChange={e => setNomeCooperado(e.value)}/>
-						<InputText value={nomePropriedade} placeholder='Propriedade' onChange={e => setNomePropriedade(e.value)}/>
-						<InputText value={nomeTecnico} placeholder='Tecnico' onChange={e => setNomeTecnico(e.value)}/>
-						<InputText value={motivoVisita} placeholder='Motivo da Visita' onChange={e => setMotivoVisita(e.value)}/>
-						<Calendar value={dataVisita} dateFormat='dd/mm/yy' placeholder='Selecione o Dia' onChange={e => setDataVisita(e.value)}/>
+					<InputWrapper className='p-mb-3' columns={5} gap='10px'>
+						<InputText value={nomeCooperado} placeholder='Cooperado' onChange={e => setNomeCooperado(e.target.value)}/>
+						<InputText value={nomePropriedade} placeholder='Propriedade' onChange={e => setNomePropriedade(e.target.value)}/>
+						<InputText value={nomeTecnico} placeholder='Tecnico' onChange={e => setNomeTecnico(e.target.value)}/>
+						<InputText value={motivoVisita} placeholder='Motivo da Visita' onChange={e => setMotivoVisita(e.target.value)}/>
+						<Calendar value={dataVisita} mask='99/99/9999' dateFormat='dd/mm/yy' placeholder='Selecione o Dia' onChange={e => setDataVisita(e.value)}/>
 					</InputWrapper>
 					<DataTable value={visitas} className="p-datatable-striped" paginator rows={7}>
 						<Column field="nome_cooperado" header="Cooperado"/>
