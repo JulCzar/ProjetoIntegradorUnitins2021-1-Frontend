@@ -9,14 +9,14 @@ import { ContainerWithTemplate } from '~/template'
 import { api } from '~/services'
 
 function Painel() {
+	const [lastTimeoutId, setTimeoutId] = React.useState(0)
 	const [loading, setLoading] = React.useState(false)
 	const [visitas, setVisitas] = React.useState([])
-	const [nomeCooperado, setNomeCooperado] = React.useState(null)
-	const [nomePropriedade, setNomePropriedade] = React.useState(null)
-	const [nomeTecnico, setNomeTecnico] = React.useState(null)
-	const [dataVisita, setDataVisita] = React.useState(null)
-	const [motivoVisita, setMotivoVisita] = React.useState(null)
-	const [lastTimeoutId, setTimeoutId] = React.useState(0)
+	const [nomePropriedade, setNomePropriedade] = React.useState('')
+	const [nomeCooperado, setNomeCooperado] = React.useState('')
+	const [motivoVisita, setMotivoVisita] = React.useState('')
+	const [nomeTecnico, setNomeTecnico] = React.useState('')
+	const [dataVisita, setDataVisita] = React.useState('')
 
 	React.useEffect(() => {
 		clearTimeout(lastTimeoutId)
@@ -40,11 +40,9 @@ function Painel() {
 	
 		const getVisitas = async () => {
 			setLoading(true)
-			const params = getParams()
-			const config = { params }
-
+			
 			try {
-				const { data: result } = await api.get('/painel', config)
+				const { data: result } = await api.get('/painel', { params: getParams() })
 
 				setVisitas(result)
 			} catch (err) {}
@@ -62,10 +60,10 @@ function Painel() {
 				<CardHeader title='Painel de Exibição'/>
 				<UnForm>
 					<InputWrapper className='p-my-3' columns={5} gap='10px'>
-						<InputText value={nomeCooperado} placeholder='Cooperado' onChange={e => setNomeCooperado(e.value)}/>
-						<InputText value={nomePropriedade} placeholder='Propriedade' onChange={e => setNomePropriedade(e.value)}/>
-						<InputText value={nomeTecnico} placeholder='Tecnico' onChange={e => setNomeTecnico(e.value)}/>
-						<InputText value={motivoVisita} placeholder='Motivo da Visita' onChange={e => setMotivoVisita(e.value)}/>
+						<InputText value={nomeCooperado} placeholder='Cooperado' onChange={e => setNomeCooperado(e.target.value)}/>
+						<InputText value={nomePropriedade} placeholder='Propriedade' onChange={e => setNomePropriedade(e.target.value)}/>
+						<InputText value={nomeTecnico} placeholder='Tecnico' onChange={e => setNomeTecnico(e.target.value)}/>
+						<InputText value={motivoVisita} placeholder='Motivo da Visita' onChange={e => setMotivoVisita(e.target.value)}/>
 						<Calendar value={dataVisita} dateFormat='dd/mm/yy' placeholder='Selecione o Dia' onChange={e => setDataVisita(e.value)}/>
 					</InputWrapper>
 					<DataTable value={visitas} className="p-datatable-striped" paginator rows={7}>
