@@ -29,7 +29,6 @@ export const InputWrapper = styled('div')`
 
 	@media (max-width: 750px) {
 		grid-template-columns: 1fr;
-		gap: 0;
 	}
 `
 

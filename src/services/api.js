@@ -3,7 +3,7 @@ import { store } from '~/store'
 
 const api = axios.create({
 	baseURL: 'https://back-simov.herokuapp.com/api',
-	timeout: 5000
+	timeout: 15000
 })
 
 api.interceptors.request.use(async config => {

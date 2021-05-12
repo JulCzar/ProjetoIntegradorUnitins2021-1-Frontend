@@ -1,126 +1,83 @@
-import React from 'react'
+import React, { useLayoutEffect } from 'react'
 import { format } from 'date-fns'
 
-import { CardHeader, UnAutoComplete, UnInput, UnInputDateTime, UnSelect } from '~/common/components'
+import { CardHeader } from '~/common/components'
 import { Block, InputWrapper, UnForm} from '~/common/styles'
-import { Column, DataTable } from '~/primereact'
+import { Button, Calendar, Column, DataTable, InputText } from '~/primereact'
 
 import { ContainerWithTemplate } from '~/template'
-import { getStringNormalized } from '~/utils'
-import cooperados from './cooperados.json'
 import { api } from '~/services'
 
 function Painel() {
+	const blockRef = React.useRef(null)
+	const [lastTimeoutId, setTimeoutId] = React.useState(0)
 	const [loading, setLoading] = React.useState(false)
 	const [visitas, setVisitas] = React.useState([])
-	const [nomeCooperado, setNomeCooperado] = React.useState(null)
-	const [idCooperado, setIdCooperado] = React.useState(null)
-	const [nomePropriedade, setNomePropriedade] = React.useState(null)
-	const [idPropriedade, setDadosPropriedade] = React.useState(null)
-	const [nomeTecnico, setNomeTecnico] = React.useState(null)
-	const [dataVisita, setDataVisita] = React.useState(null)
-	const [motivoVisita, setMotivoVisita] = React.useState(null)
-	const [idVisita, setIdVisita] = React.useState(null)
-	const [lastTimeoutId, setTimeoutId] = React.useState(0)
-	const [cooperadosFiltrados, setCooperadosFiltrados] = React.useState([])
+	const [nomePropriedade, setNomePropriedade] = React.useState('')
+	const [nomeCooperado, setNomeCooperado] = React.useState('')
+	const [motivoVisita, setMotivoVisita] = React.useState('')
+	const [nomeTecnico, setNomeTecnico] = React.useState('')
+	const [dataVisita, setDataVisita] = React.useState('')
 
 	React.useEffect(() => {
 		clearTimeout(lastTimeoutId)
+
 		const getParams = () => {
 			const params = {}
 
-			if (idCooperado) params.nome_cooperado = nomeCooperado
-			if (idPropriedade) params.nome_propriedade = nomePropriedade
-			if (nomeTecnico) params.nome_tecnico = nomeTecnico
-			if (dataVisita) params.dia_visita = format(dataVisita, 'yyyy-MM-dd')
-			if (idVisita) params.motivo_visita = motivoVisita
+			if (nomeCooperado)
+				params.nome_cooperado = nomeCooperado
+			if (nomePropriedade)
+				params.nome_propriedade = nomePropriedade
+			if (nomeTecnico)
+				params.nome_tecnico = nomeTecnico
+			if (dataVisita)
+				params.dia_visita = format(dataVisita, 'yyyy-MM-dd')
+			if (motivoVisita)
+				params.motivo_visita = motivoVisita
 
 			return params
 		}
 	
 		const getVisitas = async () => {
 			setLoading(true)
-			const params = getParams()
-			const config = { params }
-
+			
 			try {
-				const { data: result } = await api.get('/painel', config)
+				const { data: result } = await api.get('/painel', { params: getParams() })
 
 				setVisitas(result)
 			} catch (err) {}
 			finally {
 				setLoading(false)
 			}
-
 		}
 
 		setTimeoutId(setTimeout(getVisitas, 500))
 	},[nomeCooperado, nomePropriedade, nomeTecnico, dataVisita, motivoVisita])
 
-	const filtrarCooperado = event => {
-		const cooperadosFiltrados = cooperados
-			.filter(i => {
-				const pesquisaNormalizada = getStringNormalized(event.query.toLowerCase())
-				const nomeCooperadoNormalizado = getStringNormalized(i.label.toLowerCase())
-				return nomeCooperadoNormalizado.startsWith(pesquisaNormalizada)
-			})
+	const enterFullscreen = () => {
+		const isNotFullscreen = !document.fullscreenElement
 
-		setCooperadosFiltrados(cooperadosFiltrados)
+		if (isNotFullscreen)
+			return blockRef.current.requestFullscreen()
+
+		document.exitFullscreen()
 	}
 
 	return (
 		<ContainerWithTemplate loading={loading} contentClassName='p-fluid p-mt-5'>
-			<Block className='p-p-3'>
-				<CardHeader title='Painel de Exibição'/>
+			<Block ref={blockRef} className='p-p-3'>
+				<div className="p-d-flex p-ai-center">
+					<CardHeader title='Painel de Exibição'/>
+					<Button className='p-ml-3' icon='fas fa-expand' onClick={enterFullscreen}/>
+				</div>
 				<UnForm>
-					<InputWrapper columns={5} gap='10px'>
-						<UnAutoComplete
-							field='label'
-							label='Cooperado'
-							name='nome_cooperado'
-							value={idCooperado}
-							suggestions={cooperadosFiltrados}
-							completeMethod={filtrarCooperado}
-							onSelect={e => setNomeCooperado(e.value.label)}
-							onChange={e => setIdCooperado(e.value)}
-						/>
-						<UnSelect
-							name='nome_propriedade'
-							value={idPropriedade}
-							label='Propriedade'
-							options={[{value: 1, label:'Fazenda MacMilliam'}]}
-							onChange={e => {
-								setDadosPropriedade(e.value)
-								setNomePropriedade(e.originalEvent.target.innerText)
-							}}
-						/>
-						<UnInput
-							name='nome_tecnico'
-							label='Tecnico'
-							onChange={e => setNomeTecnico(e.target.value)}
-							value={nomeTecnico}
-						/>
-						<UnSelect
-							name='motivo_visita'
-							value={idVisita}
-							label='Motivo da Visita'
-							options={[
-								{value:1, label:'Checagem do Solo'},
-								{value:2, label:'Vacinação'},
-							]}
-							onChange={e => {
-								setIdVisita(e.value)
-								setMotivoVisita(e.originalEvent.target.innerText)
-							}}
-							showFilterClear
-						/>
-						<UnInputDateTime
-							name='date'
-							value={dataVisita}
-							dateFormat='dd/mm/yy'
-							label='Selecione o Dia'
-							onChange={e => setDataVisita(e.value)}
-						/>
+					<InputWrapper className='p-mb-3' columns={5} gap='10px'>
+						<InputText value={nomeCooperado} placeholder='Cooperado' onChange={e => setNomeCooperado(e.target.value)}/>
+						<InputText value={nomePropriedade} placeholder='Propriedade' onChange={e => setNomePropriedade(e.target.value)}/>
+						<InputText value={nomeTecnico} placeholder='Tecnico' onChange={e => setNomeTecnico(e.target.value)}/>
+						<InputText value={motivoVisita} placeholder='Motivo da Visita' onChange={e => setMotivoVisita(e.target.value)}/>
+						<Calendar value={dataVisita} mask='99/99/9999' dateFormat='dd/mm/yy' placeholder='Selecione o Dia' onChange={e => setDataVisita(e.value)}/>
 					</InputWrapper>
 					<DataTable value={visitas} className="p-datatable-striped" paginator rows={7}>
 						<Column field="nome_cooperado" header="Cooperado"/>
