@@ -4,7 +4,6 @@ import { CardHeader, UnInput } from '~/common/components'
 import { Button, Column, DataTable } from '~/primereact'
 import { Block, InputWrapper, UnForm } from '~/common/styles'
 
-import data from './data.json'
 import { Link } from 'react-router-dom'
 import { ContainerWithTemplate } from '~/template'
 import { api } from '~/services'
@@ -48,7 +47,7 @@ function Busca() {
 				</DataTable>
 				<InputWrapper>
 					<Link to='/cadastrar/tecnico'>
-						<Button label='Novo'/>
+						<Button className='p-mt-3' label='Novo'/>
 					</Link>
 				</InputWrapper>
 			</Block>
