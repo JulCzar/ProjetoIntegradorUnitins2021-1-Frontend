@@ -6,7 +6,7 @@ import {
 	AlterarSenha,
 	BuscaCooperado,
 	BuscaTecnico,
-	CadastroAdmin,
+	BuscaAdministrador,
 	CadastroCooperado,
 	CadastroTecn,
 	DadosVisita,
@@ -42,12 +42,12 @@ const Routes = function _Routes() {
 				<Route path='/login' component={Login}/>
 
 				{/* Cadastros */}
-				<Route path='/cadastrar/admin' component={CadastroAdmin}/>
 				<Route path='/cadastrar/tecnico' component={CadastroTecn}/>
 				<Route path='/cadastrar/cooperado' component={CadastroCooperado}/>
 
 				{/* Administrador */}
-				<Route path='/admin' component={PerfilAdmin} exact/>
+				<Route path='/admin' component={BuscaAdministrador} exact/>
+				<Route path='/admin/perfil' component={PerfilAdmin} exact/>
 				<Route path='/admin/grupos' component={ListarGrupos} exact/>
 				<Route path='/admin/motivos' component={MotivoVisita}/>
 				<Route path='/admin/historico' component={HistoricoVisitas} exact/>

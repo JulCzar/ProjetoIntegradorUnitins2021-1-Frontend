@@ -2,12 +2,11 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import { ContainerWithTemplate } from '~/template'
-import { ListBox } from '~/primereact'
+import { PanelMenu } from '~/primereact'
 
 import { lateralMenuItems } from './lateralMenuItems'
-import { Block, Content } from '~/common/styles'
+import { Block} from '~/common/styles'
 import { useHistory } from 'react-router'
-import { ContainerLimiter } from '../styles'
 import { FullWidth } from './styles'
 import { CardHeader } from '~/common/components'
 
@@ -35,7 +34,7 @@ function AdminTemplate({
 		>
 			<FullWidth className='p-mt-5'>
 				<Block className='p-grid'>
-					<ListBox className='p-col-4 p-md-3' options={lateralMenuItems} onChange={handleTabChange}/>
+					<PanelMenu className='p-col-4 p-md-3' model={lateralMenuItems} onChange={handleTabChange}/>
 					<Block className='p-col-8 p-md-9 p-px-5 p-pb-5'>
 						<CardHeader title={title} className='p-mb-5'/>
 						<Block className='p-fluid'>

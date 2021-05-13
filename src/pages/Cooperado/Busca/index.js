@@ -1,11 +1,9 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-import { CardHeader, UnInput } from '~/common/components'
-import { Block, UnForm } from '~/common/styles'
-import { Button, Column, DataTable } from '~/primereact'
+import { Button, Column, DataTable, InputText } from '~/primereact'
 import { api } from '~/services'
-import { ContainerWithTemplate } from '~/template'
+import { AdminTemplate} from '~/template'
 
 function Busca() {
 	const [cooperados, setCooperados] = React.useState([])
@@ -24,28 +22,17 @@ function Busca() {
 		})()
 	}, [])
 	return (
-		<ContainerWithTemplate loading={loading} contentClassName='p-fluid p-mt-5'>	
-			<Block className='p-p-3'>
-				<CardHeader title='Buscar Cooperado'/>
-				<UnForm>
-					<UnInput name='.' placeholder='Pesquisar por nome ou cpf' />
-				</UnForm>
-				<DataTable value={cooperados} className="p-datatable-striped">
-					<Column field="nome_cooperado" header="Nome"/>
-					<Column field="cpf_cooperado" header="CPF"/>
-					<Column bodyClassName='p-d-flex p-jc-around' headerClassName='p-d-flex p-jc-center' header='Ações' body={() => (
-						<React.Fragment>
-							<Link to='/cooperado/perfil'>Detalhes</Link>
-							<a>Desativar</a>
-						</React.Fragment>
-					)}/>
-				</DataTable>
-				
-				<Link to='/cadastrar/cooperado'>
-					<Button className='p-mt-3' label='Novo'/>
-				</Link>
-			</Block>
-		</ContainerWithTemplate>
+		<AdminTemplate title='Buscar Cooperado' loading={loading}>		
+			<InputText className='p-mb-3' name='.' placeholder='Pesquisar por nome ou cpf' />
+			<DataTable value={cooperados} className="p-datatable-striped">
+				<Column field="nome_cooperado" header="Nome"/>
+				<Column field="cpf_cooperado" header="CPF"/>
+				<Column bodyClassName='p-d-flex p-jc-around' headerClassName='p-d-flex p-jc-center' header='Ações' body={() => (
+				<Link to='/cooperado/perfil'>Detalhes</Link>
+				)}/>
+			</DataTable>
+			<Button onClick={() => history.push('/cadastrar/cooperado')} className='p-mt-3' label='Novo'/>
+		</AdminTemplate>
 	)
 }
 
