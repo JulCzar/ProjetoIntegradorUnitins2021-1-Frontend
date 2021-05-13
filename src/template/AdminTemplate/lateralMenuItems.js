@@ -24,6 +24,10 @@ const items = [
 	{label: 'Administradores', destination:'/admin'},
 	{label: 'Técnicos', destination:'/tecnico'},
 	{label: 'Cooperados', destination:'/cooperado'},
+	{label: 'Relatório', items: [
+		{label: 'Técnico', destination:'/tecnico/relatorio'},
+		{label: 'Cooperado', destination:'/cooperado/relatorio'},
+	]},
 ]
 
 export const lateralMenuItems = items.map(parseMenuItem)
