@@ -1,5 +1,5 @@
 // Administrador
-export { default as CadastroAdmin } from './Administrador/Cadastro'
+export { default as BuscaAdministrador } from './Administrador/Busca'
 export { default as PerfilAdmin } from './Administrador/Perfil'
 export { default as ListarGrupos } from './Administrador/Grupos/Listar'
 export { default as CriarGrupo } from './Administrador/Grupos/CriarGrupo'
