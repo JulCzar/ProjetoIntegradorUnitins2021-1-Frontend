@@ -44,7 +44,7 @@ const Cadastro = () => {
 					?<ListBox
 						className='p-mb-5'
 						options={properties}
-						optionLabel={opt => opt.nome}/>
+						optionLabel='nome'/>
 					:<h3>É Necessário adicionar pelo menos uma propriedade</h3>
 				}
 				<InputWrapper columns={2} gap='10px'>
