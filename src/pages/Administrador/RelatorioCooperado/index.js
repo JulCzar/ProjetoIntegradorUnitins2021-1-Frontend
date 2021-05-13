@@ -5,6 +5,9 @@ import { Button} from '~/primereact'
 import { AdminTemplate } from '~/template'
 
 function RelatorioCooperado() {
+	const [startDate, setStartDate] = React.useState(null)
+	const [endDate, setEndDate] = React.useState(null)
+
   const [groupOptions] = React.useState([
 		{label: 'Recanto', value: 1},
 		{label: 'Cargueiros', value: 2},
@@ -21,8 +24,20 @@ function RelatorioCooperado() {
   <AdminTemplate title='Relatório de Cooperado'>
 		<UnForm onSubmit={enviar}>
 			<InputWrapper columns={2} gap='10px'>
-				<UnInputDateTime mask='99/99/9999' showIcon name='inicio' label='Inicio'/>
-				<UnInputDateTime mask='99/99/9999' showIcon name='fim' label='Fim'/>
+				<UnInputDateTime
+					showIcon
+					name='inicio'
+					label='Inicio'
+					mask='99/99/9999'
+					maxDate={endDate}
+					onChange={evt => setStartDate(evt.value)}/>
+				<UnInputDateTime
+					mask='99/99/9999'
+					showIcon
+					name='fim'
+					label='Fim'
+					minDate={startDate}
+					onChange={evt => setEndDate(evt.value)}/>
 			</InputWrapper>
 			<UnSelect name='cooperado' label='Cooperado' options={groupOptions}/>
 			<UnSelect name='tecnico' label='Técnico' options={groupOptions}/>

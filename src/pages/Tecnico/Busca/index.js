@@ -2,13 +2,14 @@ import React from 'react'
 
 import { Button, Column, DataTable, InputText } from '~/primereact'
 
-import { Link } from 'react-router-dom'
-import { AdminTemplate, ContainerWithTemplate } from '~/template'
+import { Link, useHistory } from 'react-router-dom'
+import { AdminTemplate } from '~/template'
 import { api } from '~/services'
 
 function Busca() {
 	const [tecnicos, setTecnicos] = React.useState([])
 	const [loading, setLoading] = React.useState(false)
+	const history = useHistory()
 
 	React.useEffect(() => {
 		(async () => {

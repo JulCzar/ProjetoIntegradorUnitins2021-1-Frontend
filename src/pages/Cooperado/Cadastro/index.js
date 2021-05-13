@@ -1,9 +1,10 @@
 import React from 'react'
 import { CardHeader, UnInput } from '~/common/components'
+import UnInputNumber from '~/common/components/UnInputNumber'
 import { InputWrapper, UnForm } from '~/common/styles'
 import { Button, Dialog, ListBox, Toast} from '~/primereact'
 import { getToastInstance } from '~/services'
-import { ContainerWithCard } from '~/template'
+import { AdminTemplate } from '~/template'
 
 const Cadastro = () => {
 	const toastRef = React.useRef(null)
@@ -25,7 +26,7 @@ const Cadastro = () => {
 	}
 
 	return (
-		<ContainerWithCard cardClassName='p-fluid'>
+		<AdminTemplate>
 			<Toast ref={toastRef}/>
 			<CardHeader title='Cadastro de Cooperado'/>
 			<UnForm onSubmit={cadastrar}>
@@ -58,7 +59,15 @@ const Cadastro = () => {
 				<UnForm onSubmit={addProperty}>
 					<InputWrapper columns={2} gap='10px'>
 						<UnInput name='nome' label='Nome' required/>
-						<UnInput name='area' label='Tamanho (hectares)' required/>
+						<UnInputNumber
+							required
+							showButtons
+							name='area'
+							label='Tamanho'
+							suffix=' hectares'
+							buttonLayout="horizontal"
+							incrementButtonIcon="pi pi-plus"
+							decrementButtonIcon="pi pi-minus"/>
 					</InputWrapper>
 					<UnInput name='localidade' label='Localidade' required/>
 					<InputWrapper columns={2} gap='10px'>
@@ -68,7 +77,7 @@ const Cadastro = () => {
 					<Button type='submit' label='Salvar'/>
 				</UnForm>
 			</Dialog>
-		</ContainerWithCard>
+		</AdminTemplate>
 	)
 }
 

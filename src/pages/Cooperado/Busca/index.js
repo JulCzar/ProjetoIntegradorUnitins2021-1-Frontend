@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 
 import { Button, Column, DataTable, InputText } from '~/primereact'
 import { api } from '~/services'
@@ -8,6 +8,7 @@ import { AdminTemplate} from '~/template'
 function Busca() {
 	const [cooperados, setCooperados] = React.useState([])
 	const [loading, setLoading] = React.useState(false)
+	const history = useHistory()
 
 	React.useEffect(() => {
 		(async () => {
@@ -28,7 +29,7 @@ function Busca() {
 				<Column field="nome_cooperado" header="Nome"/>
 				<Column field="cpf_cooperado" header="CPF"/>
 				<Column bodyClassName='p-d-flex p-jc-around' headerClassName='p-d-flex p-jc-center' header='Ações' body={() => (
-				<Link to='/cooperado/perfil'>Detalhes</Link>
+					<Link to='/cooperado/perfil'>Detalhes</Link>
 				)}/>
 			</DataTable>
 			<Button onClick={() => history.push('/cadastrar/cooperado')} className='p-mt-3' label='Novo'/>

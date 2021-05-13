@@ -29,7 +29,7 @@ function MotivoVisita() {
 			</DataTable>
 			<Button className='p-mt-3' onClick={() => setModalVisibility(true)} label='Criar Novo'/>
 			<Dialog
-				header={() => <h2>Editar Grupo</h2>}
+				header={<h2>Editar Motivo</h2>}
 				draggable={false}
 				closable={false}
 				className='p-fluid'
