@@ -1,6 +1,7 @@
 import { CardHeader } from '~/common/components'
 import { useHistory } from 'react-router'
 import React from 'react'
+import fcevents from './events.json'
 
 import { ContainerWithTemplate } from '~/template'
 import { options } from './fullcalendarOptions'
@@ -24,10 +25,11 @@ function VisitasMarcadas() {
 					<CardHeader title='Visitas Marcadas'/>
 					<FullCalendar
 						ref={calendarRef}
-						events={events}
+						events={fcevents}
 						options={{
 							...options,
-							dateClick: e => history.push('/tecnico/visitas/agendar')	// eslint-disable-line
+							dateClick: e => history.push('/tecnico/visitas/agendar'),	// eslint-disable-line
+							eventClick: e => history.push('/tecnico/visitas/detalhes')
 						}}
 					/>
 				</Block>
