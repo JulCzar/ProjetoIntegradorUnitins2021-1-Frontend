@@ -4,7 +4,7 @@ import { InputWrapper, UnForm } from '~/common/styles'
 import { Button} from '~/primereact'
 import { AdminTemplate } from '~/template'
 
-function RelatorioTecnico() {
+function RelatorioPropriedade() {
   const [groupOptions] = React.useState([
 		{label: 'Recanto', value: 1},
 		{label: 'Cargueiros', value: 2},
@@ -18,16 +18,18 @@ function RelatorioTecnico() {
   }
 
   return (
-  <AdminTemplate title='Relatório de Técnico'>
+  <AdminTemplate title='Relatório de Propriedade'>
 		<UnForm onSubmit={enviar}>
 			<InputWrapper columns={2} gap='10px'>
 				<UnInputDateTime mask='99/99/9999' showIcon name='inicio' label='Inicio'/>
 				<UnInputDateTime mask='99/99/9999' showIcon name='fim' label='Fim'/>
 			</InputWrapper>
+			<UnSelect name='cooperado' label='Cooperado' options={groupOptions}/>
+			<UnSelect name='propriedade' label='Propriedade' options={groupOptions}/>
 			<UnSelect name='tecnico' label='Técnico' options={groupOptions}/>
-				<Button type='submit' label='Gerar Relatório'/>
+			<Button type='submit' label='Gerar Relatório'/>
 		</UnForm>
 	</AdminTemplate>
   )}
 
-export default RelatorioTecnico
+export default RelatorioPropriedade

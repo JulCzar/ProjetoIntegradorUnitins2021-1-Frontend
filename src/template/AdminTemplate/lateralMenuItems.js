@@ -21,13 +21,14 @@ const items = [
 	{label: 'Técnicos', destination:'/tecnico'},
 	{label: 'Cooperados', destination:'/cooperado'},
 	{label: 'Histórico', destination:'/admin/historico'},
+	{label: 'Relatórios', items: [
+		{label: 'Técnico', destination:'/relatorio/tecnico', icon: 'fas fa-grip-lines'},
+		{label: 'Cooperado', destination:'/relatorio/cooperado', icon: 'fas fa-grip-lines'},
+		{label: 'Propriedade', destination:'/relatorio/propriedade', icon: 'fas fa-grip-lines'},
+	]},
 	{label: 'Grupos', destination:'/admin/grupos'},
 	{label: 'Motivos', destination: '/admin/motivos'},
 	{label: 'Administradores', destination:'/admin'},
-	{label: 'Relatórios', items: [
-		{label: 'Técnico', destination:'/tecnico/relatorio', icon: 'fas fa-grip-lines'},
-		{label: 'Cooperado', destination:'/cooperado/relatorio', icon: 'fas fa-grip-lines'},
-	]}
 ]
 
 export const lateralMenuItems = items.map(parseMenuItem)

@@ -1,9 +1,10 @@
 import React from 'react'
-import { CardHeader, UnInput, UnInputDateTime, UnSelect } from '~/common/components'
-import { Card, Container, Content, InputWrapper, UnForm } from '~/common/styles'
+import { UnInputDateTime, UnSelect } from '~/common/components'
+import { InputWrapper, UnForm } from '~/common/styles'
 import { Button} from '~/primereact'
+import { AdminTemplate } from '~/template'
 
-function RelatorioLanding() {
+function RelatorioCooperado() {
   const [groupOptions] = React.useState([
 		{label: 'Recanto', value: 1},
 		{label: 'Cargueiros', value: 2},
@@ -17,25 +18,17 @@ function RelatorioLanding() {
   }
 
   return (
-  <Container className='p-d-flex'>
-			<Content className='p-d-flex p-jc-center p-ai-center layout-content'>
-				<Card className='p-fluid'>
-					<CardHeader title='Relatório de Cooperado e Propriedade'/>
-					<UnForm onSubmit={enviar}>
-						<InputWrapper columns={2} gap='10px'>
-							<UnInputDateTime name='inicio' label='Inicio'/>
-							<UnInputDateTime name='fim' label='Fim'/>
-						</InputWrapper>
-						<UnSelect name='cooperado' label='Cooperado' options={groupOptions}/>
-						<UnSelect name='tecnico' label='Técnico' options={groupOptions}/>
-            <InputWrapper columns={2} gap='10px'>
-							<Button type='submit' label='Relatório Geral'/>
-							<Button type='submit' label='Relatório da Propriedade'/>
-            </InputWrapper>
-					</UnForm>
-				</Card>
-			</Content>
-		</Container>
+  <AdminTemplate title='Relatório de Cooperado'>
+		<UnForm onSubmit={enviar}>
+			<InputWrapper columns={2} gap='10px'>
+				<UnInputDateTime mask='99/99/9999' showIcon name='inicio' label='Inicio'/>
+				<UnInputDateTime mask='99/99/9999' showIcon name='fim' label='Fim'/>
+			</InputWrapper>
+			<UnSelect name='cooperado' label='Cooperado' options={groupOptions}/>
+			<UnSelect name='tecnico' label='Técnico' options={groupOptions}/>
+			<Button type='submit' label='Gerar Relatório'/>
+		</UnForm>
+	</AdminTemplate>
   )}
 
-export default RelatorioLanding
+export default RelatorioCooperado

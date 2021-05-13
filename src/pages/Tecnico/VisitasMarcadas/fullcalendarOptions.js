@@ -11,7 +11,6 @@ export const options = {
 	droppable: false,
 	allDaySlot: false,
 	businessHours: false,
-	initialView: 'dayGridWeek',
 	headerToolbar: {
 		left: 'today,prev,next',
 		center: 'title',
