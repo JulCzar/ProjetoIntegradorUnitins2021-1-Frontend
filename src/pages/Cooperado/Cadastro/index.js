@@ -28,7 +28,9 @@ const Cadastro = () => {
 	return (
 		<AdminTemplate>
 			<Toast ref={toastRef}/>
+
 			<CardHeader title='Cadastro de Cooperado'/>
+
 			<UnForm onSubmit={cadastrar}>
 				<InputWrapper columns={2} gap='10px'>
 					<UnInput name='name' label='Nome' required/>
@@ -52,6 +54,7 @@ const Cadastro = () => {
 					<Button label='Cadastrar'/>
 				</InputWrapper>
 			</UnForm>
+			
 			<Dialog draggable={false} className='p-fluid' header={<h3>Dados da Propriedade</h3>}
 				breakpoints={{'960px': '75vw', '640px': '100vw'}}
 				visible={modalVisibility}
@@ -59,13 +62,9 @@ const Cadastro = () => {
 				<UnForm onSubmit={addProperty}>
 					<InputWrapper columns={2} gap='10px'>
 						<UnInput name='nome' label='Nome' required/>
-						<UnInputNumber
-							required
-							showButtons
-							name='area'
-							label='Tamanho'
-							suffix=' hectares'
-							buttonLayout="horizontal"
+						<UnInputNumber required showButtons
+							name='area' buttonLayout="horizontal"
+							label='Tamanho' suffix=' hectares'
 							incrementButtonIcon="pi pi-plus"
 							decrementButtonIcon="pi pi-minus"/>
 					</InputWrapper>
@@ -77,6 +76,7 @@ const Cadastro = () => {
 					<Button type='submit' label='Salvar'/>
 				</UnForm>
 			</Dialog>
+
 		</AdminTemplate>
 	)
 }

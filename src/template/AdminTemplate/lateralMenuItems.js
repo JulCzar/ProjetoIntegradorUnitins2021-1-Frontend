@@ -17,7 +17,7 @@ const parseMenuItem = ({label, destination, ...rest}) => ({
 })
 
 const items = [
-	{label: 'Perfil', destination:'/admin/perfil'},
+	{label: 'Perfil', destination:'/perfil'},
 	{label: 'Técnicos', destination:'/tecnico'},
 	{label: 'Cooperados', destination:'/cooperado'},
 	{label: 'Histórico', destination:'/admin/historico'},

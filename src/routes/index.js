@@ -48,7 +48,7 @@ const Routes = function _Routes() {
 
 				{/* Administrador */}
 				<Route path='/admin' component={BuscaAdministrador} exact/>
-				<Route path='/admin/perfil' component={PerfilAdmin} exact/>
+				<Route path='/perfil' component={PerfilAdmin} exact/>
 				<Route path='/admin/grupos' component={ListarGrupos} exact/>
 				<Route path='/admin/motivos' component={MotivoVisita}/>
 				<Route path='/admin/historico' component={HistoricoVisitas} exact/>
