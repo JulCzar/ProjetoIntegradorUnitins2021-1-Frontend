@@ -30,7 +30,7 @@ function ContainerWithTemplate({
 				<ContainerLimiter className='p-d-flex p-mx-auto p-jc-between p-ai-center'>
 					<img draggable={false} src={logo} alt='Logo do sistema SIMOV' height='50'/>
 					<HeaderMenu>
-						<TabMenu id='tabmenu-nopadding' className='desktop' model={menuItems} activeItem=' ' onTabChange={handleTabChange}/>
+						<TabMenu className='desktop' model={menuItems} activeItem=' ' onTabChange={handleTabChange}/>
 						<Button className='mobile' type="button" icon='fas fa-bars' onClick={e => op.current.toggle(e)} />
 
 						<OverlayPanel ref={op} className='mobile'>

@@ -28,6 +28,10 @@ export const HeaderMenu = styled('div')`
 		display: none;
 	}
 
+	.p-tabmenu {
+		border: none;
+	}
+
 	@media (min-width: 750px) {
 		.mobile {
 			display: none;

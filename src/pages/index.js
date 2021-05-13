@@ -12,7 +12,7 @@ export { default as HistoricoVisitas } from './Administrador/Historico/Visitas'
 export { default as Login } from './Geral/Login'
 export { default as BuscaCooperado } from './Cooperado/Busca'
 export { default as PerfilCooperado } from './Cooperado/Perfil'
-export { default as RelatorioLanding} from './Cooperado/RelatorioLanding'
+export { default as RelatorioLanding} from './Administrador/RelatorioCooperado'
 export { default as CadastroCooperado} from './Cooperado/Cadastro'
 
 // Tecnico
@@ -21,7 +21,7 @@ export { default as AgendarVisita } from './Tecnico/AgendarVisita'
 export { default as DetalhesVisita } from './Tecnico/DetalhesVisita'
 export { default as BuscaTecnico } from './Tecnico/Busca'
 export { default as PerfilTecnico } from './Tecnico/Perfil'
-export { default as RelatorioLandingTecnico } from './Tecnico/RelatorioLanding'
+export { default as RelatorioLandingTecnico } from './Administrador/RelatorioTecnico'
 export { default as VisitasMarcadas } from './Tecnico/VisitasMarcadas'
 
 // Exports Gerais

@@ -8,14 +8,14 @@ function Cadastro() {
 
 	return (
 		<AdminTemplate title='Administradores'>
-			<DataTable value={data}>
+			<DataTable emptyMessage='Nenhum item encontrado' value={data}>
 				<Column field="name" header="Name"/>
 				<Column
 					bodyClassName='p-d-flex p-jc-around'
 					headerStyle={{textAlign: 'center'}}
 					header="Ações"
 					body={() => (
-						<a onClick={() => setEditModalVisibility(true)}>Detalhes</a>
+						<a>Detalhes</a>
 					)}/>
 			</DataTable>
 		</AdminTemplate>

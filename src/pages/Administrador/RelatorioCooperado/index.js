@@ -29,8 +29,8 @@ function RelatorioLanding() {
 						<UnSelect name='cooperado' label='Cooperado' options={groupOptions}/>
 						<UnSelect name='tecnico' label='Técnico' options={groupOptions}/>
             <InputWrapper columns={2} gap='10px'>
-						  <Button type='submit' label='Relatório Geral'/>
-					    <Button type='submit' label='Relatório da Propriedade'/>
+							<Button type='submit' label='Relatório Geral'/>
+							<Button type='submit' label='Relatório da Propriedade'/>
             </InputWrapper>
 					</UnForm>
 				</Card>

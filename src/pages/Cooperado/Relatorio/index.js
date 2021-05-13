@@ -20,7 +20,7 @@ const Relatorio = () => {
 					<Chart className='p-col-6 p-print-4' type='pie' data={pieData} options={pieOptions} />
 					<Card>
 						<TableTitle className='p-col-12'>Estatísticas dos Técnicos</TableTitle>
-						<DataTable value={tableData} className='p-rol-12' rows={5}>
+						<DataTable emptyMessage='Nenhum item encontrado' value={tableData} className='p-rol-12' rows={5}>
 							<Column field='name' header='Name'></Column>
 							<Column field='country.name' header='Country'></Column>
 							<Column field='company' header='Company'></Column>
@@ -29,7 +29,7 @@ const Relatorio = () => {
 					</Card>
 					<Card>
 						<TableTitle className='p-col-12'>Visitas por Tipo</TableTitle>
-						<DataTable value={tableData} className='p-rol-12' rows={5}>
+						<DataTable emptyMessage='Nenhum item encontrado' value={tableData} className='p-rol-12' rows={5}>
 							<Column field='name' header='Name'></Column>
 							<Column field='country.name' header='Country'></Column>
 							<Column field='company' header='Company'></Column>

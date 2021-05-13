@@ -23,9 +23,9 @@ function Busca() {
 		})()
 	}, [])
 	return (
-		<AdminTemplate title='Buscar Técnico' loading={loading} contentClassName='p-fluid p-mt-5'>
+		<AdminTemplate title='Buscar Técnico' loading={loading} contentClassName='p-fluid'>
 			<InputText className='p-mb-3' name='.' placeholder='Pesquisar por nome ou cpf' />
-			<DataTable value={tecnicos} className="p-datatable-striped">
+			<DataTable emptyMessage='Nenhum item encontrado' value={tecnicos} className="p-datatable-striped">
 				<Column field="nome_tecnico" header="Nome"/>
 				<Column field="cpf_tecnico" header="CPF"/>
 				<Column header='Ações'

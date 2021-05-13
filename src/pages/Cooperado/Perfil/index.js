@@ -36,7 +36,7 @@ function Perfil() {
 		
 			<Block className="p-p-3 p-mt-5">
 				<CardHeader title='Propriedades'/>
-				<DataTable value={data} className="p-datatable-striped">
+				<DataTable emptyMessage='Nenhum item encontrado' value={data} className="p-datatable-striped">
 					<Column field="name" header="Nome"/>
 					<Column field="location" header="Localidade"/>
 					<Column className='p-d-flex p-jc-center' header='Ações' body={() => <a onClick={() => setEditingModalVisibility(true)} >Detalhes</a>}/>
