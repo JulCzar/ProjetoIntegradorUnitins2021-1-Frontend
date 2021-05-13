@@ -44,9 +44,9 @@ const Cadastro = () => {
 				<UnForm ref={formRef} onSubmit={cadastrar}>
 					<InputWrapper columns={2} gap='10px'>
 						<UnInput name='nome' label='Nome' required/>
-						<UnInput name='sobrenome' label='Sobrenome'/>
+						<UnInput name='sobrenome' label='Sobrenome' required/>
 					</InputWrapper>
-					<UnInput name='email' label='Email'/>
+					<UnInput name='email' label='Email' required/>
 					<InputWrapper columns={2} gap='10px'>
 						<UnInput name='cpf' mask='999.999.999-99' label='CPF' required/>
 						<UnInput name='phone' mask='(99) 9 9999-9999' label='Telefone' required/>

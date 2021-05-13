@@ -9,6 +9,7 @@ function Perfil() {
   const [editing, setEditing] = React.useState(false)
   const [editingProperty, setEditingProperty] = React.useState(false)
   const [modalVisibility, setModalVisibility] = React.useState(false)
+	const [editingModalVisibility, setEditingModalVisibility] = React.useState(false)
 
 	return (
 		<ContainerWithTemplate loading={editing} contentClassName='p-fluid p-mt-5'>
@@ -28,8 +29,8 @@ function Perfil() {
 					<InputWrapper columns={2} gap='10px'>
 					<Button type='submit' label='Desativar Perfil'/>
 					{!editing
-						?<Button onClick={() => setEditing(true)} label='Editar Perfil'/>
-						:<Button onClick={() => setEditing(false)} label='Salvar'/>}
+						?<Button onClick={() => setEditing(false)} label='Editar Perfil'/>
+						:<Button onClick={() => setEditing(true)} label='Salvar'/>}
 				</InputWrapper>
 			</Block>   
 		
@@ -38,10 +39,17 @@ function Perfil() {
 				<DataTable value={data} className="p-datatable-striped">
 					<Column field="name" header="Nome"/>
 					<Column field="location" header="Localidade"/>
-					<Column className='p-d-flex p-jc-center' header='Ações' body={() => <a onClick={() => setModalVisibility(true)} >Detalhes</a>}/>
+					<Column className='p-d-flex p-jc-center' header='Ações' body={() => <a onClick={() => setEditingModalVisibility(true)} >Detalhes</a>}/>
 				</DataTable>
-				<Button onClick={() => setModalVisibility(true)} label='Nova Propriedade'/>
-				<Dialog header={() => <h1>Dados da Propriedade</h1>} className='p-fluid' visible={modalVisibility} onHide={() => setModalVisibility(false)} breakpoints={{'960px': '75vw', '640px': '100vw'}} style={{width: '50vw'}}>
+				<Button className='p-mt-3' onClick={() => setModalVisibility(true)} label='Nova Propriedade'/>
+				<Dialog 
+					draggable={false}
+					header={<h1>Dados da Propriedade</h1>} 
+					className='p-fluid' 
+					visible={editingModalVisibility} 
+					onHide={() => setEditingModalVisibility(false)} 
+					breakpoints={{'960px': '75vw', '640px': '100vw'}} 
+					style={{width: '50vw'}}>
 					<UnForm>
 						<InputWrapper columns={2} gap='10px'>
 							<UnInput disabled={!editingProperty} name='nome' label='Nome'/>
@@ -49,8 +57,8 @@ function Perfil() {
 						</InputWrapper>
 						<UnInput disabled={!editingProperty} name='localidade' label='Localidade' />
 						<InputWrapper columns={2} gap='10px'>
-							<UnInput disabled name='registro' label='# da Matrícula'/>
-							<UnInput disabled name='grupo' label='Técnico Responsável'/>
+							<UnInput disabled={!editingProperty} name='registro' label='# da Matrícula'/>
+							<UnInput disabled={!editingProperty} name='grupo' label='Técnico Responsável'/>
 						</InputWrapper>
 					</UnForm>
 					<InputWrapper columns={2} gap='10px'>
@@ -61,6 +69,27 @@ function Perfil() {
 					</InputWrapper>
 				</Dialog>
 			</Block>
+			<Dialog 
+				draggable={false}
+				header={<h1>Cadastrar Propriedade</h1>} 
+				className='p-fluid' 
+				visible={modalVisibility} 
+				onHide={() => setModalVisibility(false)} 
+				breakpoints={{'960px': '75vw', '640px': '100vw'}} 
+				style={{width: '50vw'}}>
+				<UnForm>
+					<InputWrapper columns={2} gap='10px'>
+						<UnInput name='nome' label='Nome'/>
+						<UnInput name='area' label='Tamanho'/>
+					</InputWrapper>
+					<UnInput name='localidade' label='Localidade' />
+					<InputWrapper columns={2} gap='10px'>
+						<UnInput name='registro' label='# da Matrícula'/>
+						<UnInput name='grupo' label='Técnico Responsável'/>
+					</InputWrapper>
+				</UnForm>
+				<Button label='Cadastrar'/>
+			</Dialog>
 		</ContainerWithTemplate>
 	)
 }

@@ -17,11 +17,17 @@ const parseMenuItem = ({label, destination, ...rest}) => ({
 })
 
 const items = [
-	{label: 'Perfil', destination:'/admin'},
+	{label: 'Perfil', destination:'/admin/perfil'},
 	{label: 'Histórico', destination:'/admin/historico'},
 	{label: 'Grupos', destination:'/admin/grupos'},
 	{label: 'Motivos', destination: '/admin/motivos'},
-	{label: 'Cadastrar Administrador', destination:'/cadastrar/admin'},
+	{label: 'Administradores', destination:'/admin'},
+	{label: 'Técnicos', destination:'/tecnico'},
+	{label: 'Cooperados', destination:'/cooperado'},
+	{label: 'Relatório', items: [
+		{label: 'Técnico', destination:'/tecnico/relatorio'},
+		{label: 'Cooperado', destination:'/cooperado/relatorio'},
+	]},
 ]
 
 export const lateralMenuItems = items.map(parseMenuItem)
