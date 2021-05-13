@@ -1,12 +1,12 @@
 import { useHistory } from 'react-router'
 import PropTypes from 'prop-types'
-import React, { StyleHTMLAttributes } from 'react'
+import React from 'react'
 import logo from '~/assets/logo.svg'
 
+import { Container, Header, Content, Footer, ContainerLimiter, HeaderMenu } from '../styles'
 import { Button, ListBox, OverlayPanel, TabMenu } from '~/primereact'
-import { Container, Header, Content, Footer, ContainerLimiter, HeaderMenu } from './styles'
-import { menuItems } from './menuItems'
-import Loading from './Loading'
+import Loading from '~/template/components/Loading'
+import { menuItems } from '../menuItems'
 
 function ContainerWithTemplate({
 	children,

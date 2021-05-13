@@ -2,13 +2,13 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import { ContainerWithTemplate } from '~/template'
-import { ListBox, PanelMenu } from '~/primereact'
+import { PanelMenu } from '~/primereact'
 
-import { lateralMenuItems } from './lateralMenuItems'
-import { Block} from '~/common/styles'
-import { useHistory } from 'react-router'
 import { FullWidth, PanelMenuContainer } from './styles'
+import { lateralMenuItems } from './lateralMenuItems'
 import { CardHeader } from '~/common/components'
+import { useHistory } from 'react-router'
+import { Block} from '~/common/styles'
 
 function AdminTemplate({
 	children,
