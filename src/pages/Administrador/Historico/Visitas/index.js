@@ -3,12 +3,12 @@ import { Link } from 'react-router-dom'
 import { CardHeader } from '~/common/components'
 import { Card, Container, Content } from '~/common/styles'
 import { Column, DataTable } from '~/primereact'
-import { AdminTemplate } from '~/template'
+import { ManagementTemplate } from '~/template'
 import data from './data.json'
 
 function Visita() {
 	return (
-		<AdminTemplate title='Histórico de Visitas'>
+		<ManagementTemplate title='Histórico de Visitas'>
 			<DataTable emptyMessage='Nenhum item encontrado' value={data} className="p-datatable-striped" paginator rows={7}>
 				<Column field="date" header="Data da Visita"></Column>
 				<Column headerStyle={{textAlign: 'center'}} bodyStyle={{textAlign: 'center'}} field="cooperado" header="Cooperado"/>
@@ -21,7 +21,7 @@ function Visita() {
 					</div>
 				)}/>
 			</DataTable>
-		</AdminTemplate>
+		</ManagementTemplate>
 	)
 }
 

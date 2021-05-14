@@ -2,7 +2,7 @@ import React from 'react'
 import { CardHeader, UnInput } from '~/common/components'
 import { Block, InputWrapper, UnForm } from '~/common/styles'
 import { Button} from '~/primereact'
-import { AdminTemplate, ContainerWithTemplate } from '~/template'
+import { ManagementTemplate, ContainerWithTemplate } from '~/template'
 
 function Perfil() {
   const [editing, setEditing] = React.useState(true)
@@ -15,7 +15,7 @@ function Perfil() {
 	])
 
 	return (
-		<AdminTemplate title='Perfil'>
+		<ManagementTemplate title='Perfil'>
 			<UnForm>
 				<InputWrapper columns={2} gap='10px'>
 					<UnInput disabled={editing} name='name' label='Nome'/>
@@ -36,7 +36,7 @@ function Perfil() {
 					:<Button type='button' onClick={() => setEditing(true)} label='Salvar'/>}
 				</InputWrapper>
 			</UnForm>
-		</AdminTemplate>
+		</ManagementTemplate>
 	)
 }
 

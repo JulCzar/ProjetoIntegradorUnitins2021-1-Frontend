@@ -5,7 +5,7 @@ import { UnInput, UnSelect } from '~/common/components'
 import {  api, getToastInstance } from '~/services'
 import { Button, Toast } from '~/primereact'
 import { verifyPassword, getPhoneObject } from '~/utils'
-import { AdminTemplate } from '~/template'
+import { ManagementTemplate } from '~/template'
 
 const Cadastro = () => {
 	const toastRef = React.useRef(null)
@@ -38,7 +38,7 @@ const Cadastro = () => {
 	}
 
 	return (
-		<AdminTemplate loading={loading} title='Cadastro de Técnico'>
+		<ManagementTemplate loading={loading} title='Cadastro de Técnico'>
 			<Toast ref={toastRef}/>
 			<UnForm ref={formRef} onSubmit={cadastrar}>
 				<InputWrapper columns={2} gap='10px'>
@@ -58,7 +58,7 @@ const Cadastro = () => {
 				<UnInput type='password' name='passwordConfirm' label='Confirmação de Senha' required toggleMask feedback={false}/>
 				<Button type='submit' label='Cadastrar'/>
 			</UnForm>
-		</AdminTemplate>
+		</ManagementTemplate>
 	)
 }
 

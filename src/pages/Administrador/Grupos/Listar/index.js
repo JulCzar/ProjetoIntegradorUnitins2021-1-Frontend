@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { UnChecklist, UnInput } from '~/common/components'
 import { InputWrapper, UnForm } from '~/common/styles'
 import { Button, Column, DataTable, Dialog } from '~/primereact'
-import { AdminTemplate } from '~/template'
+import { ManagementTemplate } from '~/template'
 import { groupOptions } from '../groupOptions'
 import data from './data.json'
 
@@ -15,7 +15,7 @@ function ListarGrupos() {
 	const register = form => {}
 
 	return (
-		<AdminTemplate title='Grupos'>
+		<ManagementTemplate title='Grupos'>
 			<DataTable emptyMessage='Nenhum item encontrado' value={data}>
 				<Column field="name" header="Nome"/>
 				<Column bodyClassName='p-d-flex p-jc-around' headerStyle={{textAlign: 'center'}} header="Ações" body={() => (
@@ -61,7 +61,7 @@ function ListarGrupos() {
 					</InputWrapper>
 				</UnForm>
 			</Dialog>
-		</AdminTemplate>
+		</ManagementTemplate>
 	)
 }
 

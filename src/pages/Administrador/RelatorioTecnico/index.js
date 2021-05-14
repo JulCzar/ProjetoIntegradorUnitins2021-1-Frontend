@@ -2,7 +2,7 @@ import React from 'react'
 import { UnInputDateTime, UnSelect } from '~/common/components'
 import { InputWrapper, UnForm } from '~/common/styles'
 import { Button} from '~/primereact'
-import { AdminTemplate } from '~/template'
+import { ManagementTemplate } from '~/template'
 
 function RelatorioTecnico() {
 	const [startDate, setStartDate] = React.useState(null)
@@ -21,7 +21,7 @@ function RelatorioTecnico() {
   }
 
   return (
-  <AdminTemplate title='Relatório de Técnico'>
+  <ManagementTemplate title='Relatório de Técnico'>
 		<UnForm onSubmit={enviar}>
 			<InputWrapper columns={2} gap='10px'>
 				<UnInputDateTime
@@ -42,7 +42,7 @@ function RelatorioTecnico() {
 			<UnSelect name='tecnico' label='Técnico' options={groupOptions}/>
 				<Button type='submit' label='Gerar Relatório'/>
 		</UnForm>
-	</AdminTemplate>
+	</ManagementTemplate>
   )}
 
 export default RelatorioTecnico

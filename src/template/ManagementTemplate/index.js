@@ -10,7 +10,7 @@ import { CardHeader } from '~/common/components'
 import { useHistory } from 'react-router'
 import { Block} from '~/common/styles'
 
-function AdminTemplate({
+function ManagementTemplate({
 	children,
 	contentClassName = '',
 	contentStyle = {},
@@ -64,7 +64,7 @@ function AdminTemplate({
 	)
 }
 
-AdminTemplate.propTypes = {
+ManagementTemplate.propTypes = {
 	children: PropTypes.any,
 	contentClassName: PropTypes.string,
 	contentContainerClassName: PropTypes.string,
@@ -74,4 +74,4 @@ AdminTemplate.propTypes = {
 	title: PropTypes.string
 }
 
-export default AdminTemplate
+export default ManagementTemplate

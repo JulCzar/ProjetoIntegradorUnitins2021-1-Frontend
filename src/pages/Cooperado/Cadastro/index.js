@@ -4,7 +4,7 @@ import UnInputNumber from '~/common/components/UnInputNumber'
 import { InputWrapper, UnForm } from '~/common/styles'
 import { Button, Dialog, ListBox, Toast} from '~/primereact'
 import { getToastInstance } from '~/services'
-import { AdminTemplate } from '~/template'
+import { ManagementTemplate } from '~/template'
 
 const Cadastro = () => {
 	const toastRef = React.useRef(null)
@@ -26,7 +26,7 @@ const Cadastro = () => {
 	}
 
 	return (
-		<AdminTemplate>
+		<ManagementTemplate>
 			<Toast ref={toastRef}/>
 
 			<CardHeader title='Cadastro de Cooperado'/>
@@ -77,7 +77,7 @@ const Cadastro = () => {
 				</UnForm>
 			</Dialog>
 
-		</AdminTemplate>
+		</ManagementTemplate>
 	)
 }
 

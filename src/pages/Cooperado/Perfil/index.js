@@ -2,7 +2,7 @@ import React from 'react'
 import { CardHeader, UnInput } from '~/common/components'
 import { Block, InputWrapper, UnForm } from '~/common/styles'
 import { Button, Column, DataTable, Dialog} from '~/primereact'
-import { AdminTemplate } from '~/template'
+import { ManagementTemplate } from '~/template'
 import data from './data.json'
 
 function Perfil() {
@@ -13,7 +13,7 @@ function Perfil() {
 	const [editingModalVisibility, setEditingModalVisibility] = React.useState(false)
 
 	return (
-		<AdminTemplate loading={loading} title='Perfil'>
+		<ManagementTemplate loading={loading} title='Perfil'>
 			<UnForm>
 				<InputWrapper columns={2} gap='10px'>
 					<UnInput disabled={!editing} name='name' label='Nome'/>
@@ -87,7 +87,7 @@ function Perfil() {
 					<Button label='Cadastrar'/>
 				</UnForm>
 			</Dialog>
-		</AdminTemplate>
+		</ManagementTemplate>
 	)
 }
 

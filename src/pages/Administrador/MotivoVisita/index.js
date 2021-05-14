@@ -2,7 +2,7 @@ import React from 'react'
 import { UnInput } from '~/common/components'
 import { InputWrapper, UnForm } from '~/common/styles'
 import { Button, Column, DataTable, Dialog } from '~/primereact'
-import { AdminTemplate } from '~/template'
+import { ManagementTemplate } from '~/template'
 import data from './data.json'
 
 function MotivoVisita() {
@@ -13,7 +13,7 @@ function MotivoVisita() {
 	const [editModalVisibility, setEditModalVisibility] = React.useState(false)
 
 	return (
-		<AdminTemplate title='Motivos de Visita'>
+		<ManagementTemplate title='Motivos de Visita'>
 			<DataTable emptyMessage='Nenhum item encontrado' value={data}>
 				<Column field="name" header="Name"/>
 				<Column
@@ -64,7 +64,7 @@ function MotivoVisita() {
 					<Button onClick={() => setModalVisibility(false)} label='Cancelar'/>
 				</InputWrapper>
 			</Dialog>
-		</AdminTemplate>
+		</ManagementTemplate>
 	)
 }
 
