@@ -9,7 +9,7 @@ import data from './data.json'
 function Visita() {
 	return (
 		<AdminTemplate title='Histórico de Visitas'>
-			<DataTable value={data} className="p-datatable-striped" paginator rows={7}>
+			<DataTable emptyMessage='Nenhum item encontrado' value={data} className="p-datatable-striped" paginator rows={7}>
 				<Column field="date" header="Data da Visita"></Column>
 				<Column headerStyle={{textAlign: 'center'}} bodyStyle={{textAlign: 'center'}} field="cooperado" header="Cooperado"/>
 				<Column headerStyle={{textAlign: 'center'}} bodyStyle={{textAlign: 'center'}} field="tecnico" header="Técnico"/>

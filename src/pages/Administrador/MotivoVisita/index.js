@@ -14,7 +14,7 @@ function MotivoVisita() {
 
 	return (
 		<AdminTemplate title='Motivos de Visita'>
-			<DataTable value={data}>
+			<DataTable emptyMessage='Nenhum item encontrado' value={data}>
 				<Column field="name" header="Name"/>
 				<Column
 					bodyClassName='p-d-flex p-jc-around'
@@ -27,9 +27,9 @@ function MotivoVisita() {
 						</React.Fragment>
 					)}/>
 			</DataTable>
-			<Button onClick={() => setModalVisibility(true)} label='Criar Novo'/>
+			<Button className='p-mt-3' onClick={() => setModalVisibility(true)} label='Criar Novo'/>
 			<Dialog
-				header={() => <h2>Editar Grupo</h2>}
+				header={<h2>Editar Motivo</h2>}
 				draggable={false}
 				closable={false}
 				className='p-fluid'

@@ -16,7 +16,7 @@ function ListarGrupos() {
 
 	return (
 		<AdminTemplate title='Grupos'>
-			<DataTable value={data}>
+			<DataTable emptyMessage='Nenhum item encontrado' value={data}>
 				<Column field="name" header="Nome"/>
 				<Column bodyClassName='p-d-flex p-jc-around' headerStyle={{textAlign: 'center'}} header="Ações" body={() => (
 					<React.Fragment>
@@ -25,7 +25,7 @@ function ListarGrupos() {
 					</React.Fragment>
 				)}/>
 			</DataTable>
-			<Button onClick={() => setModalVisibility(true)} label='Criar Novo'/>
+			<Button className='p-mt-3' onClick={() => setModalVisibility(true)} label='Criar Novo'/>
 			<Dialog
 				draggable={false}
 				header={<h2>Criar Grupo</h2>}

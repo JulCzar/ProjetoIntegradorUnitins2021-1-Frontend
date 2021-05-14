@@ -57,8 +57,8 @@ function DetalhesVisita() {
 					<UnInput disabled name='cooperado' label='Cooperado' value={cooperado}/>
 					<UnInput disabled name='propriedade' label='Propriedade' value={terreno}/>
 					<InputWrapper columns={2} gap='10px'>
-						<UnInputDateTime disabled={!editing} name='data' label='Data' dateFormat='dd/mm/yy' mask='99/99/9999' showIcon required/>
-						<UnInputDateTime disabled={!editing} timeOnly  name='horaEstimada' label='Hora Estimada' mask='99:99'/>
+						<UnInputDateTime disabled={!editing} name='data' label='Data' dateFormat='dd/mm/yy' mask='99/99/9999' showIcon={editing} required/>
+						<UnInputDateTime disabled={!editing} timeOnly  name='horaEstimada' label='Hora Estimada' mask='99:99' showIcon={editing}/>
 					</InputWrapper>
 					<UnSelect disabled={!editing} value={2} name='motivo' label='Motivo da Visita' options={groupOptions}/>
 					<UnTextArea disabled={!editing} name='observacoes' label='Observações' autoResize />

@@ -24,10 +24,8 @@ function getMenuItems() {
 	
 	const allItems = [
 		{label: 'Home', destination:'/'},
-		{label: 'Cooperado', destination:'/cooperado'},
-		{label: 'Tecnico', destination:'/tecnico'},
 		{label: 'Visitas', destination: '/tecnico/visitas'},
-		{label: 'Gestão', destination:'/admin'},
+		{label: 'Gestão', destination:'/perfil'},
 		{label: 'login', destination:'/login', icon:'pi pi-fw pi-sign-in'},
 		{label: auth.user.name, destination: '/tecnico/perfil'}
 	]

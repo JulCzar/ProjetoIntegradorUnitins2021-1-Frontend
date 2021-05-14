@@ -6,7 +6,7 @@ import {
 	AlterarSenha,
 	BuscaCooperado,
 	BuscaTecnico,
-	CadastroAdmin,
+	BuscaAdministrador,
 	CadastroCooperado,
 	CadastroTecn,
 	DadosVisita,
@@ -22,10 +22,11 @@ import {
 	HistoricoVisitas,
 	PerfilCooperado,
 	PerfilTecnico,
-	RelatorioLanding,
+	RelatorioLandingCooperado,
 	RelatorioLandingTecnico,
 	ListarGrupos,
-	VisitasMarcadas
+	VisitasMarcadas,
+	RelatorioLandingPropriedade
 } from '~/pages'
 
 import Relatorio from '~/pages/Cooperado/Relatorio'
@@ -42,28 +43,29 @@ const Routes = function _Routes() {
 				<Route path='/login' component={Login}/>
 
 				{/* Cadastros */}
-				<Route path='/cadastrar/admin' component={CadastroAdmin}/>
 				<Route path='/cadastrar/tecnico' component={CadastroTecn}/>
 				<Route path='/cadastrar/cooperado' component={CadastroCooperado}/>
 
 				{/* Administrador */}
-				<Route path='/admin' component={PerfilAdmin} exact/>
+				<Route path='/admin' component={BuscaAdministrador} exact/>
+				<Route path='/perfil' component={PerfilAdmin} exact/>
 				<Route path='/admin/grupos' component={ListarGrupos} exact/>
 				<Route path='/admin/motivos' component={MotivoVisita}/>
 				<Route path='/admin/historico' component={HistoricoVisitas} exact/>
 				<Route path='/admin/grupos/criar' component={CriarGrupo}/>
 				<Route path='/admin/grupos/editar' component={EditarGrupo}/>
 				<Route path='/admin/historico/visita' component={DadosVisita}/>
+				<Route path='/relatorio/propriedade' component={RelatorioLandingPropriedade}/>
+				<Route path='/relatorio/tecnico' component={RelatorioLandingTecnico}/>
+				<Route path='/relatorio/cooperado' component={RelatorioLandingCooperado}/>
 
 				{/* Cooperado */}
 				<Route path='/cooperado' component={BuscaCooperado} exact/>
 				<Route path='/cooperado/perfil' component={PerfilCooperado}/>
-				<Route path='/cooperado/relatorio' component={RelatorioLanding}/>
 				<Route path='/cooperado/relatorio/:id' component={Relatorio}/>
 
 				{/* Técnico */}
 				<Route path='/tecnico' component={BuscaTecnico} exact/>
-				<Route path='/tecnico/relatorio' component={RelatorioLandingTecnico}/>
 				<Route path='/tecnico/perfil' component={PerfilTecnico}/>
 				<Route path='/tecnico/visitas' component={VisitasMarcadas} exact/>
 				<Route path='/tecnico/visitas/agendar' component={AgendarVisita}/>
