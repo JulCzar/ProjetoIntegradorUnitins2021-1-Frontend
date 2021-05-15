@@ -7,7 +7,7 @@ export const Container = styled('div')`
 `
 
 export const Content = styled('div')`
-	width: 100vw;
+	width: 100%;
 `
 
 export const Card = styled('div')`

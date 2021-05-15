@@ -15,8 +15,13 @@ import '@fullcalendar/timegrid/main.css'
 
 function VisitasMarcadas() {
 	const history = useHistory()
-	const calendarRef = React.useRef(null)
 	const [events, setEvents] = React.useState([])
+	
+	const getFullCalendarOptions = () => ({
+		...options,
+		dateClick: e => history.push('/tecnico/visitas/agendar'),	// eslint-disable-line
+		eventClick: e => history.push('/tecnico/visitas/detalhes')
+	})
 
 	return (
 		<ContainerWithTemplate contentClassName='p-fluid p-mt-5'>
@@ -24,13 +29,8 @@ function VisitasMarcadas() {
 				<Block className='p-p-3 p-fluid'>
 					<CardHeader title='Visitas Marcadas'/>
 					<FullCalendar
-						ref={calendarRef}
 						events={fcevents}
-						options={{
-							...options,
-							dateClick: e => history.push('/tecnico/visitas/agendar'),	// eslint-disable-line
-							eventClick: e => history.push('/tecnico/visitas/detalhes')
-						}}
+						options={getFullCalendarOptions()}
 					/>
 				</Block>
 			</CalendarContainer>

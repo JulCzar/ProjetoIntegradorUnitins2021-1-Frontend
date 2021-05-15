@@ -1,4 +1,4 @@
-const color = { fontColor: '#fff9'}
+const color = { fontColor: '#1c1c1c'}
 export {default as tableData} from './data.json'
 
 export const lineData = {

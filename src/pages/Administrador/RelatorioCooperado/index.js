@@ -1,10 +1,12 @@
 import React from 'react'
+import { useHistory } from 'react-router'
 import { UnInputDateTime, UnSelect } from '~/common/components'
 import { InputWrapper, UnForm } from '~/common/styles'
 import { Button} from '~/primereact'
 import { ManagementTemplate } from '~/template'
 
 function RelatorioCooperado() {
+	const history = useHistory()
 	const [startDate, setStartDate] = React.useState(null)
 	const [endDate, setEndDate] = React.useState(null)
 
@@ -15,32 +17,36 @@ function RelatorioCooperado() {
 		{label: 'Veredas', value: 4},
 		{label: 'Itabinhas', value: 5}
 	])
-  const enviar = form => {
-    // eslint-disable-next-line no-console
-    console.log(form)
+  const gerarRelatorio = form => {
+    const data = JSON.stringify(form)
+
+		console.log(data)
+
+		history.push(`/cooperado/relatorio/${btoa(data)}`)
   }
 
   return (
   <ManagementTemplate title='Relatório de Cooperado'>
-		<UnForm onSubmit={enviar}>
+		<UnForm onSubmit={gerarRelatorio}>
 			<InputWrapper columns={2} gap='10px'>
 				<UnInputDateTime
 					showIcon
-					name='inicio'
+					required
+					name='start'
 					label='Inicio'
 					mask='99/99/9999'
 					maxDate={endDate}
 					onChange={evt => setStartDate(evt.value)}/>
 				<UnInputDateTime
-					mask='99/99/9999'
 					showIcon
-					name='fim'
+					required
+					name='end'
 					label='Fim'
+					mask='99/99/9999'
 					minDate={startDate}
 					onChange={evt => setEndDate(evt.value)}/>
 			</InputWrapper>
-			<UnSelect name='cooperado' label='Cooperado' options={groupOptions}/>
-			<UnSelect name='tecnico' label='Técnico' options={groupOptions}/>
+			<UnSelect name='cooperado' label='Cooperado' options={groupOptions} required/>
 			<Button type='submit' label='Gerar Relatório'/>
 		</UnForm>
 	</ManagementTemplate>

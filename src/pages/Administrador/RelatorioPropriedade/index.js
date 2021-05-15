@@ -41,7 +41,6 @@ function RelatorioPropriedade() {
 			</InputWrapper>
 			<UnSelect name='cooperado' label='Cooperado' options={groupOptions}/>
 			<UnSelect name='propriedade' label='Propriedade' options={groupOptions}/>
-			<UnSelect name='tecnico' label='Técnico' options={groupOptions}/>
 			<Button type='submit' label='Gerar Relatório'/>
 		</UnForm>
 	</ManagementTemplate>

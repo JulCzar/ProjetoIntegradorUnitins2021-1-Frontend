@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import { Title } from '~/common/styles'
 
-export const TableTitle = styled('div')`
+export const TableTitle = styled('h2')`
 	font-size: 2rem;
 `
 

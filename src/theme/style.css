@@ -65,6 +65,21 @@
 	--fc-button-active-bg-color: var(var(--primary-color))
 }
 
+.fc-dayGridWeek-button {
+	background: var(--surface-0) !important;
+	color: var(--text-color) !important;
+	border: 1px solid #0002 !important;
+}
+.fc-dayGridWeek-button:hover {
+	filter: brightness(97%) !important;
+}
+.fc-dayGridWeek-button.fc-button-active {
+	filter: brightness(85%) !important;
+}
+.fc-dayGridWeek-button.fc-button-active:focus {
+	box-shadow:none !important;
+}
+
 body {
 	color: var(--text-color);
 	font-family: var(--font-family);
