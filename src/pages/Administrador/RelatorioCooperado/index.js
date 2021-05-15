@@ -20,8 +20,6 @@ function RelatorioCooperado() {
   const gerarRelatorio = form => {
     const data = JSON.stringify(form)
 
-		console.log(data)
-
 		history.push(`/cooperado/relatorio/${btoa(data)}`)
   }
 
