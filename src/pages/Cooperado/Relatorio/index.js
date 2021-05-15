@@ -7,7 +7,7 @@ import { format } from 'date-fns'
 import { useHistory, useParams } from 'react-router'
 import ptBr from 'date-fns/locale/pt-BR'
 
-const DATE_PATTERN = "dd 'de' MMMM 'de' yyyy" // eslint-disable-line
+const DATE_PATTERN = 'dd \'de\' MMMM \'de\' yyyy'
 
 const Relatorio = () => {
 	const [start, setStart] = React.useState(null)
