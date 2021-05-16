@@ -1,4 +1,5 @@
 import ptBr from '@fullcalendar/core/locales/pt-br'
+import fullcalendar from '@fullcalendar/core'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'

@@ -15,7 +15,7 @@ import 'primeicons/primeicons.css'
 import 'primeflex/primeflex.css'
 import '~/theme/style.css'
 
-import ptBr from '~/assets/pt-br.json'
+import ptBr from '~/config/pt-br.json'
 
 PrimeReact.ripple = true
 addLocale('pt-br', ptBr)
