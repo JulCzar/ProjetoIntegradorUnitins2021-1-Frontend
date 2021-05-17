@@ -21,11 +21,23 @@ export const Header = styled('div')`
 		padding-right: 1.5rem;
 		margin: 0;
 	}
+	.p-tabmenu .p-tabmenu-nav {
+		border: none;
+	}
+
+
+	a:hover {
+		text-decoration: none;
+	}
 `
 
 export const HeaderMenu = styled('div')`
 	.desktop {
 		display: none;
+	}
+
+	.p-tabmenu {
+		border: none;
 	}
 
 	@media (min-width: 750px) {

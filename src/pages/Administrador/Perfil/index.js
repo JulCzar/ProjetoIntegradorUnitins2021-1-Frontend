@@ -3,7 +3,7 @@ import { UnInput } from '~/common/components'
 import { InputWrapper, UnForm } from '~/common/styles'
 import { Button, Toast} from '~/primereact'
 import { getToastInstance } from '~/services'
-import { AdminTemplate } from '~/template'
+import { ManagementTemplate } from '~/template'
 
 function Perfil() {
 	const toastRef = React.useRef(null)
@@ -21,7 +21,7 @@ function Perfil() {
 	}
 
 	return (
-		<AdminTemplate title='Perfil'>
+		<ManagementTemplate title='Perfil'>
 			<Toast ref={toastRef}/>
 			<UnForm ref={formRef} onSubmit={editProfile}>
 				<InputWrapper columns={2} gap='10px'>
@@ -41,7 +41,7 @@ function Perfil() {
 						:<Button type='button' onClick={submitForm} label='Salvar'/>}
 				</InputWrapper>        
 			</UnForm>
-		</AdminTemplate>
+		</ManagementTemplate>
 	)
 }
 

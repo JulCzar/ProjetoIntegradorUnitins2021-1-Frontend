@@ -1,3 +1,4 @@
+export { addLocale, locale, localeOptions, localeOption, updateLocaleOption, updateLocaleOptions, PrimeIcons } from 'primereact/api'
 export { Accordion, AccordionTab } from 'primereact/accordion'
 export { AutoComplete } from 'primereact/autocomplete'
 export { Avatar } from 'primereact/avatar'

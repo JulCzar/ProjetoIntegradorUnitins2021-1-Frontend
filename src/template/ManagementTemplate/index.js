@@ -4,13 +4,13 @@ import PropTypes from 'prop-types'
 import { ContainerWithTemplate } from '~/template'
 import { PanelMenu } from '~/primereact'
 
+import { FullWidth, PanelMenuContainer } from './styles'
 import { lateralMenuItems } from './lateralMenuItems'
-import { Block} from '~/common/styles'
-import { useHistory } from 'react-router'
-import { FullWidth } from './styles'
 import { CardHeader } from '~/common/components'
+import { useHistory } from 'react-router'
+import { Block} from '~/common/styles'
 
-function AdminTemplate({
+function ManagementTemplate({
 	children,
 	contentClassName = '',
 	contentStyle = {},
@@ -20,10 +20,23 @@ function AdminTemplate({
 	loading
 }) {
 	const history = useHistory()
-
+	
 	const handleTabChange = e => {
 		history.push(e.value.destination)
 	}
+
+	const getNavigableMenu = item => {
+		const {label, destination, items, ...rest} = item
+		let result = { label, ...rest }
+
+		if (destination)
+			result.command = () => history.push(destination)
+		if (items)
+			result.items = items.map(getNavigableMenu)
+
+		return result
+	}
+
 	return (
 		<ContainerWithTemplate
 			contentContainerClassName={contentContainerClassName}
@@ -34,7 +47,11 @@ function AdminTemplate({
 		>
 			<FullWidth className='p-mt-5'>
 				<Block className='p-grid'>
-					<PanelMenu className='p-col-4 p-md-3' model={lateralMenuItems} onChange={handleTabChange}/>
+					<PanelMenuContainer className='p-col-4 p-md-3'>
+						<PanelMenu
+							model={lateralMenuItems.map(getNavigableMenu)}
+							onChange={handleTabChange}/>
+					</PanelMenuContainer>
 					<Block className='p-col-8 p-md-9 p-px-5 p-pb-5'>
 						<CardHeader title={title} className='p-mb-5'/>
 						<Block className='p-fluid'>
@@ -47,7 +64,7 @@ function AdminTemplate({
 	)
 }
 
-AdminTemplate.propTypes = {
+ManagementTemplate.propTypes = {
 	children: PropTypes.any,
 	contentClassName: PropTypes.string,
 	contentContainerClassName: PropTypes.string,
@@ -57,4 +74,4 @@ AdminTemplate.propTypes = {
 	title: PropTypes.string
 }
 
-export default AdminTemplate
+export default ManagementTemplate

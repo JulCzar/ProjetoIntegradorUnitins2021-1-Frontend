@@ -3,7 +3,7 @@ import { UnInput, UnInputDateTime, UnSelect } from '~/common/components'
 import UnTextArea from '~/common/components/UnTextArea'
 import { InputWrapper, UnForm } from '~/common/styles'
 import { Button } from '~/primereact'
-import { AdminTemplate } from '~/template'
+import { ManagementTemplate } from '~/template'
 
 const groupOptions = [
 	{value: 1, label: 'teste1'},
@@ -19,7 +19,7 @@ function DadosVisita() {
 	const terreno = 'Recanto'
 
 	return (
-		<AdminTemplate title='Detalhes da Visita'>
+		<ManagementTemplate title='Detalhes da Visita'>
 			<UnForm>
 				<UnInput disabled name='cooperado' label='Cooperado' value={cooperado}/>
 				<UnInput disabled name='propriedade' label='Propriedade'  value={terreno}/>
@@ -31,7 +31,7 @@ function DadosVisita() {
 				<UnTextArea disabled name='observacoes' label='Observações' autoResize />
 				<Button type='button' label='Imprimir'/>
 			</UnForm>
-		</AdminTemplate>
+		</ManagementTemplate>
 	)
 }
 

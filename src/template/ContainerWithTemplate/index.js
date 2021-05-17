@@ -1,12 +1,12 @@
 import { useHistory } from 'react-router'
 import PropTypes from 'prop-types'
-import React, { StyleHTMLAttributes } from 'react'
+import React from 'react'
 import logo from '~/assets/logo.svg'
 
+import { Container, Header, Content, Footer, ContainerLimiter, HeaderMenu } from '../styles'
 import { Button, ListBox, OverlayPanel, TabMenu } from '~/primereact'
-import { Container, Header, Content, Footer, ContainerLimiter, HeaderMenu } from './styles'
-import { menuItems } from './menuItems'
-import Loading from './Loading'
+import Loading from '~/template/components/Loading'
+import { menuItems } from '../menuItems'
 
 function ContainerWithTemplate({
 	children,
@@ -30,7 +30,7 @@ function ContainerWithTemplate({
 				<ContainerLimiter className='p-d-flex p-mx-auto p-jc-between p-ai-center'>
 					<img draggable={false} src={logo} alt='Logo do sistema SIMOV' height='50'/>
 					<HeaderMenu>
-						<TabMenu id='tabmenu-nopadding' className='desktop' model={menuItems} activeItem=' ' onTabChange={handleTabChange}/>
+						<TabMenu className='desktop' model={menuItems} activeIndex={-1} onTabChange={handleTabChange}/>
 						<Button className='mobile' type="button" icon='fas fa-bars' onClick={e => op.current.toggle(e)} />
 
 						<OverlayPanel ref={op} className='mobile'>

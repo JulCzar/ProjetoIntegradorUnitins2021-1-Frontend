@@ -69,7 +69,13 @@ function Painel() {
 			<Block ref={blockRef} className='p-p-3'>
 				<div className="p-d-flex p-ai-center">
 					<CardHeader title='Painel de Exibição'/>
-					<Button className='p-ml-3' icon='fas fa-expand' onClick={enterFullscreen}/>
+					<Button
+						className='p-ml-3'
+						icon='fas fa-expand'
+						onClick={enterFullscreen}
+						tooltip='Expandir Tela'
+						tooltipOptions={{position: 'left'}}
+					/>
 				</div>
 				<UnForm>
 					<InputWrapper className='p-mb-3' columns={5} gap='10px'>
@@ -77,9 +83,9 @@ function Painel() {
 						<InputText value={nomePropriedade} placeholder='Propriedade' onChange={e => setNomePropriedade(e.target.value)}/>
 						<InputText value={nomeTecnico} placeholder='Tecnico' onChange={e => setNomeTecnico(e.target.value)}/>
 						<InputText value={motivoVisita} placeholder='Motivo da Visita' onChange={e => setMotivoVisita(e.target.value)}/>
-						<Calendar value={dataVisita} mask='99/99/9999' dateFormat='dd/mm/yy' placeholder='Selecione o Dia' onChange={e => setDataVisita(e.value)}/>
+						<Calendar value={dataVisita} mask='99/99/9999' placeholder='Selecione o Dia' onChange={e => setDataVisita(e.value)}/>
 					</InputWrapper>
-					<DataTable value={visitas} className="p-datatable-striped" paginator rows={7}>
+					<DataTable emptyMessage='Nenhum item encontrado' value={visitas} className="p-datatable-striped" paginator rows={7}>
 						<Column field="nome_cooperado" header="Cooperado"/>
 						<Column field="nome_propriedade" header="Propriedade"  />
 						<Column field="nome_tecnico" header="Técnico"/>            

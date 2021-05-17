@@ -1,43 +1,35 @@
+import { Controller, useForm } from 'react-hook-form'
 import React from 'react'
 
-import { CardHeader, UnAutoComplete, UnInputDateTime, UnSelect } from '~/common/components'
-import { Block, InputWrapper, UnForm } from '~/common/styles'
+import { AutoComplete, Button, Calendar, Dropdown, MultiSelect } from '~/primereact'
+import { CardHeader, InputContainer } from '~/common/components'
+import { classNames, getStringNormalized } from '~/utils'
+import { Block, InputWrapper } from '~/common/styles'
 import { ContainerWithTemplate } from '~/template'
-import { Button, Toast } from '~/primereact'
-import { getStringNormalized } from '~/utils'
 
 import cooperados from './cooperados.json'
-import { getToastInstance } from '~/services'
+import motivosJSON from './motivos.json'
+import propriedadesJSON from './propriedades.json'
 
 function AgendarVisita() {
-	const toastRef = React.useRef(null)
 	const [cooperadosFiltrados, setCooperadosFiltrados] = React.useState([])
-	const [groups, setGroups] = React.useState([
-		{value: 1, label: 'teste1'},
-		{value: 2, label: 'teste2'},
-		{value: 3, label: 'teste3'},
-		{value: 4, label: 'teste4'},
-		{value: 5, label: 'teste5'},
-		{value: 6, label: 'teste6'},
-	])
-	const toast = getToastInstance(toastRef)
-
-	const validateForm = form => {
-		const { cooperado, propriedade, motivo } = form
-		const { value } = cooperado || { value: null }
-		
-		if (![propriedade, motivo, value].includes(null))
-			return true
-
-		return false
-	}
+	const [propriedades, setPropriedades] = React.useState([])
+	const [motivos, setMotivos] = React.useState([])
+	
+	const { control, errors, handleSubmit, reset } = useForm()
+	
+	React.useEffect(() => {
+		setMotivos(motivosJSON)
+	}, [])
+	
+	React.useEffect(() => {
+		setPropriedades(propriedadesJSON)
+	}, [])
 
 	const agendar = form => {
-		const isValid = validateForm(form)
-		
-		if (!isValid) return toast.showWarn('Ainda há campos para serem selecionados')
-		
 		console.log(form) // eslint-disable-line no-console
+		
+		reset()
 	}
 
 	const filtrarCooperado = event => {
@@ -51,28 +43,95 @@ function AgendarVisita() {
 		setCooperadosFiltrados(cooperadosFiltrados)
 	}
 
+	const getClass = name => classNames({ 'p-invalid': errors[name]})
+
 	return (
 		<ContainerWithTemplate contentClassName='p-mt-5'>
-			<Toast ref={toastRef}/>
 			<Block className='p-p-3 p-fluid'>
 				<CardHeader title='Agendar Visita'/>
-				<UnForm onSubmit={agendar}>
-					<UnAutoComplete
+				<form onSubmit={handleSubmit(agendar)}>
+					<Controller
 						name='cooperado'
-						field='label'
-						label='Cooperado'
-						suggestions={cooperadosFiltrados}
-						completeMethod={filtrarCooperado}
-						required
+						control={control}
+						defaultValue={false}
+						rules={{required: 'É necessário selecionar um cooperado.'}}
+						render={({ name, value, onChange }) => (
+							<InputContainer name={name} label='Cooperado' error={errors[name]}>
+								<AutoComplete
+									field='label'
+									value={value}
+									suggestions={cooperadosFiltrados}
+									completeMethod={filtrarCooperado}
+									onChange={e => onChange(e.value)}
+									className={getClass(name)}/>
+							</InputContainer>
+						)}
 					/>
-					<UnSelect name='propriedade' label='Propriedade' options={groups} required/>
+					<Controller
+						name='propriedade'
+						control={control}
+						defaultValue={false}
+						rules={{required: 'É necessário selecionar uma propriedade.'}}
+						render={({ name, value, onChange }) => (
+							<InputContainer name={name} label='Propriedade' error={errors[name]}>
+								<Dropdown
+									options={propriedades}
+									value={value}
+									onChange={e => onChange(e.value)}
+									className={getClass(name)}/>
+							</InputContainer>
+						)}/>
 					<InputWrapper columns={2} gap='10px'>
-						<UnInputDateTime name='data' label='Data' dateFormat='dd/mm/yy' mask='99/99/9999' showIcon required/>
-						<UnInputDateTime timeOnly  name='horaEstimada' label='Hora Estimada' mask='99:99' required/>
+						<Controller
+							name='data'
+							control={control}
+							defaultValue={false}
+							rules={{required: 'É necessário Informar o dia.'}}
+							render={({ name, value, onChange }) => (
+								<InputContainer label='Data' name='data' error={errors.data}>
+								<Calendar
+									showIcon
+									mask='99/99/9999'
+									value={value}
+									minDate={new Date()}
+									dateFormat='dd/mm/yy'
+									onChange={e => onChange(e.value)}
+									className={getClass(name)}/>
+							</InputContainer>
+						)}/>
+						<Controller
+							name='horaEstimada'
+							control={control}
+							defaultValue={false}
+							rules={{required: 'É necessário Informar a hora.'}}
+							render={({ name, value, onChange }) => (
+								<InputContainer label='Hora Estimada' name={name} error={errors[name]}>
+									<Calendar
+										timeOnly
+										mask='99:99'
+										value={value}
+										onChange={e => onChange(e.value)}
+										className={getClass(name)}
+									/>
+								</InputContainer>
+						)}/>
 					</InputWrapper>
-					<UnSelect name='motivo' label='Motivo da Visita' options={groups} required/>
+					<Controller
+						name='motivo'
+						control={control}
+						defaultValue={false}
+						rules={{required: 'É necessário Informar um motivo.'}}
+						render={({ name, value, onChange }) => (
+							<InputContainer label='Motivo da Visita' name={name} error={errors[name]}>
+								<MultiSelect
+									value={value}
+									options={motivos}
+									className={getClass(name)}
+									onChange={e => onChange(e.value)}/>
+							</InputContainer>
+						)}/>
 					<Button label='Agendar Visita' />
-				</UnForm>
+				</form>
 			</Block>
 		</ContainerWithTemplate>
 	)

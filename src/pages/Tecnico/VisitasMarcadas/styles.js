@@ -4,6 +4,8 @@ export const CalendarContainer = styled('div')`
 width: 100vw;
 max-width: var(--max-container-width);
 
+.fc-day { cursor:cell; }
+
 @media (max-width: 770px) {
 	.fc-button-group {
 		display: unset;
