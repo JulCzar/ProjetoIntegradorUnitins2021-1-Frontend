@@ -1,91 +1,149 @@
 import React from 'react'
+import { useForm } from 'react-hook-form'
+
+import { Button, Column, confirmPopup, DataTable, Toast } from '~/primereact'
+import MotivoModal from './components/MotivoDialog'
 import { api, getToastInstance } from '~/services'
-import { UnInput } from '~/common/components'
 import { ManagementTemplate } from '~/template'
-import { InputWrapper, UnForm } from '~/common/styles'
-import { Button, Column, DataTable, Dialog, Toast } from '~/primereact'
 
 function MotivoVisita() {
-	const formRef = React.useRef(null)
 	const toastRef = React.useRef(null)
-	const formRefEdit = React.useRef(null)
-	const [state, setState] = React.useState(null)
+	const deleteRef = React.useRef(null)
 	const [motivos, setMotivos] = React.useState([])
 	const [loading, setLoading] = React.useState(false)
+	const [motivoEditado, setMotivoEditado] = React.useState(null)
 	const [modalVisibility, setModalVisibility] = React.useState(false)
 	const [editModalVisibility, setEditModalVisibility] = React.useState(false)
-
+	
+	const { control, errors, handleSubmit, reset } = useForm()
 	const toast = getToastInstance(toastRef)
 
 	React.useEffect(() => {
-		(async () => {
-			setLoading(true)
-
-			try {
-				const { data } = await api.get('/motivos')
-				
-				setMotivos(data.motivos_visita)
-			} catch (err) {
-				toast.showWarn('Houve um erro ao obter a lista de motivos')
-			} finally {
-				setLoading(false)
-			}
-		})()
+		carregarMotivos()
 	}, [])
+
+	const carregarMotivos = async () => {
+		setLoading(true)
+
+		try {
+			const { data } = await api.get('/motivos')
+			
+			setMotivos(data.motivos_visita)
+		} catch (err) {
+			toast.showWarn('Houve um erro ao obter a lista de motivos')
+		} finally {
+			setLoading(false)
+		}
+	}
+
+	const cadastrarMotivo = async form => {
+		setLoading(true)
+		try {
+			await api.post('/motivos', form)
+
+			toast.showSuccess('Motivo cadastrado com sucesso.')
+
+			carregarMotivos()
+		} catch (error) {
+			toast.showError('Houve um erro ao cadastrar')
+		} finally {
+			setLoading(false)
+			setModalVisibility(false)
+		}
+
+		reset()
+	}
+
+	const editarMotivo = async form => {
+		setLoading(true)
+		try {
+			await api.put(`/motivos/${form.id}`, form)
+
+			toast.showSuccess('Motivo alterado com sucesso.')
+
+			carregarMotivos()
+		} catch (error) {
+			toast.showError('Houve um erro ao cadastrar')
+		} finally {
+			setLoading(false)
+			setEditModalVisibility(false)
+		}
+
+		reset()
+	}
+
+	const excluirMotivo = async form => {
+		setLoading(true)
+		try {
+			await api.delete(`/motivos/${form.id}`)
+
+			toast.showSuccess('Motivo excluído com sucesso.')
+
+			carregarMotivos()
+		} catch (error) {
+			toast.showError('Houve um erro ao apagar')
+		} finally {
+			setLoading(false)
+		}
+
+		reset()
+	}
+
+	const handleEdit = data => {
+		setMotivoEditado(data)
+		setEditModalVisibility(true)
+	}
+
+	const confirmDelete = (form, evt) => {
+		confirmPopup({
+			target: evt.currentTarget,
+			message: 'Deseja realmente apagar esse motivo?',
+			icon: 'pi pi-info-circle',
+			acceptClassName: 'p-button-danger',
+			accept() {
+				excluirMotivo(form)
+			}
+		})
+	}
 
 	return (
 		<ManagementTemplate loading={loading} title='Motivos de Visita'>
 			<Toast ref={toastRef}/>
 			<DataTable emptyMessage='Nenhum item encontrado' value={motivos}>
-				<Column field="name" header="Name"/>
+				<Column field="nome" header="Name"/>
 				<Column
 					bodyClassName='p-d-flex p-jc-around'
 					headerStyle={{textAlign: 'center'}}
 					header="Ações"
-					body={() => (
-						<React.Fragment>
-							<a onClick={() => setEditModalVisibility(true)}>Editar</a>
-							<a>Excluir</a>
-						</React.Fragment>
+					body={rowData => (
+					<React.Fragment>
+						<a onClick={() => handleEdit(rowData)}>Editar</a>
+						<a ref={deleteRef} onClick={(...rest) => confirmDelete(rowData, ...rest)}>Excluir</a>
+					</React.Fragment>
 					)}/>
 			</DataTable>
 			<Button className='p-mt-3' onClick={() => setModalVisibility(true)} label='Criar Novo'/>
-			<Dialog
-				header={<h2>Editar Motivo</h2>}
-				draggable={false}
-				closable={false}
-				className='p-fluid'
-				visible={editModalVisibility}
-				onHide={() => setState(null)}
-				breakpoints={{'1300px': '75vw', '640px': '100vw'}}
-				style={{width: '40vw'}}>
-				<UnForm ref={formRefEdit} onSubmit={() => {}}>
-					<UnInput name='nome' label='Nome' value={state?.name || ''} onChange={props => setState({
-						...state, name: props.target.value // eslint-disable-line react/prop-types
-					})} required={true}/>
-				</UnForm>
-				<InputWrapper columns={2} gap='10px'>
-					<Button onClick={() => {formRefEdit.current.submitForm()}} label='Salvar'/>
-					<Button onClick={() => setEditModalVisibility(false)} label='Cancelar'/>
-				</InputWrapper>
-			</Dialog>
-			<Dialog
-				draggable={false}
-				header={<h2>Criar Motivo</h2>}
-				closable={false}
-				className='p-fluid'
+
+			{/* Modal de Cadastro de Motivo */}
+			<MotivoModal
+				hideModal={() => setModalVisibility(false)}
+				onSubmit={handleSubmit(cadastrarMotivo)}
 				visible={modalVisibility}
-				onHide={() => setState(null)}
-				breakpoints={{'1300px': '75vw', '640px': '100vw'}}
-				style={{width: '40vw'}}>
-				<UnForm ref={formRef} onSubmit={() => {}}>
-					<UnInput name='nome' label='Nome' required={true}/>
-				</UnForm>
-				<InputWrapper columns={2} gap='10px'>
-					<Button onClick={() => {formRef.current.submitForm()}} label='Criar'/>
-					<Button onClick={() => setModalVisibility(false)} label='Cancelar'/>
-				</InputWrapper>
-			</Dialog>
+				headerName='Criar Motivo'
+				control={control}
+				errors={errors}
+			/>
+
+			{/* Modal de edição de Motivo */}
+			<MotivoModal
+				hideModal={() => setEditModalVisibility(false)}
+				onSubmit={handleSubmit(editarMotivo)}
+				visible={editModalVisibility}
+				headerName='Editar Motivo'
+				formData={motivoEditado}
+				control={control}
+				errors={errors}
+			/>
 		</ManagementTemplate>
 	)
 }
