@@ -8,7 +8,6 @@ import { ManagementTemplate } from '~/template'
 
 function MotivoVisita() {
 	const toastRef = React.useRef(null)
-	const deleteRef = React.useRef(null)
 	const [motivos, setMotivos] = React.useState([])
 	const [loading, setLoading] = React.useState(false)
 	const [motivoEditado, setMotivoEditado] = React.useState(null)
@@ -118,7 +117,7 @@ function MotivoVisita() {
 					body={rowData => (
 					<React.Fragment>
 						<a onClick={() => handleEdit(rowData)}>Editar</a>
-						<a ref={deleteRef} onClick={(...rest) => confirmDelete(rowData, ...rest)}>Excluir</a>
+						<a onClick={(...rest) => confirmDelete(rowData, ...rest)}>Excluir</a>
 					</React.Fragment>
 					)}/>
 			</DataTable>
@@ -136,7 +135,10 @@ function MotivoVisita() {
 
 			{/* Modal de edição de Motivo */}
 			<MotivoModal
-				hideModal={() => setEditModalVisibility(false)}
+				hideModal={() => {
+					setMotivoEditado(null)
+					setEditModalVisibility(false)
+				}}
 				onSubmit={handleSubmit(editarMotivo)}
 				visible={editModalVisibility}
 				headerName='Editar Motivo'
