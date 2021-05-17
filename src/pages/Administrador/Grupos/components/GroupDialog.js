@@ -4,7 +4,7 @@ import { Controller } from 'react-hook-form'
 
 import { Button, Dialog, InputText } from '~/primereact'
 import { InputContainer } from '~/common/components'
-import { classNames } from '~/utils'
+import { getInvalidClass } from '~/utils'
 import Checklist from './Checklist'
 
 function GroupDialog({
@@ -17,8 +17,6 @@ function GroupDialog({
 	onHide,
 	errors
 }) {
-	const getClass = name => classNames({ 'p-invalid': errors[name]})
-
 	return (
 		<Dialog
 			draggable={false}
@@ -39,7 +37,7 @@ function GroupDialog({
 						<InputText
 							name={name}
 							value={value}
-							className={getClass(name)}
+							className={getInvalidClass(errors[name])}
 							onChange={e => onChange(e.target.value)}
 						/>
 					</InputContainer>

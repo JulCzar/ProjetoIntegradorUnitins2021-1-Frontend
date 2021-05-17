@@ -1,12 +1,12 @@
  [
-        {"id": "1000","location": "Fazenda Esperança","name": "Bamboo Watch"},
-        {"id": "1001","location": "Fazenda Esperança","name": "Black Watch"},
-        {"id": "1002","location": "Fazenda Esperança","name": "Blue Band"},
-        {"id": "1003","location": "Fazenda Esperança","name": "Blue T-Shirt"},
-        {"id": "1004","location": "Fazenda Esperança","name": "Bracelet"},
-        {"id": "1005","location": "Fazenda Esperança","name": "Brown Purse"},
-        {"id": "1006","location": "Fazenda Esperança","name": "Chakra Bracelet"},
-        {"id": "1007","location": "Fazenda Esperança","name": "Galaxy Earrings"},
-        {"id": "1008","location": "Fazenda Esperança","name": "Game Controller"},
-        {"id": "1009","location": "Fazenda Esperança","name": "Gaming Set"}
+        {"id": "1000","localidade": "Fazenda Esperança","nome": "Bamboo Watch", "area": 60, "registro": "123a65sfa4fds65", "tecnico": "Rogério"},
+        {"id": "1001","localidade": "Fazenda Esperança","nome": "Black Watch", "area": 60, "registro": "123a65sfa4fds65", "tecnico": "Rogério"},
+        {"id": "1002","localidade": "Fazenda Esperança","nome": "Blue Band", "area": 60, "registro": "123a65sfa4fds65", "tecnico": "Rogério"},
+        {"id": "1003","localidade": "Fazenda Esperança","nome": "Blue T-Shirt", "area": 60, "registro": "123a65sfa4fds65", "tecnico": "Rogério"},
+        {"id": "1004","localidade": "Fazenda Esperança","nome": "Bracelet", "area": 60, "registro": "123a65sfa4fds65", "tecnico": "Rogério"},
+        {"id": "1005","localidade": "Fazenda Esperança","nome": "Brown Purse", "area": 60, "registro": "123a65sfa4fds65", "tecnico": "Rogério"},
+        {"id": "1006","localidade": "Fazenda Esperança","nome": "Chakra Bracelet", "area": 60, "registro": "123a65sfa4fds65", "tecnico": "Rogério"},
+        {"id": "1007","localidade": "Fazenda Esperança","nome": "Galaxy Earrings", "area": 60, "registro": "123a65sfa4fds65", "tecnico": "Rogério"},
+        {"id": "1008","localidade": "Fazenda Esperança","nome": "Game Controller", "area": 60, "registro": "123a65sfa4fds65", "tecnico": "Rogério"},
+        {"id": "1009","localidade": "Fazenda Esperança","nome": "Gaming Set", "area": 60, "registro": "123a65sfa4fds65", "tecnico": "Rogério"}
     ]

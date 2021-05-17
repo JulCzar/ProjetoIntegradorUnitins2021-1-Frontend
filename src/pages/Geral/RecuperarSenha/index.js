@@ -1,8 +1,10 @@
 import React from 'react'
-import { CardHeader, UnInput } from '~/common/components'
-import { Card, Container, Content, UnForm } from '~/common/styles'
-import { Button } from '~/primereact'
+import { CardHeader, InputContainer } from '~/common/components'
+import { Card, Container, Content } from '~/common/styles'
+import { Button, InputText } from '~/primereact'
 import styled from 'styled-components'
+import { Controller, useForm } from 'react-hook-form'
+import { getInvalidClass } from '~/utils'
 
 const Alert = styled('div')`
 	font-size: .75rem;
@@ -10,9 +12,12 @@ const Alert = styled('div')`
 `
 
 function RecuperarSenha() {
+	const { control, errors, handleSubmit, reset } = useForm()
+
 	const request = form => {
-		// eslint-disable-next-line no-console
-		console.log(form)
+		console.log(form)	// eslint-disable-line no-console
+
+		reset()
 	}
 
 	return (
@@ -21,10 +26,30 @@ function RecuperarSenha() {
 				<Card className='p-fluid' width='450px'>
 					<CardHeader title='Recuperar Senha'/>
 					<Alert>Para redefinir sua senha, informe o seu email, se ele estiver cadastrado em nosso sistema, iremos enviar uma mensagem com mais informações.</Alert>
-					<UnForm onSubmit={request}>
-						<UnInput name='email' label='E-mail cadastrado' required={true}/>
-						<Button type='submit' label='Recuperar Senha'/>
-					</UnForm>
+					<form onSubmit={handleSubmit(request)}>
+						<Controller
+							name='email'
+							defaultValue=''
+							control={control}
+							rules={{
+								required: 'É necessário informar um email para continuar',
+								pattern: {
+									value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+									message: 'Endereço de email invalido.'
+								}
+							}}
+							render={({ name, value, onChange}) => (
+								<InputContainer name={name} label='E-mail cadastrado' error={errors[name]}>
+									<InputText
+										name={name}
+										value={value}
+										className={getInvalidClass(errors[name])}
+										onChange={evt => onChange(evt.target.value)}
+									/>
+								</InputContainer>
+							)}/>
+						<Button label='Recuperar Senha'/>
+					</form>
 				</Card>
 			</Content>
 		</Container>

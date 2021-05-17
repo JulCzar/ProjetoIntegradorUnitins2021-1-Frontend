@@ -5,7 +5,7 @@ import { InputWrapper } from '~/common/styles'
 import { InputContainer } from '~/common/components'
 import {  api, getToastInstance } from '~/services'
 import { Button, Dropdown, InputMask, InputText, Password, Toast } from '~/primereact'
-import { verifyPassword, getPhoneObject, classNames } from '~/utils'
+import { verifyPassword, getPhoneObject, getInvalidClass } from '~/utils'
 import { ManagementTemplate } from '~/template'
 
 const Cadastro = () => {
@@ -45,8 +45,6 @@ const Cadastro = () => {
 		}
 	}
 
-	const getClass = name => classNames({ 'p-invalid': errors[name]})
-
 	return (
 		<ManagementTemplate loading={loading} title='Cadastro de Técnico'>
 			<Toast ref={toastRef}/>
@@ -61,7 +59,7 @@ const Cadastro = () => {
 						<InputContainer name={name} label='Nome' error={errors[name]}>
 							<InputText
 								name={name}
-								className={getClass(name)}
+								className={getInvalidClass(errors[name])}
 								value={value}
 								onChange={evt => onChange(evt.target.value)}/>
 						</InputContainer>
@@ -75,26 +73,26 @@ const Cadastro = () => {
 						<InputContainer name={name} label='Sobrenome' error={errors[name]}>
 							<InputText
 								name={name}
-								className={getClass(name)}
+								className={getInvalidClass(errors[name])}
 								value={value}
 								onChange={evt => onChange(evt.target.value)}/>
 						</InputContainer>
 					)}/>
 				</InputWrapper>
-					<Controller
-						name='email'
-						control={control}
-						defaultValue=''
-						rules={{required: 'Informe o email'}}
-						render={({ name, value, onChange }) => (
-						<InputContainer name={name} label='Email' error={errors[name]}>
-							<InputText
-								name={name}
-								className={getClass(name)}
-								value={value}
-								onChange={evt => onChange(evt.target.value)}/>
-						</InputContainer>
-					)}/>
+				<Controller
+					name='email'
+					control={control}
+					defaultValue=''
+					rules={{required: 'Informe o email'}}
+					render={({ name, value, onChange }) => (
+					<InputContainer name={name} label='Email' error={errors[name]}>
+						<InputText
+							name={name}
+							className={getInvalidClass(errors[name])}
+							value={value}
+							onChange={evt => onChange(evt.target.value)}/>
+					</InputContainer>
+				)}/>
 				<InputWrapper columns={2} gap='10px'>
 					<Controller
 						name='cpf'
@@ -107,7 +105,7 @@ const Cadastro = () => {
 									name={name}
 									value={value}
 									mask='999.999.999-99'
-									className={getClass(name)}
+									className={getInvalidClass(errors[name])}
 									onChange={evt => onChange(evt.target.value)}/>
 							</InputContainer>
 						)}/>
@@ -122,7 +120,7 @@ const Cadastro = () => {
 									name={name}
 									value={value}
 									mask='(99) 9 9999-9999'
-									className={getClass(name)}
+									className={getInvalidClass(errors[name])}
 									onChange={evt => onChange(evt.target.value)}/>
 							</InputContainer>
 						)}/>
@@ -137,7 +135,7 @@ const Cadastro = () => {
 						<InputContainer name={name} label='Número do Conselho' error={errors[name]}>
 							<InputText
 								name={name}
-								className={getClass(name)}
+								className={getInvalidClass(errors[name])}
 								value={value}
 								onChange={evt => onChange(evt.target.value)}/>
 						</InputContainer>
@@ -153,42 +151,42 @@ const Cadastro = () => {
 								name={name}
 								value={value}
 								options={groupOptions}
-								className={getClass(name)}
+								className={getInvalidClass(errors[name])}
 								onChange={evt => onChange(evt.target.value)}/>
 						</InputContainer>
 					)}/>
 				</InputWrapper>
-					<Controller
-						name='senha'
-						control={control}
-						defaultValue=''
-						rules={{required: 'Insira uma senha'}}
-						render={({ name, value, onChange }) => (
-						<InputContainer name={name} label='Senha' error={errors[name]}>
-							<Password
-								toggleMask
-								name={name}
-								value={value}
-								className={getClass(name)}
-								onChange={evt => onChange(evt.target.value)}/>
-						</InputContainer>
-					)}/>
-					<Controller
-						name='passwordConfirm'
-						control={control}
-						defaultValue=''
-						rules={{required: 'Confirme sua senha'}}
-						render={({ name, value, onChange }) => (
-						<InputContainer name={name} label='Confirmação de Senha' error={errors[name]}>
-							<Password
-								toggleMask
-								name={name}
-								value={value}
-								feedback={false}
-								className={getClass(name)}
-								onChange={evt => onChange(evt.target.value)}/>
-						</InputContainer>
-					)}/>
+				<Controller
+					name='senha'
+					control={control}
+					defaultValue=''
+					rules={{required: 'Insira uma senha'}}
+					render={({ name, value, onChange }) => (
+					<InputContainer name={name} label='Senha' error={errors[name]}>
+						<Password
+							toggleMask
+							name={name}
+							value={value}
+							className={getInvalidClass(errors[name])}
+							onChange={evt => onChange(evt.target.value)}/>
+					</InputContainer>
+				)}/>
+				<Controller
+					name='passwordConfirm'
+					control={control}
+					defaultValue=''
+					rules={{required: 'Confirme sua senha'}}
+					render={({ name, value, onChange }) => (
+					<InputContainer name={name} label='Confirmação de Senha' error={errors[name]}>
+						<Password
+							toggleMask
+							name={name}
+							value={value}
+							feedback={false}
+							className={getInvalidClass(errors[name])}
+							onChange={evt => onChange(evt.target.value)}/>
+					</InputContainer>
+				)}/>
 				<Button label='Cadastrar'/>
 			</form>
 		</ManagementTemplate>

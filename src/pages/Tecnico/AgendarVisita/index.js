@@ -3,7 +3,7 @@ import React from 'react'
 
 import { AutoComplete, Button, Calendar, Dropdown, MultiSelect } from '~/primereact'
 import { CardHeader, InputContainer } from '~/common/components'
-import { classNames, getStringNormalized } from '~/utils'
+import { getInvalidClass, getStringNormalized } from '~/utils'
 import { Block, InputWrapper } from '~/common/styles'
 import { ContainerWithTemplate } from '~/template'
 
@@ -43,8 +43,6 @@ function AgendarVisita() {
 		setCooperadosFiltrados(cooperadosFiltrados)
 	}
 
-	const getClass = name => classNames({ 'p-invalid': errors[name]})
-
 	return (
 		<ContainerWithTemplate contentClassName='p-mt-5'>
 			<Block className='p-p-3 p-fluid'>
@@ -63,7 +61,7 @@ function AgendarVisita() {
 									suggestions={cooperadosFiltrados}
 									completeMethod={filtrarCooperado}
 									onChange={e => onChange(e.value)}
-									className={getClass(name)}/>
+									className={getInvalidClass(errors[name])}/>
 							</InputContainer>
 						)}
 					/>
@@ -78,7 +76,7 @@ function AgendarVisita() {
 									options={propriedades}
 									value={value}
 									onChange={e => onChange(e.value)}
-									className={getClass(name)}/>
+									className={getInvalidClass(errors[name])}/>
 							</InputContainer>
 						)}/>
 					<InputWrapper columns={2} gap='10px'>
@@ -96,7 +94,7 @@ function AgendarVisita() {
 									minDate={new Date()}
 									dateFormat='dd/mm/yy'
 									onChange={e => onChange(e.value)}
-									className={getClass(name)}/>
+									className={getInvalidClass(errors[name])}/>
 							</InputContainer>
 						)}/>
 						<Controller
@@ -111,7 +109,7 @@ function AgendarVisita() {
 										mask='99:99'
 										value={value}
 										onChange={e => onChange(e.value)}
-										className={getClass(name)}
+										className={getInvalidClass(errors[name])}
 									/>
 								</InputContainer>
 						)}/>
@@ -126,7 +124,7 @@ function AgendarVisita() {
 								<MultiSelect
 									value={value}
 									options={motivos}
-									className={getClass(name)}
+									className={getInvalidClass(errors[name])}
 									onChange={e => onChange(e.value)}/>
 							</InputContainer>
 						)}/>

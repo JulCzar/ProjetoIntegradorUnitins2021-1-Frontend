@@ -5,9 +5,9 @@ export { default as ListarGrupos } from './Administrador/Grupos'
 export { default as DadosVisita } from './Administrador/Historico/DadosVisita'
 export { default as MotivoVisita } from './Administrador/MotivoVisita'
 export { default as HistoricoVisitas } from './Administrador/Historico/Visitas'
-export { default as RelatorioLandingTecnico } from './Administrador/RelatorioTecnico'
-export { default as RelatorioLandingCooperado} from './Administrador/RelatorioCooperado'
-export { default as RelatorioLandingPropriedade } from './Administrador/RelatorioPropriedade'
+export { default as RelatorioLandingTecnico } from './Administrador/Relatorios/Tecnico'
+export { default as RelatorioLandingCooperado} from './Administrador/Relatorios/Cooperado'
+export { default as RelatorioLandingPropriedade } from './Administrador/Relatorios/Propriedade'
 
 //Cooperado
 export { default as Login } from './Geral/Login'

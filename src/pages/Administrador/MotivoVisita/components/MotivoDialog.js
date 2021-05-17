@@ -3,11 +3,9 @@ import PropTypes from 'prop-types'
 import { Button, Dialog, InputText } from '~/primereact'
 import { Controller } from 'react-hook-form'
 import { InputContainer } from '~/common/components'
-import { classNames } from '~/utils'
+import { getInvalidClass } from '~/utils'
 
 function MotivoModal({ headerName, visible, hideModal, onSubmit, errors, formData, control }) {
-	const getClass = name => classNames({ 'p-invalid': errors[name]})
-
 	return (
 		<Dialog
 			header={<h2>{headerName}</h2>}
@@ -38,7 +36,7 @@ function MotivoModal({ headerName, visible, hideModal, onSubmit, errors, formDat
 							<InputText
 								name={name}
 								value={value}
-								className={getClass(name)}
+								className={getInvalidClass(errors[name])}
 								onChange={evt => onChange(evt.target.value)}
 							/>
 						</InputContainer>

@@ -1,47 +1,129 @@
 import React from 'react'
-import { UnInput } from '~/common/components'
-import { InputWrapper, UnForm } from '~/common/styles'
-import { Button, Toast} from '~/primereact'
+import { Controller, useForm } from 'react-hook-form'
+import { InputContainer } from '~/common/components'
+import { InputWrapper } from '~/common/styles'
+import { Button, InputMask, InputText, Toast} from '~/primereact'
 import { getToastInstance } from '~/services'
 import { ManagementTemplate } from '~/template'
+import { getInvalidClass } from '~/utils'
 
 function Perfil() {
-	const toastRef = React.useRef(null)
+	const { control, errors, handleSubmit, reset } = useForm()
+
   const [editing, setEditing] = React.useState(false)
 	const formRef = React.useRef(null)
-	const toast = getToastInstance(toastRef)
 
-	const submitForm = () => {
-		formRef.current.submitForm()
-	}
+	const toastRef = React.useRef(null)
+	const toast = getToastInstance(toastRef)
 
 	const editProfile = form => {
 		console.log(form) // eslint-disable-line
-		setEditing(false)
+
 		toast.showSuccess('Alterações Realizadas')
+		setEditing(false)
+		reset()
 	}
 
 	return (
 		<ManagementTemplate title='Perfil'>
 			<Toast ref={toastRef}/>
-			<UnForm ref={formRef} onSubmit={editProfile}>
+			<form ref={formRef} onSubmit={handleSubmit(editProfile)}>
 				<InputWrapper columns={2} gap='10px'>
-					<UnInput disabled={!editing} name='name' label='Nome'/>
-					<UnInput disabled={!editing} name='lastname' label='Sobrenome'/>
+					<Controller name='nome'
+						defaultValue=''
+						control={control}
+						rules={{required: 'O campo não pode ficar vazio'}}
+						render={({ name, value, onChange }) => (
+							<InputContainer name={name} label='Nome' error={errors[name]}>
+								<InputText
+									name={name}
+									value={value}
+									disabled={!editing}
+									className={getInvalidClass(errors[name])}
+									onChange={evt => onChange(evt.target.value)}
+								/>
+							</InputContainer>
+						)}
+					/>
+					<Controller name='sobrenome'
+						defaultValue=''
+						control={control}
+						rules={{required: 'O campo não pode ficar vazio'}}
+						render={({ name, value, onChange }) => (
+							<InputContainer name={name} label='Sobrenome' error={errors[name]}>
+								<InputText
+									name={name}
+									value={value}
+									disabled={!editing}
+									className={getInvalidClass(errors[name])}
+									onChange={evt => onChange(evt.target.value)}
+								/>
+							</InputContainer>
+						)}/>
 				</InputWrapper>
-				<UnInput disabled={!editing} name='email' label='Email' />
+				<Controller name='email'
+					defaultValue=''
+					control={control}
+					rules={{required: 'O campo não pode ficar vazio'}}
+					render={({ name, value, onChange }) => (
+						<InputContainer name={name} label='Email' error={errors[name]}>
+							<InputText
+								name={name}
+								value={value}
+								disabled={!editing}
+								className={getInvalidClass(errors[name])}
+								onChange={evt => onChange(evt.target.value)}
+							/>
+						</InputContainer>
+					)}/>
 				<InputWrapper columns={2} gap='10px'>
-					<UnInput disabled={!editing} mask='(99) 9 9999-9999' name='phone' label='Telefone'/>
-					<UnInput disabled={!editing} mask='999.999.999-99' name='cpf' label='CPF'/>
+					<Controller name='phone'
+						defaultValue=''
+						control={control}
+						rules={{required: 'O campo não pode ficar vazio'}}
+						render={({ name, value, onChange }) => (
+							<InputContainer name={name} label='Telefone' error={errors[name]}>
+								<InputMask
+									name={name}
+									value={value}
+									disabled={!editing}
+									mask='(99) 9 9999-9999'
+									className={getInvalidClass(errors[name])}
+									onChange={evt => onChange(evt.target.value)}
+								/>
+							</InputContainer>
+						)}/>
+						<Controller name='cpf'
+							defaultValue=''
+							control={control}
+							rules={{required: 'O campo não pode ficar vazio'}}
+							render={({ name, value, onChange }) => (
+								<InputContainer name={name} label='Telefone' error={errors[name]}>
+									<InputMask
+										name={name}
+										value={value}
+										disabled={!editing}
+										mask='999.999.999-99'
+										className={getInvalidClass(errors[name])}
+										onChange={evt => onChange(evt.target.value)}
+									/>
+								</InputContainer>
+							)}/>
 				</InputWrapper>
 				<InputWrapper columns={3} gap='10px'>
 					<Button type='submit' label='Desativar Perfil'/>
 					<Button type='submit' label='Alterar Senha'/>
-					{!editing
-						?<Button type='button' onClick={() => setEditing(true)} label='Editar Perfil'/>
-						:<Button type='button' onClick={submitForm} label='Salvar'/>}
+					{!editing && (
+						<Button type='button' onClick={e => {
+							e.stopPropagation()
+							setEditing(true)
+						}} label='Editar Perfil'/>
+					)}
+					{editing && (
+						<Button type='submit' label='Salvar'/>
+					)}
 				</InputWrapper>        
-			</UnForm>
+			</form>
 		</ManagementTemplate>
 	)
 }

@@ -1,9 +1,11 @@
 import React from 'react'
-import { CardHeader, UnInput } from '~/common/components'
-import { Card, Container, Content, UnForm } from '~/common/styles'
-import { Button, Toast } from '~/primereact'
+import { CardHeader, InputContainer } from '~/common/components'
+import { Card, Container, Content } from '~/common/styles'
+import { Button, Password, Toast } from '~/primereact'
 import styled from 'styled-components'
-import { verifyPassword } from '~/utils'
+import { getInvalidClass, verifyPassword } from '~/utils'
+import { Controller, useForm } from 'react-hook-form'
+import { getToastInstance } from '~/services'
 
 const Alert = styled('div')`
 	font-size: .75rem;
@@ -11,39 +13,65 @@ const Alert = styled('div')`
 `
 
 function AlterarSenha() {
-	const toast = React.useRef(null)
+	const { errors, control, handleSubmit, reset } = useForm()
+
+	const toastRef = React.useRef(null)
+	const toast = getToastInstance(toastRef)
 
 	const request = form => {
-		const { passwordConfirm, ...data } = form
-		const passwordCheck = verifyPassword(data.password, passwordConfirm)
+		const { senha, passwordConfirm } = form
+		const passwordCheck = verifyPassword(senha, passwordConfirm)
 		
-		if (!passwordCheck.isValid) {
-			toast.current.show(passwordCheck.errors.map(error => ({
-				severity: 'info',
-				summary: error
-			})))
-
-			return
-		}
+		if (!passwordCheck.isValid) return toast.showInfos(passwordCheck.errors)
+		
 		// eslint-disable-next-line no-console
-		toast.current.show({
-			severity: 'success',
-			summary: 'Sua Senha foi redefinida com sucesso!'
-		})
+		toast.showSuccess('Sua Senha foi redefinida com sucesso!')
+		reset()
 	}
 
 	return (
 		<Container className='p-d-flex'>
-			<Toast ref={toast} />
+			<Toast ref={toastRef} />
 			<Content className='p-grid p-d-flex p-jc-center p-ai-center'>
 				<Card className='p-fluid' width='450px'>
 					<CardHeader title='Alterar Senha'/>
 					<Alert>Informe uma senha e confirme para que possamos realizar as devidas alterações em nosso sistema.</Alert>
-					<UnForm onSubmit={request}>
-						<UnInput name='password' label='Nova senha' required={true}/>
-						<UnInput name='passwordConfirm' label='Confirme a nova senha' required={true}/>
+					<form onSubmit={handleSubmit(request)}>
+						<Controller
+							name='senha'
+							defaultValue=''
+							control={control}
+							rules={{required: 'É necessário informar uma senha'}}
+							render={({ name, value, onChange }) => (
+							<InputContainer label='Nova senha' name={name} error={errors[name]}>
+								<Password
+									toggleMask
+									name={name}
+									value={value}
+									className={getInvalidClass(errors[name])}
+									onChange={evt => onChange(evt.target.value)}
+								/>
+							</InputContainer>
+						)}/>
+						<Controller
+							name='passwordConfirm'
+							defaultValue=''
+							control={control}
+							rules={{required: 'Confirme sua senha'}}
+							render={({ name, value, onChange }) => (
+							<InputContainer label='Confirme a senha' name={name} error={errors[name]}>
+								<Password
+									toggleMask
+									name={name}
+									value={value}
+									feedback={false}
+									className={getInvalidClass(errors[name])}
+									onChange={evt => onChange(evt.target.value)}
+								/>
+							</InputContainer>
+						)}/>
 						<Button type='submit' label='Recuperar Senha'/>
-					</UnForm>
+					</form>
 				</Card>
 			</Content>
 		</Container>

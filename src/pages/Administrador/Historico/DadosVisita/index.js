@@ -62,7 +62,6 @@ function DadosVisita() {
 							<InputContainer name={name} label='Data'>
 								<Calendar
 									disabled
-									required
 									id={name}
 									name={name}
 									value={value}
@@ -80,7 +79,6 @@ function DadosVisita() {
 							<InputContainer name={name} label='Hora Estimada'>
 								<Calendar
 									disabled
-									required
 									timeOnly
 									id={name}
 									name={name}
@@ -110,7 +108,7 @@ function DadosVisita() {
 				<Controller
 					name='observacoes'
 					control={control}
-					defaultValue={'A visita foi realizada sem problemas'}
+					defaultValue='A visita foi realizada sem problemas'
 					render={({ name, value }) => (
 						<InputContainer name={name} label='Observações'>
 							<InputTextarea

@@ -1,33 +1,30 @@
 import React from 'react'
-import { CardHeader, UnInput, UnInputDateTime, UnSelect } from '~/common/components'
-import UnTextArea from '~/common/components/UnTextArea'
-import { Block, InputWrapper, UnForm } from '~/common/styles'
-import { Button, Toast } from '~/primereact'
+import { Controller, useForm } from 'react-hook-form'
+import { CardHeader, InputContainer } from '~/common/components'
+import { Block, InputWrapper } from '~/common/styles'
+import { Button, Calendar, Dropdown, InputText, InputTextarea, Toast } from '~/primereact'
 import { getToastInstance } from '~/services'
 import { ContainerWithTemplate } from '~/template'
 
 	const groupOptions = [
-		{value: 1, label: 'teste1'},
-		{value: 2, label: 'teste2'},
-		{value: 3, label: 'teste3'},
-		{value: 4, label: 'teste4'},
-		{value: 5, label: 'teste5'},
-		{value: 6, label: 'teste6'},
+		{value: 1, label: 'Motivo 1'},
+		{value: 2, label: 'Motivo 2'},
+		{value: 3, label: 'Motivo 3'},
+		{value: 4, label: 'Motivo 4'},
+		{value: 5, label: 'Motivo 5'},
+		{value: 6, label: 'Motivo 6'},
 	] 
 
 function DetalhesVisita() {
+	const { control, handleSubmit } = useForm()
 	const [editing, setEditing] = React.useState(false)
+
 	const toastRef = React.useRef(null)
-	const formRef = React.useRef(null)
 	const toast = getToastInstance(toastRef)
 
 	const cooperado = 'Miguel Teixeira'
 	const terreno = 'Recanto'
 
-	const submitForm = () => {
-		formRef.current.submitForm()
-		setEditing(false)
-	}
 
 	const validateForm = form => {
 		const { cooperado, propriedade, motivo } = form
@@ -53,23 +50,116 @@ function DetalhesVisita() {
 			<Block className='p-p-3 p-fluid'>
 				<Toast ref={toastRef} />
 				<CardHeader title='Detalhes da Visita'/>
-				<UnForm ref={formRef} onSubmit={salvar}>
-					<UnInput disabled name='cooperado' label='Cooperado' value={cooperado}/>
-					<UnInput disabled name='propriedade' label='Propriedade' value={terreno}/>
+				<form onSubmit={handleSubmit(salvar)}>
+					<Controller
+						name='cooperado'
+						control={control}
+						defaultValue={cooperado}
+						render={({ name, value }) => (
+							<InputContainer name={name} label='Cooperado'>
+								<InputText
+									disabled
+									id={name}
+									name={name}
+									value={value}
+								/>
+							</InputContainer>
+						)}
+					/>
+					<Controller
+						name='propriedade'
+						control={control}
+						defaultValue={terreno}
+						render={({ name, value }) => (
+							<InputContainer name={name} label='Propriedade'>
+								<InputText
+									disabled
+									id={name}
+									name={name}
+									value={value}
+								/>
+							</InputContainer>
+						)}
+					/>
 					<InputWrapper columns={2} gap='10px'>
-						<UnInputDateTime disabled={!editing} name='data' label='Data' dateFormat='dd/mm/yy' mask='99/99/9999' showIcon={editing} required/>
-						<UnInputDateTime disabled={!editing} timeOnly  name='horaEstimada' label='Hora Estimada' mask='99:99' showIcon={editing}/>
+						<Controller
+							name='data'
+							control={control}
+							defaultValue={new Date()}
+							render={({ name, value }) => (
+								<InputContainer name={name} label='Data'>
+									<Calendar
+										disabled={!editing}
+										showIcon={editing}
+										id={name}
+										name={name}
+										value={value}
+										mask='99/99/9999'
+										minDate={new Date()}
+										dateFormat='dd/mm/yy'
+									/>
+								</InputContainer>
+							)}
+						/>
+						<Controller
+							name='horaEstimada'
+							control={control}
+							defaultValue={new Date()}
+							render={({ name, value }) => (
+								<InputContainer name={name} label='Hora Estimada'>
+									<Calendar
+										timeOnly
+										id={name}
+										name={name}
+										mask='99:99'
+										value={value}
+										showIcon={editing}
+										disabled={!editing}
+									/>
+								</InputContainer>
+							)}
+						/>
 					</InputWrapper>
-					<UnSelect disabled={!editing} value={2} name='motivo' label='Motivo da Visita' options={groupOptions}/>
-					<UnTextArea disabled={!editing} name='observacoes' label='Observações' autoResize />
+					<Controller
+						name='motivo'
+						control={control}
+						defaultValue={1}
+						render={({ name, value }) => (
+							<InputContainer name={name} label='Motivo da Visita'>
+								<Dropdown
+									disabled={!editing}
+									id={name}
+									name={name}
+									value={value}
+									options={groupOptions}
+								/>
+							</InputContainer>
+						)}
+					/>
+					<Controller
+						name='observacoes'
+						control={control}
+						defaultValue=''
+						render={({ name, value }) => (
+							<InputContainer name={name} label='Observações'>
+								<InputTextarea
+									disabled={!editing}
+									id={name}
+									autoResize
+									name={name}
+									value={value}
+									options={groupOptions}
+								/>
+							</InputContainer>
+						)}
+					/>
 					<InputWrapper type='button' columns={3} gap='10px'>
 						<Button type='button' label='Cancelar Visita'/>
-						{!editing
-							?<Button type='button' onClick={() => setEditing(true)} label='Editar Visita'/>
-							:<Button type='button' onClick={submitForm} label='Salvar'/>}
+						{!editing && <Button type='button' onClick={() => setEditing(true)} label='Editar Visita'/>}
+						{editing && <Button label='Salvar'/>}
 						<Button type='button' label='Concluir Visita'/>
 					</InputWrapper>
-				</UnForm>
+				</form>
 			</Block>
 		</ContainerWithTemplate>
 	)

@@ -2,7 +2,7 @@ import React from 'react'
 import { format } from 'date-fns'
 
 import { CardHeader } from '~/common/components'
-import { Block, InputWrapper, UnForm} from '~/common/styles'
+import { Block, InputWrapper } from '~/common/styles'
 import { Button, Calendar, Column, DataTable, InputText } from '~/primereact'
 
 import { ContainerWithTemplate } from '~/template'
@@ -77,24 +77,22 @@ function Painel() {
 						tooltipOptions={{position: 'left'}}
 					/>
 				</div>
-				<UnForm>
-					<InputWrapper className='p-mb-3' columns={5} gap='10px'>
-						<InputText value={nomeCooperado} placeholder='Cooperado' onChange={e => setNomeCooperado(e.target.value)}/>
-						<InputText value={nomePropriedade} placeholder='Propriedade' onChange={e => setNomePropriedade(e.target.value)}/>
-						<InputText value={nomeTecnico} placeholder='Tecnico' onChange={e => setNomeTecnico(e.target.value)}/>
-						<InputText value={motivoVisita} placeholder='Motivo da Visita' onChange={e => setMotivoVisita(e.target.value)}/>
-						<Calendar value={dataVisita} mask='99/99/9999' placeholder='Selecione o Dia' onChange={e => setDataVisita(e.value)}/>
-					</InputWrapper>
-					<DataTable emptyMessage='Nenhum item encontrado' value={visitas} className="p-datatable-striped" paginator rows={7}>
-						<Column field="nome_cooperado" header="Cooperado"/>
-						<Column field="nome_propriedade" header="Propriedade"  />
-						<Column field="nome_tecnico" header="Técnico"/>            
-						<Column field="dia_visita" header="Data"/>            
-						<Column field="horario_estimado_visita" header="Hora"/>           
-						<Column field="motivo_visita" header="Motivo da Visita"/>
-						<Column field="status" header="Status"/>            
-					</DataTable>
-				</UnForm>
+				<InputWrapper className='p-mb-3' columns={5} gap='10px'>
+					<InputText value={nomeCooperado} placeholder='Cooperado' onChange={e => setNomeCooperado(e.target.value)}/>
+					<InputText value={nomePropriedade} placeholder='Propriedade' onChange={e => setNomePropriedade(e.target.value)}/>
+					<InputText value={nomeTecnico} placeholder='Tecnico' onChange={e => setNomeTecnico(e.target.value)}/>
+					<InputText value={motivoVisita} placeholder='Motivo da Visita' onChange={e => setMotivoVisita(e.target.value)}/>
+					<Calendar value={dataVisita} mask='99/99/9999' placeholder='Selecione o Dia' onChange={e => setDataVisita(e.value)}/>
+				</InputWrapper>
+				<DataTable emptyMessage='Nenhum item encontrado' value={visitas} className="p-datatable-striped" paginator rows={7}>
+					<Column field="nome_cooperado" header="Cooperado"/>
+					<Column field="nome_propriedade" header="Propriedade"  />
+					<Column field="nome_tecnico" header="Técnico"/>            
+					<Column field="dia_visita" header="Data"/>            
+					<Column field="horario_estimado_visita" header="Hora"/>           
+					<Column field="motivo_visita" header="Motivo da Visita"/>
+					<Column field="status" header="Status"/>            
+				</DataTable>
 			</Block>
 		</ContainerWithTemplate>
 	)
