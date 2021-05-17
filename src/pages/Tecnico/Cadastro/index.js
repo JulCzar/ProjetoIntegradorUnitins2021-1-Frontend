@@ -1,4 +1,5 @@
 import React from 'react'
+import { useForm } from 'react-hook-form'
 
 import { InputWrapper, UnForm } from '~/common/styles'
 import { UnInput, UnSelect } from '~/common/components'
@@ -12,6 +13,8 @@ const Cadastro = () => {
 	const formRef = React.useRef(null)
 	const [loading, setLoading] = React.useState(false)
 	const [groupOptions] = React.useState([{label: 'Cooperado', value: 1}])
+	
+	const { control, errors, handleSubmit, reset } = useForm()
 
 	const toast = getToastInstance(toastRef)
 

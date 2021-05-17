@@ -1,9 +1,7 @@
 // Administrador
 export { default as BuscaAdministrador } from './Administrador/Busca'
 export { default as PerfilAdmin } from './Administrador/Perfil'
-export { default as ListarGrupos } from './Administrador/Grupos/Listar'
-export { default as CriarGrupo } from './Administrador/Grupos/CriarGrupo'
-export { default as EditarGrupo } from './Administrador/Grupos/EditarGrupo'
+export { default as ListarGrupos } from './Administrador/Grupos'
 export { default as DadosVisita } from './Administrador/Historico/DadosVisita'
 export { default as MotivoVisita } from './Administrador/MotivoVisita'
 export { default as HistoricoVisitas } from './Administrador/Historico/Visitas'

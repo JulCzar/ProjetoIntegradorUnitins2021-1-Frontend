@@ -10,8 +10,6 @@ import {
 	CadastroCooperado,
 	CadastroTecn,
 	DadosVisita,
-	CriarGrupo,
-	EditarGrupo,
 	DetalhesVisita,
 	Login,
 	MotivoVisita,
@@ -52,8 +50,6 @@ const Routes = function _Routes() {
 				<Route path='/admin/grupos' component={ListarGrupos} exact/>
 				<Route path='/admin/motivos' component={MotivoVisita}/>
 				<Route path='/admin/historico' component={HistoricoVisitas} exact/>
-				<Route path='/admin/grupos/criar' component={CriarGrupo}/>
-				<Route path='/admin/grupos/editar' component={EditarGrupo}/>
 				<Route path='/admin/historico/visita' component={DadosVisita}/>
 				<Route path='/relatorio/propriedade' component={RelatorioLandingPropriedade}/>
 				<Route path='/relatorio/tecnico' component={RelatorioLandingTecnico}/>
@@ -72,8 +68,6 @@ const Routes = function _Routes() {
 				<Route path='/tecnico/visitas/detalhes' component={DetalhesVisita}/>
     
 				{/* Grupo */}
-				<Route path='/criar-grupo' component={CriarGrupo}/>
-				<Route path='/editar-grupo' component={EditarGrupo}/>
 				<Route path='/listar-grupos' component={ListarGrupos}/>
 
 				{/* Page Not Found, Precisa ser a ultima rota! */}

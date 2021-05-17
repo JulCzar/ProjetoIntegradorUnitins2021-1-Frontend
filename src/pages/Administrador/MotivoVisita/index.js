@@ -1,20 +1,42 @@
 import React from 'react'
+import { api, getToastInstance } from '~/services'
 import { UnInput } from '~/common/components'
-import { InputWrapper, UnForm } from '~/common/styles'
-import { Button, Column, DataTable, Dialog } from '~/primereact'
 import { ManagementTemplate } from '~/template'
-import data from './data.json'
+import { InputWrapper, UnForm } from '~/common/styles'
+import { Button, Column, DataTable, Dialog, Toast } from '~/primereact'
 
 function MotivoVisita() {
 	const formRef = React.useRef(null)
+	const toastRef = React.useRef(null)
 	const formRefEdit = React.useRef(null)
 	const [state, setState] = React.useState(null)
+	const [motivos, setMotivos] = React.useState([])
+	const [loading, setLoading] = React.useState(false)
 	const [modalVisibility, setModalVisibility] = React.useState(false)
 	const [editModalVisibility, setEditModalVisibility] = React.useState(false)
 
+	const toast = getToastInstance(toastRef)
+
+	React.useEffect(() => {
+		(async () => {
+			setLoading(true)
+
+			try {
+				const { data } = await api.get('/motivos')
+				
+				setMotivos(data.motivos_visita)
+			} catch (err) {
+				toast.showWarn('Houve um erro ao obter a lista de motivos')
+			} finally {
+				setLoading(false)
+			}
+		})()
+	}, [])
+
 	return (
-		<ManagementTemplate title='Motivos de Visita'>
-			<DataTable emptyMessage='Nenhum item encontrado' value={data}>
+		<ManagementTemplate loading={loading} title='Motivos de Visita'>
+			<Toast ref={toastRef}/>
+			<DataTable emptyMessage='Nenhum item encontrado' value={motivos}>
 				<Column field="name" header="Name"/>
 				<Column
 					bodyClassName='p-d-flex p-jc-around'
