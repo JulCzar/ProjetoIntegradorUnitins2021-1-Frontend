@@ -1,4 +1,4 @@
-import { store } from '~/store'
+// import { store } from '~/store'
 
 function MenuItem(label, destination) {
 	this.label = label

@@ -1,36 +1,131 @@
 import React from 'react'
-import { UnInput, UnInputDateTime, UnSelect } from '~/common/components'
-import UnTextArea from '~/common/components/UnTextArea'
-import { InputWrapper, UnForm } from '~/common/styles'
-import { Button } from '~/primereact'
+import { Controller, useForm } from 'react-hook-form'
+import { InputContainer } from '~/common/components'
+import { InputWrapper } from '~/common/styles'
+import { Button, Calendar, Dropdown, InputText, InputTextarea } from '~/primereact'
 import { ManagementTemplate } from '~/template'
 
 const groupOptions = [
-	{value: 1, label: 'teste1'},
-	{value: 2, label: 'teste2'},
-	{value: 3, label: 'teste3'},
-	{value: 4, label: 'teste4'},
-	{value: 5, label: 'teste5'},
-	{value: 6, label: 'teste6'},
+	{value: 1, label: 'Motivo 1'},
+	{value: 2, label: 'Motivo 2'},
+	{value: 3, label: 'Motivo 3'},
+	{value: 4, label: 'Motivo 4'},
+	{value: 5, label: 'Motivo 5'},
+	{value: 6, label: 'Motivo 6'},
 ]
 
 function DadosVisita() {
+	const { control } = useForm()
+	
 	const cooperado = 'Miguel Teixeira'
 	const terreno = 'Recanto'
 
 	return (
 		<ManagementTemplate title='Detalhes da Visita'>
-			<UnForm>
-				<UnInput disabled name='cooperado' label='Cooperado' value={cooperado}/>
-				<UnInput disabled name='propriedade' label='Propriedade'  value={terreno}/>
+			<form>
+				<Controller
+					name='cooperado'
+					control={control}
+					defaultValue={cooperado}
+					render={({ name, value }) => (
+						<InputContainer name={name} label='Cooperado'>
+							<InputText
+								disabled
+								id={name}
+								name={name}
+								value={value}
+							/>
+						</InputContainer>
+					)}
+				/>
+				<Controller
+					name='propriedade'
+					control={control}
+					defaultValue={terreno}
+					render={({ name, value }) => (
+						<InputContainer name={name} label='Propriedade'>
+							<InputText
+								disabled
+								id={name}
+								name={name}
+								value={value}
+							/>
+						</InputContainer>
+					)}
+				/>
 				<InputWrapper columns={2} gap='10px'>
-					<UnInputDateTime disabled name='data' label='Data' dateFormat='dd/mm/yy' mask='99/99/9999' showIcon required/>
-					<UnInputDateTime disabled timeOnly  name='horaEstimada' label='Hora Estimada' mask='99:99'/>
+					<Controller
+						name='data'
+						control={control}
+						defaultValue={new Date()}
+						render={({ name, value }) => (
+							<InputContainer name={name} label='Data'>
+								<Calendar
+									disabled
+									required
+									id={name}
+									name={name}
+									value={value}
+									mask='99/99/9999'
+									dateFormat='dd/mm/yy'
+								/>
+							</InputContainer>
+						)}
+					/>
+					<Controller
+						name='horaEstimada'
+						control={control}
+						defaultValue={new Date()}
+						render={({ name, value }) => (
+							<InputContainer name={name} label='Hora Estimada'>
+								<Calendar
+									disabled
+									required
+									timeOnly
+									id={name}
+									name={name}
+									mask='99:99'
+									value={value}
+								/>
+							</InputContainer>
+						)}
+					/>
 				</InputWrapper>
-				<UnSelect disabled name='motivo' label='Motivo da Visita' options={groupOptions}/>
-				<UnTextArea disabled name='observacoes' label='Observações' autoResize />
+				<Controller
+					name='motivo'
+					control={control}
+					defaultValue={1}
+					render={({ name, value }) => (
+						<InputContainer name={name} label='Motivo da Visita'>
+							<Dropdown
+								disabled
+								id={name}
+								name={name}
+								value={value}
+								options={groupOptions}
+							/>
+						</InputContainer>
+					)}
+				/>
+				<Controller
+					name='observacoes'
+					control={control}
+					defaultValue={'A visita foi realizada sem problemas'}
+					render={({ name, value }) => (
+						<InputContainer name={name} label='Observações'>
+							<InputTextarea
+								disabled
+								id={name}
+								autoResize
+								name={name}
+								value={value}
+								options={groupOptions}
+							/>
+						</InputContainer>
+					)}
+				/>
 				<Button type='button' label='Imprimir'/>
-			</UnForm>
+			</form>
 		</ManagementTemplate>
 	)
 }

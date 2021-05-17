@@ -30,7 +30,7 @@ function getMenuItems() {
 		{label: auth.user.name, destination: '/tecnico/perfil'}
 	]
 
-	const checkPermissions = () => {}
+	// const checkPermissions = () => {}
 	
 	return allItems.filter(i => i.label)
 }

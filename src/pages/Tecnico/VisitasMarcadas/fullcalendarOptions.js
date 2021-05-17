@@ -1,5 +1,4 @@
 import ptBr from '@fullcalendar/core/locales/pt-br'
-import fullcalendar from '@fullcalendar/core'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
@@ -19,9 +18,11 @@ export function getCalendarOptions(history) {
 			right: 'dayGridMonth,dayGridWeek,timeGridDay',
 		},
 		dateClick(evt) {
+			console.log(evt) // eslint-disable-line
 			history.push('/tecnico/visitas/agendar')
-		},	// eslint-disable-line
+		},
 		eventClick(evt) {
+			console.log(evt) // eslint-disable-line
 			history.push('/tecnico/visitas/detalhes')
 		}
 	}

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { useField } from '@unform/core'
 import { InputText, InputMask, Password } from '~/primereact'
 
-const UnInput = ({ type, name, label, defaultInput, mask, value, className, onChange = () => {}, ...rest }) => {
+const UnInput = ({ type, name, label, mask, value, className, onChange = () => {}, ...rest }) => {
 	const inputRef = React.useRef(null)
 	const [inputValue, setValue] = React.useState('')
 	const { fieldName, defaultValue, registerField } = useField(name)

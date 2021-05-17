@@ -1,13 +1,13 @@
 import React from 'react'
 import { CardHeader, UnInput } from '~/common/components'
-import { Block, InputWrapper, UnForm } from '~/common/styles'
+import { InputWrapper, UnForm } from '~/common/styles'
 import { Button, Column, DataTable, Dialog} from '~/primereact'
 import { ManagementTemplate } from '~/template'
 import data from './data.json'
 
 function Perfil() {
   const [editing, setEditing] = React.useState(false)
-  const [loading, setLoading] = React.useState(false)
+  const [loading] = React.useState(false)
   const [editingProperty, setEditingProperty] = React.useState(false)
   const [modalVisibility, setModalVisibility] = React.useState(false)
 	const [editingModalVisibility, setEditingModalVisibility] = React.useState(false)

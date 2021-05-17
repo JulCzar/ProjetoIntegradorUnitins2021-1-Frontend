@@ -1,7 +1,5 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { CardHeader } from '~/common/components'
-import { Card, Container, Content } from '~/common/styles'
 import { Column, DataTable } from '~/primereact'
 import { ManagementTemplate } from '~/template'
 import data from './data.json'

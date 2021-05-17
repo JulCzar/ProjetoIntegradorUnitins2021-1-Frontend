@@ -16,6 +16,7 @@ function Perfil() {
 	}
 
 	const editProfile = form => {
+		console.log(form) // eslint-disable-line
 		setEditing(false)
 		toast.showSuccess('Alterações Realizadas')
 	}

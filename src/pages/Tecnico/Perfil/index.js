@@ -1,8 +1,8 @@
 import React from 'react'
-import { CardHeader, UnInput } from '~/common/components'
-import { Block, InputWrapper, UnForm } from '~/common/styles'
+import { UnInput } from '~/common/components'
+import { InputWrapper, UnForm } from '~/common/styles'
 import { Button} from '~/primereact'
-import { ManagementTemplate, ContainerWithTemplate } from '~/template'
+import { ManagementTemplate } from '~/template'
 
 function Perfil() {
   const [editing, setEditing] = React.useState(true)

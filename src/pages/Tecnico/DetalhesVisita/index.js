@@ -1,7 +1,7 @@
 import React from 'react'
 import { CardHeader, UnInput, UnInputDateTime, UnSelect } from '~/common/components'
 import UnTextArea from '~/common/components/UnTextArea'
-import { Block, Card, Container, Content, InputWrapper, UnForm } from '~/common/styles'
+import { Block, InputWrapper, UnForm } from '~/common/styles'
 import { Button, Toast } from '~/primereact'
 import { getToastInstance } from '~/services'
 import { ContainerWithTemplate } from '~/template'

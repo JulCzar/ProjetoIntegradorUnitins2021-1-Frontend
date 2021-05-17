@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { Button, Dialog, InputText } from '~/primereact'
 import { Controller } from 'react-hook-form'
 import { InputContainer } from '~/common/components'
-import { InputWrapper } from '~/common/styles'
 import { classNames } from '~/utils'
 
 function MotivoModal({ headerName, visible, hideModal, onSubmit, errors, formData, control }) {
