@@ -25,7 +25,6 @@ module.exports = {
 		'object-shorthand': 'warn',
 		'no-array-constructor': 'warn',
 		'prefer-destructuring': 'warn',
-		'prefer-template': 'warn',
 		'template-curly-spacing': 'warn',
 		'no-eval': 'error',
 		'no-useless-escape': 'warn',
@@ -42,7 +41,7 @@ module.exports = {
 		'no-restricted-properties': 'warn',
 		'no-multi-assign': 'warn',
 		'operator-linebreak': 'warn',
-		'no-unused-vars': ['error', { 'vars': 'all', 'args': 'after-used', 'ignoreRestSiblings': false }],
+		'no-unused-vars': 'error',
 		'no-console': 'warn'
 	}
 }
