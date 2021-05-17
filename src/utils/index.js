@@ -21,12 +21,12 @@ const containNumbers = getAlphabetChecker([...numbers])
 /**
  * @param {string} password 
  * @param {string} passwordConfirm 
- * @returns 
+ * @returns {{isValid: boolean, errors: string[]}}
  */
 export const verifyPassword = (password, passwordConfirm) => {
 	const result = {
 		isValid: true,
-		errors: (() => [''].splice(0, 1))()
+		errors: []
 	}
 
 	const setPasswordInvalid = reason => {
