@@ -6,6 +6,7 @@ import { Button, Dialog, InputText } from '~/primereact'
 import { InputContainer } from '~/common/components'
 import { getInvalidClass } from '~/utils'
 import Checklist from './Checklist'
+import { nameValidation } from '~/config/validations'
 
 function GroupDialog({
 	headerName,
@@ -30,8 +31,8 @@ function GroupDialog({
 				<Controller
 					name='nome'
 					control={control}
+					rules={nameValidation}
 					defaultValue={formData?formData.nome:''}
-					rules={{required: 'É Necessário fornecer um nome ao grupo.'}}
 					render={({ name, value, onChange }) => (
 					<InputContainer name={name} label='Nome' error={errors[name]}>
 						<InputText

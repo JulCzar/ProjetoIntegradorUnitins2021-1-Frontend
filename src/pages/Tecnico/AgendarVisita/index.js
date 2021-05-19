@@ -7,9 +7,16 @@ import { getInvalidClass, getStringNormalized } from '~/utils'
 import { Block, InputWrapper } from '~/common/styles'
 import { ContainerWithTemplate } from '~/template'
 
+import propriedadesJSON from './propriedades.json'
 import cooperados from './cooperados.json'
 import motivosJSON from './motivos.json'
-import propriedadesJSON from './propriedades.json'
+import {
+	dayValidate,
+	hourValidate,
+	selectReasonValidate,
+	selectPropertyValidate,
+	selectCooperadoValidate
+} from '~/config/validations'
 
 function AgendarVisita() {
 	const [cooperadosFiltrados, setCooperadosFiltrados] = React.useState([])
@@ -52,7 +59,7 @@ function AgendarVisita() {
 						name='cooperado'
 						control={control}
 						defaultValue={false}
-						rules={{required: 'É necessário selecionar um cooperado.'}}
+						rules={selectCooperadoValidate}
 						render={({ name, value, onChange }) => (
 							<InputContainer name={name} label='Cooperado' error={errors[name]}>
 								<AutoComplete
@@ -69,7 +76,7 @@ function AgendarVisita() {
 						name='propriedade'
 						control={control}
 						defaultValue={false}
-						rules={{required: 'É necessário selecionar uma propriedade.'}}
+						rules={selectPropertyValidate}
 						render={({ name, value, onChange }) => (
 							<InputContainer name={name} label='Propriedade' error={errors[name]}>
 								<Dropdown
@@ -83,8 +90,8 @@ function AgendarVisita() {
 						<Controller
 							name='data'
 							control={control}
+							rules={dayValidate}
 							defaultValue={false}
-							rules={{required: 'É necessário Informar o dia.'}}
 							render={({ name, value, onChange }) => (
 								<InputContainer label='Data' name='data' error={errors.data}>
 								<Calendar
@@ -100,8 +107,8 @@ function AgendarVisita() {
 						<Controller
 							name='horaEstimada'
 							control={control}
+							rules={hourValidate}
 							defaultValue={false}
-							rules={{required: 'É necessário Informar a hora.'}}
 							render={({ name, value, onChange }) => (
 								<InputContainer label='Hora Estimada' name={name} error={errors[name]}>
 									<Calendar
@@ -118,7 +125,7 @@ function AgendarVisita() {
 						name='motivo'
 						control={control}
 						defaultValue={false}
-						rules={{required: 'É necessário Informar um motivo.'}}
+						rules={selectReasonValidate}
 						render={({ name, value, onChange }) => (
 							<InputContainer label='Motivo da Visita' name={name} error={errors[name]}>
 								<MultiSelect

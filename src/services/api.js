@@ -2,7 +2,7 @@ import axios from 'axios'
 import { store } from '~/store'
 
 const api = axios.create({
-	baseURL: 'https://back-simov.herokuapp.com/api',
+	baseURL: 'http://localhost:8000/api',
 	timeout: 15000
 })
 

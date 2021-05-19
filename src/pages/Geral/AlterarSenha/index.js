@@ -1,11 +1,12 @@
 import React from 'react'
-import { CardHeader, InputContainer } from '~/common/components'
+import { CardHeader, InputContainer, passwordFooter, passwordHeader } from '~/common/components'
 import { Card, Container, Content } from '~/common/styles'
 import { Button, Password, Toast } from '~/primereact'
 import styled from 'styled-components'
 import { getInvalidClass, verifyPassword } from '~/utils'
 import { Controller, useForm } from 'react-hook-form'
 import { getToastInstance } from '~/services'
+import { passwordConfirmValidate, passwordValidate } from '~/config/validations'
 
 const Alert = styled('div')`
 	font-size: .75rem;
@@ -41,23 +42,25 @@ function AlterarSenha() {
 							name='senha'
 							defaultValue=''
 							control={control}
-							rules={{required: 'É necessário informar uma senha'}}
+							rules={passwordValidate}
 							render={({ name, value, onChange }) => (
 							<InputContainer label='Nova senha' name={name} error={errors[name]}>
 								<Password
 									toggleMask
 									name={name}
 									value={value}
+									header={passwordHeader}
+									footer={passwordFooter}
 									className={getInvalidClass(errors[name])}
 									onChange={evt => onChange(evt.target.value)}
 								/>
 							</InputContainer>
 						)}/>
 						<Controller
-							name='passwordConfirm'
 							defaultValue=''
 							control={control}
-							rules={{required: 'Confirme sua senha'}}
+							name='passwordConfirm'
+							rules={passwordConfirmValidate}
 							render={({ name, value, onChange }) => (
 							<InputContainer label='Confirme a senha' name={name} error={errors[name]}>
 								<Password

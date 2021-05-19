@@ -28,49 +28,46 @@ function DadosVisita() {
 					control={control}
 					defaultValue={cooperado}
 					render={({ name, value }) => (
-						<InputContainer name={name} label='Cooperado'>
-							<InputText
-								disabled
-								id={name}
-								name={name}
-								value={value}
-							/>
-						</InputContainer>
-					)}
-				/>
+					<InputContainer name={name} label='Cooperado'>
+						<InputText
+							disabled
+							id={name}
+							name={name}
+							value={value}
+						/>
+					</InputContainer>
+				)}/>
 				<Controller
 					name='propriedade'
 					control={control}
 					defaultValue={terreno}
 					render={({ name, value }) => (
-						<InputContainer name={name} label='Propriedade'>
-							<InputText
-								disabled
-								id={name}
-								name={name}
-								value={value}
-							/>
-						</InputContainer>
-					)}
-				/>
+					<InputContainer name={name} label='Propriedade'>
+						<InputText
+							disabled
+							id={name}
+							name={name}
+							value={value}
+						/>
+					</InputContainer>
+				)}/>
 				<InputWrapper columns={2} gap='10px'>
 					<Controller
 						name='data'
 						control={control}
 						defaultValue={new Date()}
 						render={({ name, value }) => (
-							<InputContainer name={name} label='Data'>
-								<Calendar
-									disabled
-									id={name}
-									name={name}
-									value={value}
-									mask='99/99/9999'
-									dateFormat='dd/mm/yy'
-								/>
-							</InputContainer>
-						)}
-					/>
+						<InputContainer name={name} label='Data'>
+							<Calendar
+								disabled
+								id={name}
+								name={name}
+								value={value}
+								mask='99/99/9999'
+								dateFormat='dd/mm/yy'
+							/>
+						</InputContainer>
+					)}/>
 					<Controller
 						name='horaEstimada'
 						control={control}
