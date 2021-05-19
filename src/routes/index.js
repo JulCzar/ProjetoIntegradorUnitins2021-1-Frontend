@@ -62,7 +62,7 @@ const Routes = function _Routes() {
 
 				{/* Técnico */}
 				<Route path='/tecnico' component={BuscaTecnico} exact/>
-				<Route path='/tecnico/perfil' component={PerfilTecnico}/>
+				<Route path='/tecnico/perfil/:id' component={PerfilTecnico}/>
 				<Route path='/tecnico/visitas' component={VisitasMarcadas} exact/>
 				<Route path='/tecnico/visitas/agendar' component={AgendarVisita}/>
 				<Route path='/tecnico/visitas/detalhes' component={DetalhesVisita}/>

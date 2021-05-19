@@ -41,7 +41,6 @@ module.exports = {
 		'no-restricted-properties': 'warn',
 		'no-multi-assign': 'warn',
 		'operator-linebreak': 'warn',
-		'no-unused-vars': 'error',
-		'no-console': 'warn'
+		'no-unused-vars': 'error'
 	}
 }

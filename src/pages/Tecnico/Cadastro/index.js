@@ -39,7 +39,8 @@ const Cadastro = () => {
 
 			reset()
 		}catch ({ response }) {
-			toast.showInfo(response.data.message)
+			const errors = Object.values(response.data.errors) ?? ['Ocorreu um erro ao processar a requisição']
+			toast.showInfos(errors)
 		}finally {
 			setLoading(false)
 		}

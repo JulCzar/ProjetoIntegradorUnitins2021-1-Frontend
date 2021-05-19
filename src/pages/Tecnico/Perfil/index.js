@@ -1,14 +1,20 @@
 import React from 'react'
 import { Controller, useForm } from 'react-hook-form'
+import {  useHistory, useParams } from 'react-router'
 import { InputContainer } from '~/common/components'
 import { InputWrapper } from '~/common/styles'
 import { Button, Dropdown, InputMask, InputText} from '~/primereact'
 import { ManagementTemplate } from '~/template'
 import { getInvalidClass } from '~/utils'
+import { api } from '~/services'
 
 function Perfil() {
 	const { control, errors, handleSubmit, reset } = useForm()
   const [editing, setEditing] = React.useState(false)
+  const [loading, setLoading] = React.useState(false)
+	const [ data, setData ] = React.useState(null)
+	const history = useHistory()
+	const { id } = useParams()
 
 	const [groupOptions] = React.useState([
 		{label: 'Recanto', value: 1},
@@ -18,6 +24,26 @@ function Perfil() {
 		{label: 'Itabirinhas', value: 5}
 	])
 
+	React.useEffect(() => {
+		async function getUserData() {
+			setLoading(true)
+			try {
+				const { data } = await api.get(`/tecnico/data/${id}`)
+
+				setData(data)
+				console.log(data)
+			} catch (err) {
+				console.log(err)
+				history.push('/error')
+			} finally {
+				setLoading(false)
+				reset()
+			}
+		}
+
+		getUserData()
+	}, [])
+
 	const editarPerfil = form => {
 		console.log(form) // eslint-disable-line
 		
@@ -25,13 +51,13 @@ function Perfil() {
 	}
 
 	return (
-		<ManagementTemplate title='Perfil'>
+		<ManagementTemplate loading={loading} title='Perfil'>
 			<form onSubmit={handleSubmit(editarPerfil)}>
 				<InputWrapper columns={2} gap='10px'>
 					<Controller
 						name='nome'
 						control={control}
-						defaultValue=''
+						defaultValue={data?data.nome:''}
 						rules={{required: 'Informe o nome'}}
 						render={({ name, value, onChange }) => (
 						<InputContainer name={name} label='Nome' error={errors[name]}>
@@ -46,7 +72,7 @@ function Perfil() {
 					<Controller
 						name='sobrenome'
 						control={control}
-						defaultValue=''
+						defaultValue={data?data.sobrenome:''}
 						rules={{required: 'Informe o sobrenome'}}
 						render={({ name, value, onChange }) => (
 						<InputContainer name={name} label='Sobrenome' error={errors[name]}>
@@ -62,7 +88,7 @@ function Perfil() {
 				<Controller
 					name='email'
 					control={control}
-					defaultValue=''
+					defaultValue={data?data.email:''}
 					rules={{required: 'Informe o email'}}
 					render={({ name, value, onChange }) => (
 					<InputContainer name={name} label='Email' error={errors[name]}>
@@ -78,7 +104,7 @@ function Perfil() {
 					<Controller
 						name='cpf'
 						control={control}
-						defaultValue=''
+						defaultValue={data?data.cpf:''}
 						rules={{required: 'Informe o CPF'}}
 						render={({ name, value, onChange }) => (
 							<InputContainer name={name} label='CPF' error={errors[name]}>
@@ -94,7 +120,7 @@ function Perfil() {
 						<Controller
 							name='phone'
 							control={control}
-							defaultValue=''
+							defaultValue={data?data.phone:''}
 							rules={{required: 'Informe o Telefone'}}
 							render={({ name, value, onChange }) => (
 							<InputContainer name={name} label='Telefone' error={errors[name]}>
@@ -112,7 +138,7 @@ function Perfil() {
 					<Controller
 						name='numero_registro'
 						control={control}
-						defaultValue=''
+						defaultValue={data?data.numero_registro:''}
 						rules={{required: 'Informe o registro'}}
 						render={({ name, value, onChange }) => (
 						<InputContainer name={name} label='Número do Conselho' error={errors[name]}>
