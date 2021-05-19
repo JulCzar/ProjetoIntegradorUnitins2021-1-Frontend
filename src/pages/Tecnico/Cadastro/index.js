@@ -11,7 +11,6 @@ import { cpfValidation, emailValidation, lastnameValidation, nameValidation, pas
 
 const Cadastro = () => {
 	const toastRef = React.useRef(null)
-	const formRef = React.useRef(null)
 	const [loading, setLoading] = React.useState(false)
 	const [groupOptions] = React.useState([{label: 'Cooperado', value: 1}])
 	
@@ -36,8 +35,6 @@ const Cadastro = () => {
 
 			toast.showSuccess('Cadastro Realizado com Sucesso!')
 
-			formRef.current.reset()
-
 			reset()
 		}catch ({ response }) {
 			const errors = Object.values(response.data.errors) ?? ['Ocorreu um erro ao processar a requisição']
@@ -50,7 +47,7 @@ const Cadastro = () => {
 	return (
 		<ManagementTemplate loading={loading} title='Cadastro de Técnico'>
 			<Toast ref={toastRef}/>
-			<form ref={formRef} onSubmit={handleSubmit(cadastrar)}>
+			<form onSubmit={handleSubmit(cadastrar)}>
 				<InputWrapper columns={2} gap='10px'>
 					<Controller
 						name='nome'

@@ -3,19 +3,22 @@ import { Controller, useForm } from 'react-hook-form'
 import {  useHistory, useParams } from 'react-router'
 import { InputContainer } from '~/common/components'
 import { InputWrapper } from '~/common/styles'
-import { Button, Dropdown, InputMask, InputText} from '~/primereact'
+import { Button, Dropdown, InputMask, InputText, Toast} from '~/primereact'
 import { ManagementTemplate } from '~/template'
-import { getInvalidClass } from '~/utils'
-import { api } from '~/services'
+import { getInvalidClass, getPhoneObject } from '~/utils'
+import { api, getToastInstance } from '~/services'
 import { cpfValidation, emailValidation, lastnameValidation, nameValidation, phoneValidation, registerValidate, selectGroupValidate } from '~/config/validations'
 
 function Perfil() {
-	const { control, errors, handleSubmit, reset } = useForm()
+	const { control, errors, handleSubmit, reset, setValue } = useForm()
   const [editing, setEditing] = React.useState(false)
   const [loading, setLoading] = React.useState(false)
 	const [ data, setData ] = React.useState(null)
 	const history = useHistory()
 	const { id } = useParams()
+	
+	const toastRef = React.useRef(null)
+	const toast = getToastInstance(toastRef)
 
 	const [groupOptions] = React.useState([
 		{label: 'Recanto', value: 1},
@@ -26,33 +29,68 @@ function Perfil() {
 	])
 
 	React.useEffect(() => {
-		async function getUserData() {
-			setLoading(true)
-			try {
-				const { data } = await api.get(`/tecnico/data/${id}`)
-
-				setData(data)
-				console.log(data)
-			} catch (err) {
-				console.log(err)
-				history.push('/error')
-			} finally {
-				setLoading(false)
-				reset()
-			}
-		}
-
 		getUserData()
 	}, [])
+	
+	async function getUserData() {
+		setLoading(true)
+		try {
+			const { data } = await api.get(`/tecnico/data/${id}`)
 
-	const editarPerfil = form => {
-		console.log(form) // eslint-disable-line
+			setData(data)
+
+			Object.keys(data).forEach(key => setValue(key, data[key]))
+		} catch (err) {
+			console.log(err)
+			history.push('/error')
+		} finally {
+			setLoading(false)
+		}
+	}
+
+	const editarPerfil = async form => {
+		console.log('do form', form) // eslint-disable-line
+		setLoading(true)
+
+		const { phone, ...restForm } = form
+		const telefone = getPhoneObject(phone)
+		console.log('para API', {...restForm, telefone})
 		
+		if (!telefone) {
+			setLoading(false)
+			return toast.showError('O número de telefone providenciado é inválido')
+		}
+	
+		try {
+			await api.put(`/tecnico/${data.id}`, {...restForm, telefone})
+
+			toast.showSuccess('Dados Salvos!')
+
+			reset()
+		}catch ({ response }) {
+			const hasApiResponse = response?.data?.errors
+			const errors = hasApiResponse
+				?Object.values(response.data.errors)
+				:['Ocorreu um erro ao processar a requisição']
+			toast.showInfos(errors)
+		}finally {
+			setLoading(false)
+			setEditing(false)
+			getUserData()
+		}
+	}
+
+	const resetForm = () => {
+		reset()
+
+		Object.keys(data).forEach(key => setValue(key, data[key]))
+
 		setEditing(false)
 	}
 
 	return (
 		<ManagementTemplate loading={loading} title='Perfil'>
+			<Toast ref={toastRef}/>
 			<form onSubmit={handleSubmit(editarPerfil)}>
 				<InputWrapper columns={2} gap='10px'>
 					<Controller
@@ -170,9 +208,9 @@ function Perfil() {
 				</InputWrapper>
 				<InputWrapper columns={editing?2:3} gap='10px'>
 					{!editing && <Button type='button' label='Desativar Perfil'/>}
-					{editing && <Button type='button' onClick={() => {setEditing(false);reset()}} label='Cancelar'/>}
 					{!editing && <Button type='button' label='Alterar Senha'/>}
 					{!editing && <Button type='button' onClick={() => setEditing(true)} label='Editar Perfil'/>}
+					{editing && <Button type='button' onClick={resetForm} label='Cancelar'/>}
 					{editing && <Button label='Salvar'/>}
 				</InputWrapper>
 			</form>
