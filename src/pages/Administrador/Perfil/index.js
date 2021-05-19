@@ -2,7 +2,7 @@ import React from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { InputContainer } from '~/common/components'
 import { InputWrapper } from '~/common/styles'
-import { cpfValidation, emailValidation, lastnameValidation, nameValidation, phoneValidation } from '~/config/validations'
+import * as validation from '~/config/validations'
 import { Button, InputMask, InputText, Toast} from '~/primereact'
 import { getToastInstance } from '~/services'
 import { ManagementTemplate } from '~/template'
@@ -39,7 +39,7 @@ function Perfil() {
 						name='nome'
 						defaultValue=''
 						control={control}
-						rules={nameValidation}
+						rules={validation.nameValidation}
 						render={({ name, value, onChange }) => (
 							<InputContainer name={name} label='Nome' error={errors[name]}>
 								<InputText
@@ -56,7 +56,7 @@ function Perfil() {
 						defaultValue=''
 						name='sobrenome'
 						control={control}
-						rules={lastnameValidation}
+						rules={validation.lastnameValidation}
 						render={({ name, value, onChange }) => (
 							<InputContainer name={name} label='Sobrenome' error={errors[name]}>
 								<InputText
@@ -72,7 +72,7 @@ function Perfil() {
 				<Controller name='email'
 					defaultValue=''
 					control={control}
-					rules={emailValidation}
+					rules={validation.emailValidation}
 					render={({ name, value, onChange }) => (
 						<InputContainer name={name} label='Email' error={errors[name]}>
 							<InputText
@@ -89,7 +89,7 @@ function Perfil() {
 						name='phone'
 						defaultValue=''
 						control={control}
-						rules={phoneValidation}
+						rules={validation.phoneValidation}
 						render={({ name, value, onChange }) => (
 							<InputContainer name={name} label='Telefone' error={errors[name]}>
 								<InputMask
@@ -106,7 +106,7 @@ function Perfil() {
 							name='cpf'
 							defaultValue=''
 							control={control}
-							rules={cpfValidation}
+							rules={validation.cpfValidation}
 							render={({ name, value, onChange }) => (
 								<InputContainer name={name} label='CPF' error={errors[name]}>
 									<InputMask

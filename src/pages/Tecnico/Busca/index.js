@@ -53,7 +53,13 @@ function Busca() {
 				placeholder='Pesquisar por nome ou cpf'
 				onChange={e => setQuery(e.target.value)}
 			/>
-			<DataTable emptyMessage='Nenhum item encontrado' value={filteredTecnicos} className="p-datatable-striped">
+			<DataTable
+				rows={7}
+				paginator={filteredTecnicos.length > 7}
+				value={filteredTecnicos}
+				className="p-datatable-striped"
+				emptyMessage='Nenhum item encontrado'
+			>
 				<Column field="nome_tecnico" header="Nome"/>
 				<Column field="cpf_tecnico" header="CPF"/>
 				<Column header='Ações'

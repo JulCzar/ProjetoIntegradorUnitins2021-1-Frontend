@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import { getInvalidClass, verifyPassword } from '~/utils'
 import { Controller, useForm } from 'react-hook-form'
 import { getToastInstance } from '~/services'
-import { passwordConfirmValidate, passwordValidate } from '~/config/validations'
+import { passwordConfirmValidation, passwordValidation } from '~/config/validations'
 
 const Alert = styled('div')`
 	font-size: .75rem;
@@ -42,7 +42,7 @@ function AlterarSenha() {
 							name='senha'
 							defaultValue=''
 							control={control}
-							rules={passwordValidate}
+							rules={passwordValidation}
 							render={({ name, value, onChange }) => (
 							<InputContainer label='Nova senha' name={name} error={errors[name]}>
 								<Password
@@ -60,7 +60,7 @@ function AlterarSenha() {
 							defaultValue=''
 							control={control}
 							name='passwordConfirm'
-							rules={passwordConfirmValidate}
+							rules={passwordConfirmValidation}
 							render={({ name, value, onChange }) => (
 							<InputContainer label='Confirme a senha' name={name} error={errors[name]}>
 								<Password

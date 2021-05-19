@@ -10,13 +10,7 @@ import { ContainerWithTemplate } from '~/template'
 import propriedadesJSON from './propriedades.json'
 import cooperados from './cooperados.json'
 import motivosJSON from './motivos.json'
-import {
-	dayValidate,
-	hourValidate,
-	selectReasonValidate,
-	selectPropertyValidate,
-	selectCooperadoValidate
-} from '~/config/validations'
+import * as validation from '~/config/validations'
 
 function AgendarVisita() {
 	const [cooperadosFiltrados, setCooperadosFiltrados] = React.useState([])
@@ -59,7 +53,7 @@ function AgendarVisita() {
 						name='cooperado'
 						control={control}
 						defaultValue={false}
-						rules={selectCooperadoValidate}
+						rules={validation.selectCooperadoValidation}
 						render={({ name, value, onChange }) => (
 							<InputContainer name={name} label='Cooperado' error={errors[name]}>
 								<AutoComplete
@@ -76,7 +70,7 @@ function AgendarVisita() {
 						name='propriedade'
 						control={control}
 						defaultValue={false}
-						rules={selectPropertyValidate}
+						rules={validation.selectPropertyValidation}
 						render={({ name, value, onChange }) => (
 							<InputContainer name={name} label='Propriedade' error={errors[name]}>
 								<Dropdown
@@ -90,7 +84,7 @@ function AgendarVisita() {
 						<Controller
 							name='data'
 							control={control}
-							rules={dayValidate}
+							rules={validation.dayValidation}
 							defaultValue={false}
 							render={({ name, value, onChange }) => (
 								<InputContainer label='Data' name='data' error={errors.data}>
@@ -107,7 +101,7 @@ function AgendarVisita() {
 						<Controller
 							name='horaEstimada'
 							control={control}
-							rules={hourValidate}
+							rules={validation.hourValidation}
 							defaultValue={false}
 							render={({ name, value, onChange }) => (
 								<InputContainer label='Hora Estimada' name={name} error={errors[name]}>
@@ -125,7 +119,7 @@ function AgendarVisita() {
 						name='motivo'
 						control={control}
 						defaultValue={false}
-						rules={selectReasonValidate}
+						rules={validation.selectReasonValidation}
 						render={({ name, value, onChange }) => (
 							<InputContainer label='Motivo da Visita' name={name} error={errors[name]}>
 								<MultiSelect

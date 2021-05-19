@@ -8,7 +8,7 @@ import { InputWrapper } from '~/common/styles'
 import { getInvalidClass } from '~/utils'
 import Modal from './components/Modal'
 import data from './data.json'
-import { cpfValidation, emailValidation, lastnameValidation, nameValidation, phoneValidation } from '~/config/validations'
+import * as validation from '~/config/validations'
 
 function Perfil() {
 	const { control, errors, handleSubmit } = useForm()
@@ -52,7 +52,7 @@ function Perfil() {
 						name='nome'
 						defaultValue=''
 						control={control}
-						rules={nameValidation}
+						rules={validation.nameValidation}
 						render={({ name, value, onChange }) => (
 							<InputContainer name={name} error={errors[name]} label='Nome'>
 								<InputText
@@ -69,7 +69,7 @@ function Perfil() {
 						defaultValue=''
 						name='sobrenome'
 						control={control}
-						rules={lastnameValidation}
+						rules={validation.lastnameValidation}
 						render={({ name, value, onChange }) => (
 							<InputContainer name={name} error={errors[name]} label='Sobrenome'>
 								<InputText
@@ -87,7 +87,7 @@ function Perfil() {
 					name='email'
 					defaultValue=''
 					control={control}
-					rules={emailValidation}
+					rules={validation.emailValidation}
 					render={({ name, value, onChange }) => (
 						<InputContainer name={name} error={errors[name]} label='Email'>
 							<InputText
@@ -105,7 +105,7 @@ function Perfil() {
 						name='phone'
 						defaultValue=''
 						control={control}
-						rules={phoneValidation}
+						rules={validation.phoneValidation}
 						render={({ name, value, onChange }) => (
 							<InputContainer name={name} error={errors[name]} label='Telefone'>
 								<InputMask
@@ -123,7 +123,7 @@ function Perfil() {
 						name='cpf'
 						defaultValue=''
 						control={control}
-						rules={cpfValidation}
+						rules={validation.cpfValidation}
 						render={({ name, value, onChange }) => (
 							<InputContainer name={name} error={errors[name]} label='CPF'>
 								<InputMask

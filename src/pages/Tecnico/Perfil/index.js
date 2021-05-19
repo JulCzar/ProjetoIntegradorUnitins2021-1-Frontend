@@ -7,7 +7,7 @@ import { Button, Dropdown, InputMask, InputText, Toast} from '~/primereact'
 import { ManagementTemplate } from '~/template'
 import { getInvalidClass, getPhoneObject } from '~/utils'
 import { api, getToastInstance } from '~/services'
-import { cpfValidation, emailValidation, lastnameValidation, nameValidation, phoneValidation, registerValidate, selectGroupValidate } from '~/config/validations'
+import * as validation from '~/config/validations'
 
 function Perfil() {
 	const { control, errors, handleSubmit, reset, setValue } = useForm()
@@ -96,7 +96,7 @@ function Perfil() {
 					<Controller
 						name='nome'
 						control={control}
-						rules={nameValidation}
+						rules={validation.nameValidation}
 						defaultValue={data?data.nome:''}
 						render={({ name, value, onChange }) => (
 						<InputContainer name={name} label='Nome' error={errors[name]}>
@@ -111,7 +111,7 @@ function Perfil() {
 					<Controller
 						name='sobrenome'
 						control={control}
-						rules={lastnameValidation}
+						rules={validation.lastnameValidation}
 						defaultValue={data?data.sobrenome:''}
 						render={({ name, value, onChange }) => (
 						<InputContainer name={name} label='Sobrenome' error={errors[name]}>
@@ -128,7 +128,7 @@ function Perfil() {
 					name='email'
 					control={control}
 					defaultValue={data?data.email:''}
-					rules={emailValidation}
+					rules={validation.emailValidation}
 					render={({ name, value, onChange }) => (
 					<InputContainer name={name} label='Email' error={errors[name]}>
 						<InputText
@@ -143,7 +143,7 @@ function Perfil() {
 					<Controller
 						name='cpf'
 						control={control}
-						rules={cpfValidation}
+						rules={validation.cpfValidation}
 						defaultValue={data?data.cpf:''}
 						render={({ name, value, onChange }) => (
 							<InputContainer name={name} label='CPF' error={errors[name]}>
@@ -159,7 +159,7 @@ function Perfil() {
 						<Controller
 							name='phone'
 							control={control}
-							rules={phoneValidation}
+							rules={validation.phoneValidation}
 							defaultValue={data?data.phone:''}
 							render={({ name, value, onChange }) => (
 							<InputContainer name={name} label='Telefone' error={errors[name]}>
@@ -177,7 +177,7 @@ function Perfil() {
 					<Controller
 						name='numero_registro'
 						control={control}
-						rules={registerValidate}
+						rules={validation.registerValidation}
 						defaultValue={data?data.numero_registro:''}
 						render={({ name, value, onChange }) => (
 						<InputContainer name={name} label='Número do Conselho' error={errors[name]}>
@@ -193,7 +193,7 @@ function Perfil() {
 						name='id_grupo'
 						defaultValue=''
 						control={control}
-						rules={selectGroupValidate}
+						rules={validation.selectGroupValidation}
 						render={({ name, value, onChange }) => (
 						<InputContainer name={name} label='Grupo de Usuário' error={errors[name]}>
 							<Dropdown

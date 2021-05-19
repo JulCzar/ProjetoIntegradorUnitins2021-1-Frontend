@@ -5,7 +5,7 @@ import { InputContainer } from '~/common/components'
 import { InputWrapper } from '~/common/styles'
 import { Dialog, InputNumber, InputText } from '~/primereact'
 import { getInvalidClass } from '~/utils'
-import { nameValidation, propertyAreaValidate, propertyIdValidate, propertyLocalValidate, selectTecnicoValidate } from '~/config/validations'
+import * as validation from '~/config/validations'
 
 function Modal({ editable = true, formData, headerName, buttons, visible, control, errors, onSubmit, hideModal }) {
 	return (
@@ -23,7 +23,7 @@ function Modal({ editable = true, formData, headerName, buttons, visible, contro
 						name='nome'
 						defaultValue={formData?formData.nome:''}
 						control={control}
-						rules={nameValidation}
+						rules={validation.nameValidation}
 						render={({ name, value, onChange }) => (
 							<InputContainer name={name} error={errors[name]} label='Nome'>
 								<InputText
@@ -39,7 +39,7 @@ function Modal({ editable = true, formData, headerName, buttons, visible, contro
 					<Controller
 						name='area'
 						control={control}
-						rules={propertyAreaValidate}
+						rules={validation.propertyAreaValidation}
 						defaultValue={formData?formData.area:null}
 						render={({ name, value, onChange }) => (
 						<InputContainer name={name} error={errors[name]} label='Tamanho'>
@@ -61,7 +61,7 @@ function Modal({ editable = true, formData, headerName, buttons, visible, contro
 				<Controller
 					name='localidade'
 					control={control}
-					rules={propertyLocalValidate}
+					rules={validation.propertyLocalValidation}
 					defaultValue={formData?formData.localidade:''}
 					render={({ name, value, onChange }) => (
 					<InputContainer name={name} error={errors[name]} label='Localidade'>
@@ -78,7 +78,7 @@ function Modal({ editable = true, formData, headerName, buttons, visible, contro
 					<Controller
 						name='registro'
 						control={control}
-						rules={propertyIdValidate}
+						rules={validation.propertyIdValidation}
 						defaultValue={formData?formData.registro:''}
 						render={({ name, value, onChange }) => (
 							<InputContainer name={name} error={errors[name]} label='# da Matrícula'>
@@ -95,7 +95,7 @@ function Modal({ editable = true, formData, headerName, buttons, visible, contro
 					<Controller
 						name='tecnico'
 						control={control}
-						rules={selectTecnicoValidate}
+						rules={validation.selectTecnicoValidation}
 						defaultValue={formData?formData.tecnico:''}
 						render={({ name, value, onChange }) => (
 							<InputContainer name={name} error={errors[name]} label='Técnico Responsável'>

@@ -2,7 +2,7 @@ import React from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { InputContainer } from '~/common/components'
 import { InputWrapper } from '~/common/styles'
-import { endRelatorioValidate, selectTecnicoValidate, startRelatorioValidate } from '~/config/validations'
+import * as validation from '~/config/validations'
 import { Button, Calendar, Dropdown} from '~/primereact'
 import { ManagementTemplate } from '~/template'
 import { getInvalidClass } from '~/utils'
@@ -47,7 +47,7 @@ function RelatorioTecnico() {
 					name='start'
 					control={control}
 					defaultValue={null}
-					rules={startRelatorioValidate}
+					rules={validation.startRelatorioValidation}
 					render={({ name, value, onChange }) => (
 					<InputContainer name={name} label='Inicio' error={errors[name]}>
 						<Calendar
@@ -64,7 +64,7 @@ function RelatorioTecnico() {
 					name='end'
 					control={control}
 					defaultValue={null}
-					rules={endRelatorioValidate}
+					rules={validation.endRelatorioValidation}
 					render={({ name, value, onChange }) => (
 					<InputContainer name={name} label='Fim' error={errors[name]}>
 						<Calendar
@@ -82,7 +82,7 @@ function RelatorioTecnico() {
 				name='tecnico'
 				control={control}
 				defaultValue={null}
-				rules={selectTecnicoValidate}
+				rules={validation.selectTecnicoValidation}
 				render={({ name, value, onChange }) => (
 				<InputContainer name={name} label='Técnico' error={errors[name]}>
 					<Dropdown

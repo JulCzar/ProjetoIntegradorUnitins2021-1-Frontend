@@ -5,7 +5,7 @@ import { Controller } from 'react-hook-form'
 import { InputWrapper } from '~/common/styles'
 import { InputContainer } from '~/common/components'
 import { Button, Dialog, InputNumber, InputText } from '~/primereact'
-import { nameValidation, propertyAreaValidate, propertyIdValidate, propertyLocalValidate, selectTecnicoValidate } from '~/config/validations'
+import * as validation from '~/config/validations'
 
 function Modal({ headerName, hideModal, visible, onSubmit, formData, control, errors }) {
 	return (
@@ -18,7 +18,7 @@ function Modal({ headerName, hideModal, visible, onSubmit, formData, control, er
 					<Controller
 						name='nome'
 						control={control}
-						rules={nameValidation}
+						rules={validation.nameValidation}
 						defaultValue={formData?formData.nome:''}
 						render={({ name, value, onChange }) => (
 						<InputContainer name={name} error={errors[name]} label='Nome'>
@@ -32,7 +32,7 @@ function Modal({ headerName, hideModal, visible, onSubmit, formData, control, er
 					<Controller
 						name='area'
 						control={control}
-						rules={propertyAreaValidate}
+						rules={validation.propertyAreaValidation}
 						defaultValue={formData?formData.area:null}
 						render={({ name, value, onChange }) => (
 						<InputContainer name={name} error={errors[name]} label='Tamanho'>
@@ -52,7 +52,7 @@ function Modal({ headerName, hideModal, visible, onSubmit, formData, control, er
 				<Controller
 					name='localidade'
 					control={control}
-					rules={propertyLocalValidate}
+					rules={validation.propertyLocalValidation}
 					defaultValue={formData?formData.localidade:''}
 					render={({ name, value, onChange }) => (
 						<InputContainer name={name} error={errors[name]} label='Localidade'>
@@ -68,7 +68,7 @@ function Modal({ headerName, hideModal, visible, onSubmit, formData, control, er
 					<Controller
 						name='registro'
 						control={control}
-						rules={propertyIdValidate}
+						rules={validation.propertyIdValidation}
 						defaultValue={formData?formData.registro:''}
 						render={({ name, value, onChange }) => (
 							<InputContainer name={name} error={errors[name]} label='# da Matrícula'>
@@ -83,7 +83,7 @@ function Modal({ headerName, hideModal, visible, onSubmit, formData, control, er
 					<Controller
 						name='tecnico'
 						control={control}
-						rules={selectTecnicoValidate}
+						rules={validation.selectTecnicoValidation}
 						defaultValue={formData?formData.tecnico:''}
 						render={({ name, value, onChange }) => (
 						<InputContainer name={name} error={errors[name]} label='Técnico Responsável'>

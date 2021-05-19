@@ -10,7 +10,7 @@ import { Button, InputText, Password } from '~/primereact'
 import { ContainerWithCard } from '~/template'
 import * as action from '~/store/actions/auth'
 import { getInvalidClass } from '~/utils'
-import { emailValidation, passwordValidate } from '~/config/validations'
+import { emailValidation, passwordValidation } from '~/config/validations'
 
 const Login = ({ login }) => {
 	const { control, errors, handleSubmit, reset } = useForm()
@@ -46,7 +46,7 @@ const Login = ({ login }) => {
 					name='senha'
 					defaultValue=''
 					control={control}
-					rules={passwordValidate}
+					rules={passwordValidation}
 					render={({ name, value, onChange }) => (
 						<InputContainer name={name} label='Senha' error={errors[name]}>
 							<Password

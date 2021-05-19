@@ -7,9 +7,9 @@ import { ManagementTemplate } from '~/template'
 import { InputWrapper } from '~/common/styles'
 import { getToastInstance } from '~/services'
 
-import Modal from './components/Modal'
+import * as validation from '~/config/validations'
 import { getInvalidClass } from '~/utils'
-import { cpfValidation, emailValidation, lastnameValidation, nameValidation, phoneValidation } from '~/config/validations'
+import Modal from './components/Modal'
 
 const Cadastro = () => {
 	const { control, errors, handleSubmit, reset} = useForm()
@@ -46,7 +46,7 @@ const Cadastro = () => {
 						name='nome'
 						defaultValue=''
 						control={control}
-						rules={nameValidation}
+						rules={validation.nameValidation}
 						render={({ name, value, onChange }) => (
 							<InputContainer name={name} error={errors[name]} label='Nome'>
 								<InputText
@@ -62,7 +62,7 @@ const Cadastro = () => {
 						defaultValue=''
 						name='sobrenome'
 						control={control}
-						rules={lastnameValidation}
+						rules={validation.lastnameValidation}
 						render={({ name, value, onChange }) => (
 							<InputContainer name={name} error={errors[name]} label='Sobrenome'>
 								<InputText
@@ -79,7 +79,7 @@ const Cadastro = () => {
 					name='email'
 					defaultValue=''
 					control={control}
-					rules={emailValidation}
+					rules={validation.emailValidation}
 					render={({ name, value, onChange }) => (
 						<InputContainer name={name} error={errors[name]} label='Email'>
 							<InputText
@@ -96,7 +96,7 @@ const Cadastro = () => {
 						name='cpf'
 						defaultValue=''
 						control={control}
-						rules={cpfValidation}
+						rules={validation.cpfValidation}
 						render={({ name, value, onChange }) => (
 							<InputContainer name={name} error={errors[name]} label='CPF'>
 								<InputMask
@@ -113,7 +113,7 @@ const Cadastro = () => {
 						name='phone'
 						defaultValue=''
 						control={control}
-						rules={phoneValidation}
+						rules={validation.phoneValidation}
 						render={({ name, value, onChange }) => (
 							<InputContainer name={name} error={errors[name]} label='Telefone'>
 								<InputMask

@@ -2,7 +2,7 @@
  * @param {string} message 
  * @returns 
  */
-export function dateValidate(message) {
+export function getDateValidation(message) {
 	return {
 		required: message,
 		pattern: {
@@ -44,23 +44,23 @@ export const lastnameValidation = {
 	required: 'O campo sobrenome não pode ficar vazio.'
 }
 
-export const propertyAreaValidate = {
+export const propertyAreaValidation = {
 	required: 'É necessário informar a área da propriedade.'
 }
 
-export const propertyLocalValidate = {
+export const propertyLocalValidation = {
 	required: 'É necessário informar a localidade da propriedade.'
 }
 
-export const propertyIdValidate = {
+export const propertyIdValidation = {
 	required: 'É necessário informar o id da propriedade.'
 }
 
-export const registerValidate = {
+export const registerValidation = {
 	required: 'É necessário informar o registro.'
 }
 
-export const passwordValidate = {
+export const passwordValidation = {
 	required: 'Informe uma senha.',
 	minLength: {
 		value: 8,
@@ -68,34 +68,34 @@ export const passwordValidate = {
 	}
 }
 
-export const passwordConfirmValidate = {
+export const passwordConfirmValidation = {
 	required: 'Confirme sua senha.'
 }
 
-export const selectCooperadoValidate = {
+export const selectCooperadoValidation = {
 	required: 'Você precisa selecionar um cooperado.'
 }
 
-export const selectTecnicoValidate = {
+export const selectTecnicoValidation = {
 	required: 'Você precisa selecionar um técnico.'
 }
 
-export const selectPropertyValidate = {
+export const selectPropertyValidation = {
 	required: 'Você precisa selecionar uma Propriedade.'
 }
 
-export const selectReasonValidate = {
+export const selectReasonValidation = {
 	required: 'Você precisa selecionar pelo menos um motivo.'
 }
 
-export const selectGroupValidate = {
+export const selectGroupValidation = {
 	required: 'Você precisa selecionar um grupo.'
 }
 
-export const startRelatorioValidate = dateValidate('Você precisa informar o inicio do relatório.')
-export const endRelatorioValidate = dateValidate('Você precisa informar o final do relatório.')
-export const dayValidate = dateValidate('Você precisa informar a data.')
-export const hourValidate = {
+export const startRelatorioValidation = getDateValidation('Você precisa informar o inicio do relatório.')
+export const endRelatorioValidation = getDateValidation('Você precisa informar o final do relatório.')
+export const dayValidation = getDateValidation('Você precisa informar a data.')
+export const hourValidation = {
 	required: 'Você precisa informar a hora',
 	pattern: {
 		value: /^[0-9]{2}:[0-9]{2}/i,

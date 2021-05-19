@@ -134,7 +134,7 @@ const Cadastro = () => {
 						defaultValue=''
 						control={control}
 						name='numero_registro'
-						rules={registerValidate}
+						rules={validation.registerValidation}
 						render={({ name, value, onChange }) => (
 						<InputContainer name={name} label='Número do Conselho' error={errors[name]}>
 							<InputText
@@ -148,7 +148,7 @@ const Cadastro = () => {
 						name='id_grupo'
 						defaultValue=''
 						control={control}
-						rules={selectGroupValidate}
+						rules={validation.selectGroupValidation}
 						render={({ name, value, onChange }) => (
 						<InputContainer name={name} label='Grupo de Usuário' error={errors[name]}>
 							<Dropdown
@@ -164,7 +164,7 @@ const Cadastro = () => {
 					name='senha'
 					defaultValue=''
 					control={control}
-					rules={passwordValidate}
+					rules={validation.passwordValidation}
 					render={({ name, value, onChange }) => (
 					<InputContainer name={name} label='Senha' error={errors[name]}>
 						<Password
@@ -181,7 +181,7 @@ const Cadastro = () => {
 					defaultValue=''
 					control={control}
 					name='passwordConfirm'
-					rules={passwordConfirmValidate}
+					rules={validation.passwordConfirmValidation}
 					render={({ name, value, onChange }) => (
 					<InputContainer name={name} label='Confirmação de Senha' error={errors[name]}>
 						<Password
