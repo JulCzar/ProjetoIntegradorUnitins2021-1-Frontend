@@ -3,7 +3,7 @@ import { Controller, useForm } from 'react-hook-form'
 import {  useHistory, useParams } from 'react-router'
 import { InputContainer } from '~/common/components'
 import { InputWrapper } from '~/common/styles'
-import { Button, Dropdown, InputMask, InputText, Toast} from '~/primereact'
+import { Button, confirmPopup, Dropdown, InputMask, InputText, Toast} from '~/primereact'
 import { ManagementTemplate } from '~/template'
 import { getInvalidClass, getPhoneObject } from '~/utils'
 import { api, getToastInstance } from '~/services'
@@ -86,6 +86,49 @@ function Perfil() {
 		Object.keys(data).forEach(key => setValue(key, data[key]))
 
 		setEditing(false)
+	}
+
+	const confirmDisable = event => {
+    confirmPopup({
+			target: event.currentTarget,
+			message: 'Deseja desativar esse técnico?',
+			icon: 'pi pi-exclamation-triangle',
+			async accept() {
+				setLoading(true)
+				try {
+					await api.put(`/tecnico/${data.id}/disable`)
+
+					toast.showSuccess('Técnico não possuí mais acesso ao sistema.')
+				} catch ({ response }) {
+					const hasApiResponse = response?.data?.errors
+					toast.showWarns(hasApiResponse?response?.data?.errors:['Houve um erro ao processar a requisição.'])
+				} finally {
+					getUserData()
+					setLoading(false)
+				}
+			}
+    })
+	}
+
+	const confirmEnable = event => {
+    confirmPopup({
+			target: event.currentTarget,
+			message: 'Deseja ativar esse técnico?',
+			icon: 'pi pi-exclamation-triangle',
+			async accept() {
+				try {
+					await api.put(`/tecnico/${data.id}/enable`)
+
+					toast.showSuccess('Técnico voltou a poder acessar o sistema.')
+				} catch ({ response }) {
+					const hasApiResponse = response?.data?.errors
+					toast.showWarns(hasApiResponse?response?.data?.errors:['Houve um erro ao processar a requisição.'])
+				} finally {
+					getUserData()
+					setLoading(false)
+				}
+			}
+    })
 	}
 
 	return (
@@ -207,7 +250,8 @@ function Perfil() {
 					)}/>
 				</InputWrapper>
 				<InputWrapper columns={editing?2:3} gap='10px'>
-					{!editing && <Button type='button' label='Desativar Perfil'/>}
+					{(!editing && !!data?.status) && <Button type='button' onClick={confirmDisable} label='Desativar Perfil'/>}
+					{(!editing && !data?.status) && <Button type='button' onClick={confirmEnable} label='Ativar Perfil'/>}
 					{!editing && <Button type='button' label='Alterar Senha'/>}
 					{!editing && <Button type='button' onClick={() => setEditing(true)} label='Editar Perfil'/>}
 					{editing && <Button type='button' onClick={resetForm} label='Cancelar'/>}
