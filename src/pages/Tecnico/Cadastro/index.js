@@ -1,4 +1,5 @@
 import React from 'react'
+import { useHistory } from 'react-router'
 import { Controller, useForm } from 'react-hook-form'
 
 import { InputWrapper } from '~/common/styles'
@@ -7,9 +8,10 @@ import {  api, getToastInstance } from '~/services'
 import { Button, Dropdown, InputMask, InputText, Password, Toast } from '~/primereact'
 import { verifyPassword, getPhoneObject, getInvalidClass } from '~/utils'
 import { ManagementTemplate } from '~/template'
-import { cpfValidation, emailValidation, lastnameValidation, nameValidation, passwordConfirmValidate, passwordValidate, phoneValidation, registerValidate, selectGroupValidate } from '~/config/validations'
+import * as validation from '~/config/validations'
 
 const Cadastro = () => {
+	const history = useHistory()
 	const toastRef = React.useRef(null)
 	const [loading, setLoading] = React.useState(false)
 	const [groupOptions] = React.useState([{label: 'Cooperado', value: 1}])
@@ -34,6 +36,9 @@ const Cadastro = () => {
 			await api.post('/tecnico/store', {...data, telefone})
 
 			toast.showSuccess('Cadastro Realizado com Sucesso!')
+			toast.showInfo('Você sera redirecionado para a tela de listagem em 2 segundo')
+
+			setTimeout(history.push, 2000, '/tecnico')
 
 			reset()
 		}catch ({ response }) {
@@ -53,13 +58,13 @@ const Cadastro = () => {
 						name='nome'
 						defaultValue=''
 						control={control}
-						rules={nameValidation}
+						rules={validation.nameValidation}
 						render={({ name, value, onChange }) => (
 						<InputContainer name={name} label='Nome' error={errors[name]}>
 							<InputText
 								name={name}
-								className={getInvalidClass(errors[name])}
 								value={value}
+								className={getInvalidClass(errors[name])}
 								onChange={evt => onChange(evt.target.value)}/>
 						</InputContainer>
 					)}/>
@@ -67,13 +72,13 @@ const Cadastro = () => {
 						defaultValue=''
 						name='sobrenome'
 						control={control}
-						rules={lastnameValidation}
+						rules={validation.lastnameValidation}
 						render={({ name, value, onChange }) => (
 						<InputContainer name={name} label='Sobrenome' error={errors[name]}>
 							<InputText
 								name={name}
-								className={getInvalidClass(errors[name])}
 								value={value}
+								className={getInvalidClass(errors[name])}
 								onChange={evt => onChange(evt.target.value)}/>
 						</InputContainer>
 					)}/>
@@ -82,13 +87,13 @@ const Cadastro = () => {
 					name='email'
 					control={control}
 					defaultValue=''
-					rules={emailValidation}
+					rules={validation.emailValidation}
 					render={({ name, value, onChange }) => (
 					<InputContainer name={name} label='Email' error={errors[name]}>
 						<InputText
 							name={name}
-							className={getInvalidClass(errors[name])}
 							value={value}
+							className={getInvalidClass(errors[name])}
 							onChange={evt => onChange(evt.target.value)}/>
 					</InputContainer>
 				)}/>
@@ -97,7 +102,7 @@ const Cadastro = () => {
 						name='cpf'
 						defaultValue=''
 						control={control}
-						rules={cpfValidation}
+						rules={validation.cpfValidation}
 						render={({ name, value, onChange }) => (
 							<InputContainer name={name} label='CPF' error={errors[name]}>
 								<InputMask
@@ -112,7 +117,7 @@ const Cadastro = () => {
 							name='phone'
 							control={control}
 							defaultValue=''
-							rules={phoneValidation}
+							rules={validation.phoneValidation}
 							render={({ name, value, onChange }) => (
 							<InputContainer name={name} label='Telefone' error={errors[name]}>
 								<InputMask
@@ -134,8 +139,8 @@ const Cadastro = () => {
 						<InputContainer name={name} label='Número do Conselho' error={errors[name]}>
 							<InputText
 								name={name}
-								className={getInvalidClass(errors[name])}
 								value={value}
+								className={getInvalidClass(errors[name])}
 								onChange={evt => onChange(evt.target.value)}/>
 						</InputContainer>
 					)}/>

@@ -61,7 +61,11 @@ export const registerValidate = {
 }
 
 export const passwordValidate = {
-	required: 'Informe uma senha.'
+	required: 'Informe uma senha.',
+	minLength: {
+		value: 8,
+		message: 'A senha precisa ter no mínimo 8 caracteres.'
+	}
 }
 
 export const passwordConfirmValidate = {
