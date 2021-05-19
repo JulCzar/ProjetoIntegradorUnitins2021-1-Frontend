@@ -7,8 +7,9 @@ import { ManagementTemplate } from '~/template'
 import { InputWrapper } from '~/common/styles'
 import { getToastInstance } from '~/services'
 
-import Modal from './components/Modal'
+import * as validation from '~/config/validations'
 import { getInvalidClass } from '~/utils'
+import Modal from './components/Modal'
 
 const Cadastro = () => {
 	const { control, errors, handleSubmit, reset} = useForm()
@@ -45,7 +46,7 @@ const Cadastro = () => {
 						name='nome'
 						defaultValue=''
 						control={control}
-						rules={{required: 'É necessário informar um nome'}}
+						rules={validation.nameValidation}
 						render={({ name, value, onChange }) => (
 							<InputContainer name={name} error={errors[name]} label='Nome'>
 								<InputText
@@ -58,10 +59,10 @@ const Cadastro = () => {
 						)}
 					/>
 					<Controller
-						name='sobrenome'
 						defaultValue=''
+						name='sobrenome'
 						control={control}
-						rules={{required: 'É necessário informar o sobrenome'}}
+						rules={validation.lastnameValidation}
 						render={({ name, value, onChange }) => (
 							<InputContainer name={name} error={errors[name]} label='Sobrenome'>
 								<InputText
@@ -78,7 +79,7 @@ const Cadastro = () => {
 					name='email'
 					defaultValue=''
 					control={control}
-					rules={{required: 'É necessário informar um email'}}
+					rules={validation.emailValidation}
 					render={({ name, value, onChange }) => (
 						<InputContainer name={name} error={errors[name]} label='Email'>
 							<InputText
@@ -95,7 +96,7 @@ const Cadastro = () => {
 						name='cpf'
 						defaultValue=''
 						control={control}
-						rules={{required: 'É necessário informar o CPF'}}
+						rules={validation.cpfValidation}
 						render={({ name, value, onChange }) => (
 							<InputContainer name={name} error={errors[name]} label='CPF'>
 								<InputMask
@@ -112,7 +113,7 @@ const Cadastro = () => {
 						name='phone'
 						defaultValue=''
 						control={control}
-						rules={{required: 'É necessário informar o telefone'}}
+						rules={validation.phoneValidation}
 						render={({ name, value, onChange }) => (
 							<InputContainer name={name} error={errors[name]} label='Telefone'>
 								<InputMask

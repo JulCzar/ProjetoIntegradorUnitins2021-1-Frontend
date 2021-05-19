@@ -2,6 +2,7 @@ import React from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { InputContainer } from '~/common/components'
 import { InputWrapper } from '~/common/styles'
+import * as validation from '~/config/validations'
 import { Button, Calendar, Dropdown} from '~/primereact'
 import { ManagementTemplate } from '~/template'
 import { getInvalidClass } from '~/utils'
@@ -46,53 +47,53 @@ function RelatorioTecnico() {
 					name='start'
 					control={control}
 					defaultValue={null}
-					rules={{required: 'Você precisa informar o inicio do relatório.'}}
+					rules={validation.startRelatorioValidation}
 					render={({ name, value, onChange }) => (
-						<InputContainer name={name} label='Inicio' error={errors[name]}>
-							<Calendar
-								showIcon
-								name={name}
-								value={value}
-								mask='99/99/9999'
-								maxDate={endDate}
-								className={getInvalidClass(errors[name])}
-								onChange={handleDateChange(name, onChange)}/>
-						</InputContainer>
-					)}/>
-					<Controller
-						name='end'
-						control={control}
-						defaultValue={null}
-						rules={{required: 'Você precisa informar o final do relatório.'}}
-						render={({ name, value, onChange }) => (
-							<InputContainer name={name} label='Fim' error={errors[name]}>
-								<Calendar
-									showIcon
-									name={name}
-									value={value}
-									mask='99/99/9999'
-									minDate={startDate}
-									className={getInvalidClass(errors[name])}
-									onChange={handleDateChange(name, onChange)}/>
-							</InputContainer>
-						)}/>
+					<InputContainer name={name} label='Inicio' error={errors[name]}>
+						<Calendar
+							showIcon
+							name={name}
+							value={value}
+							mask='99/99/9999'
+							maxDate={endDate}
+							className={getInvalidClass(errors[name])}
+							onChange={handleDateChange(name, onChange)}/>
+					</InputContainer>
+				)}/>
+				<Controller
+					name='end'
+					control={control}
+					defaultValue={null}
+					rules={validation.endRelatorioValidation}
+					render={({ name, value, onChange }) => (
+					<InputContainer name={name} label='Fim' error={errors[name]}>
+						<Calendar
+							showIcon
+							name={name}
+							value={value}
+							mask='99/99/9999'
+							minDate={startDate}
+							className={getInvalidClass(errors[name])}
+							onChange={handleDateChange(name, onChange)}/>
+					</InputContainer>
+				)}/>
 			</InputWrapper>
 			<Controller
 				name='tecnico'
 				control={control}
 				defaultValue={null}
-				rules={{required: 'Você precisa selecionar um técnico.'}}
+				rules={validation.selectTecnicoValidation}
 				render={({ name, value, onChange }) => (
-					<InputContainer name={name} label='Técnico' error={errors[name]}>
-						<Dropdown
-							showIcon
-							name={name}
-							value={value}
-							options={groupOptions}
-							className={getInvalidClass(errors[name])}
-							onChange={evt => onChange(evt.value)}/>
-					</InputContainer>
-				)}/>
+				<InputContainer name={name} label='Técnico' error={errors[name]}>
+					<Dropdown
+						showIcon
+						name={name}
+						value={value}
+						options={groupOptions}
+						className={getInvalidClass(errors[name])}
+						onChange={evt => onChange(evt.value)}/>
+				</InputContainer>
+			)}/>
 			<Button type='submit' label='Gerar Relatório'/>
 		</form>
 	</ManagementTemplate>

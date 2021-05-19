@@ -2,6 +2,7 @@ import React from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { InputContainer } from '~/common/components'
 import { InputWrapper } from '~/common/styles'
+import * as validation from '~/config/validations'
 import { Button, InputMask, InputText, Toast} from '~/primereact'
 import { getToastInstance } from '~/services'
 import { ManagementTemplate } from '~/template'
@@ -15,6 +16,11 @@ function Perfil() {
 
 	const toastRef = React.useRef(null)
 	const toast = getToastInstance(toastRef)
+	
+	const cancel = () => {
+		setEditing(false)
+		reset()
+	}
 
 	const editProfile = form => {
 		console.log(form) // eslint-disable-line
@@ -29,10 +35,11 @@ function Perfil() {
 			<Toast ref={toastRef}/>
 			<form ref={formRef} onSubmit={handleSubmit(editProfile)}>
 				<InputWrapper columns={2} gap='10px'>
-					<Controller name='nome'
+					<Controller
+						name='nome'
 						defaultValue=''
 						control={control}
-						rules={{required: 'O campo não pode ficar vazio'}}
+						rules={validation.nameValidation}
 						render={({ name, value, onChange }) => (
 							<InputContainer name={name} label='Nome' error={errors[name]}>
 								<InputText
@@ -45,10 +52,11 @@ function Perfil() {
 							</InputContainer>
 						)}
 					/>
-					<Controller name='sobrenome'
+					<Controller
 						defaultValue=''
+						name='sobrenome'
 						control={control}
-						rules={{required: 'O campo não pode ficar vazio'}}
+						rules={validation.lastnameValidation}
 						render={({ name, value, onChange }) => (
 							<InputContainer name={name} label='Sobrenome' error={errors[name]}>
 								<InputText
@@ -64,7 +72,7 @@ function Perfil() {
 				<Controller name='email'
 					defaultValue=''
 					control={control}
-					rules={{required: 'O campo não pode ficar vazio'}}
+					rules={validation.emailValidation}
 					render={({ name, value, onChange }) => (
 						<InputContainer name={name} label='Email' error={errors[name]}>
 							<InputText
@@ -77,10 +85,11 @@ function Perfil() {
 						</InputContainer>
 					)}/>
 				<InputWrapper columns={2} gap='10px'>
-					<Controller name='phone'
+					<Controller
+						name='phone'
 						defaultValue=''
 						control={control}
-						rules={{required: 'O campo não pode ficar vazio'}}
+						rules={validation.phoneValidation}
 						render={({ name, value, onChange }) => (
 							<InputContainer name={name} label='Telefone' error={errors[name]}>
 								<InputMask
@@ -93,12 +102,13 @@ function Perfil() {
 								/>
 							</InputContainer>
 						)}/>
-						<Controller name='cpf'
+						<Controller
+							name='cpf'
 							defaultValue=''
 							control={control}
-							rules={{required: 'O campo não pode ficar vazio'}}
+							rules={validation.cpfValidation}
 							render={({ name, value, onChange }) => (
-								<InputContainer name={name} label='Telefone' error={errors[name]}>
+								<InputContainer name={name} label='CPF' error={errors[name]}>
 									<InputMask
 										name={name}
 										value={value}
@@ -110,18 +120,12 @@ function Perfil() {
 								</InputContainer>
 							)}/>
 				</InputWrapper>
-				<InputWrapper columns={3} gap='10px'>
-					<Button type='submit' label='Desativar Perfil'/>
-					<Button type='submit' label='Alterar Senha'/>
-					{!editing && (
-						<Button type='button' onClick={e => {
-							e.stopPropagation()
-							setEditing(true)
-						}} label='Editar Perfil'/>
-					)}
-					{editing && (
-						<Button type='submit' label='Salvar'/>
-					)}
+				<InputWrapper columns={editing?2:3} gap='10px'>
+					{!editing && <Button type='button' label='Desativar Perfil'/>}
+					{!editing && <Button type='button' label='Alterar Senha'/>}
+					{!editing && <Button type='button' onClick={() => setEditing(true)} label='Editar Perfil'/>}
+					{editing && <Button type='button' onClick={cancel} label='Cancelar'/>}
+					{editing && <Button label='Salvar'/>}
 				</InputWrapper>        
 			</form>
 		</ManagementTemplate>

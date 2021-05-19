@@ -5,6 +5,7 @@ import { Controller } from 'react-hook-form'
 import { InputWrapper } from '~/common/styles'
 import { InputContainer } from '~/common/components'
 import { Button, Dialog, InputNumber, InputText } from '~/primereact'
+import * as validation from '~/config/validations'
 
 function Modal({ headerName, hideModal, visible, onSubmit, formData, control, errors }) {
 	return (
@@ -16,45 +17,43 @@ function Modal({ headerName, hideModal, visible, onSubmit, formData, control, er
 				<InputWrapper columns={2} gap='10px'>
 					<Controller
 						name='nome'
-						defaultValue={formData?formData.nome:''}
 						control={control}
-						rules={{required: 'É necessário dar um nome a propriedade'}}
+						rules={validation.nameValidation}
+						defaultValue={formData?formData.nome:''}
 						render={({ name, value, onChange }) => (
-							<InputContainer name={name} error={errors[name]} label='Nome'>
-								<InputText
-									name={name}
-									value={value}
-									onChange={evt => onChange(evt.target.value)}
-								/>
-							</InputContainer>
-						)}
-					/>
+						<InputContainer name={name} error={errors[name]} label='Nome'>
+							<InputText
+								name={name}
+								value={value}
+								onChange={evt => onChange(evt.target.value)}
+							/>
+						</InputContainer>
+					)}/>
 					<Controller
 						name='area'
-						defaultValue={formData?formData.area:null}
 						control={control}
-						rules={{required: 'É necessário dar um nome a propriedade'}}
+						rules={validation.propertyAreaValidation}
+						defaultValue={formData?formData.area:null}
 						render={({ name, value, onChange }) => (
-							<InputContainer name={name} error={errors[name]} label='Tamanho'>
-								<InputNumber
-									name={name}
-									showButtons
-									value={value}
-									suffix=' hectares'
-									buttonLayout="horizontal"
-									incrementButtonIcon="pi pi-plus"
-									decrementButtonIcon="pi pi-minus"
-									onChange={evt => onChange(evt.value)}
-								/>
-							</InputContainer>
-						)}
-					/>
+						<InputContainer name={name} error={errors[name]} label='Tamanho'>
+							<InputNumber
+								name={name}
+								showButtons
+								value={value}
+								suffix=' hectares'
+								buttonLayout='horizontal'
+								incrementButtonIcon="pi pi-plus"
+								decrementButtonIcon="pi pi-minus"
+								onChange={evt => onChange(evt.value)}
+							/>
+						</InputContainer>
+					)}/>
 				</InputWrapper>
 				<Controller
 					name='localidade'
-					defaultValue={formData?formData.localidade:''}
 					control={control}
-					rules={{required: 'É preciso informar o local da Propriedade'}}
+					rules={validation.propertyLocalValidation}
+					defaultValue={formData?formData.localidade:''}
 					render={({ name, value, onChange }) => (
 						<InputContainer name={name} error={errors[name]} label='Localidade'>
 							<InputText
@@ -68,9 +67,9 @@ function Modal({ headerName, hideModal, visible, onSubmit, formData, control, er
 				<InputWrapper columns={2} gap='10px'>
 					<Controller
 						name='registro'
-						defaultValue={formData?formData.registro:''}
 						control={control}
-						rules={{required: 'O id da propriedade é necessário'}}
+						rules={validation.propertyIdValidation}
+						defaultValue={formData?formData.registro:''}
 						render={({ name, value, onChange }) => (
 							<InputContainer name={name} error={errors[name]} label='# da Matrícula'>
 								<InputText
@@ -83,19 +82,18 @@ function Modal({ headerName, hideModal, visible, onSubmit, formData, control, er
 					/>
 					<Controller
 						name='tecnico'
-						defaultValue={formData?formData.tecnico:''}
 						control={control}
-						rules={{required: 'É necessário selecionar o tecnico'}}
+						rules={validation.selectTecnicoValidation}
+						defaultValue={formData?formData.tecnico:''}
 						render={({ name, value, onChange }) => (
-							<InputContainer name={name} error={errors[name]} label='Técnico Responsável'>
-								<InputText
-									name={name}
-									value={value}
-									onChange={evt => onChange(evt.target.value)}
-								/>
-							</InputContainer>
-						)}
-					/>
+						<InputContainer name={name} error={errors[name]} label='Técnico Responsável'>
+							<InputText
+								name={name}
+								value={value}
+								onChange={evt => onChange(evt.target.value)}
+							/>
+						</InputContainer>
+					)}/>
 				</InputWrapper>
 				<Button type='submit' label='Salvar'/>
 			</form>

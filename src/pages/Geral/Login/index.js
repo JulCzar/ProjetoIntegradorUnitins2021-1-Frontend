@@ -5,11 +5,12 @@ import { Link } from 'react-router-dom'
 import { bindActionCreators } from 'redux'
 import { Controller, useForm } from 'react-hook-form'
 
-import { CardHeader, InputContainer } from '~/common/components'
+import { CardHeader, InputContainer, passwordFooter, passwordHeader } from '~/common/components'
 import { Button, InputText, Password } from '~/primereact'
 import { ContainerWithCard } from '~/template'
 import * as action from '~/store/actions/auth'
 import { getInvalidClass } from '~/utils'
+import { emailValidation, passwordValidation } from '~/config/validations'
 
 const Login = ({ login }) => {
 	const { control, errors, handleSubmit, reset } = useForm()
@@ -29,7 +30,7 @@ const Login = ({ login }) => {
 					name='email'
 					defaultValue=''
 					control={control}
-					rules={{required: 'O campo email não pode ficar vazio'}}
+					rules={emailValidation}
 					render={({ name, value, onChange }) => (
 						<InputContainer name={name} label='Email' error={errors[name]}>
 							<InputText
@@ -45,7 +46,7 @@ const Login = ({ login }) => {
 					name='senha'
 					defaultValue=''
 					control={control}
-					rules={{required: 'O campo email não pode ficar vazio'}}
+					rules={passwordValidation}
 					render={({ name, value, onChange }) => (
 						<InputContainer name={name} label='Senha' error={errors[name]}>
 							<Password
@@ -53,6 +54,8 @@ const Login = ({ login }) => {
 								name={name}
 								value={value}
 								feedback={false}
+								header={passwordHeader}
+								footer={passwordFooter}
 								className={getInvalidClass(errors[name])}
 								onChange={evt => onChange(evt.target.value)}
 							/>

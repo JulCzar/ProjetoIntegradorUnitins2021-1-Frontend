@@ -8,6 +8,7 @@ import { InputWrapper } from '~/common/styles'
 import { getInvalidClass } from '~/utils'
 import Modal from './components/Modal'
 import data from './data.json'
+import * as validation from '~/config/validations'
 
 function Perfil() {
 	const { control, errors, handleSubmit } = useForm()
@@ -51,7 +52,7 @@ function Perfil() {
 						name='nome'
 						defaultValue=''
 						control={control}
-						rules={{required: 'É necessário informar um nome'}}
+						rules={validation.nameValidation}
 						render={({ name, value, onChange }) => (
 							<InputContainer name={name} error={errors[name]} label='Nome'>
 								<InputText
@@ -65,10 +66,10 @@ function Perfil() {
 						)}
 					/>
 					<Controller
-						name='sobrenome'
 						defaultValue=''
+						name='sobrenome'
 						control={control}
-						rules={{required: 'É necessário informar o sobrenome'}}
+						rules={validation.lastnameValidation}
 						render={({ name, value, onChange }) => (
 							<InputContainer name={name} error={errors[name]} label='Sobrenome'>
 								<InputText
@@ -86,7 +87,7 @@ function Perfil() {
 					name='email'
 					defaultValue=''
 					control={control}
-					rules={{required: 'É necessário informar um email'}}
+					rules={validation.emailValidation}
 					render={({ name, value, onChange }) => (
 						<InputContainer name={name} error={errors[name]} label='Email'>
 							<InputText
@@ -104,7 +105,7 @@ function Perfil() {
 						name='phone'
 						defaultValue=''
 						control={control}
-						rules={{required: 'É necessário informar o telefone'}}
+						rules={validation.phoneValidation}
 						render={({ name, value, onChange }) => (
 							<InputContainer name={name} error={errors[name]} label='Telefone'>
 								<InputMask
@@ -122,7 +123,7 @@ function Perfil() {
 						name='cpf'
 						defaultValue=''
 						control={control}
-						rules={{required: 'É necessário informar o CPF'}}
+						rules={validation.cpfValidation}
 						render={({ name, value, onChange }) => (
 							<InputContainer name={name} error={errors[name]} label='CPF'>
 								<InputMask

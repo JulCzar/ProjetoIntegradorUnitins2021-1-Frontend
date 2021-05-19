@@ -2,9 +2,10 @@ import React from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { CardHeader, InputContainer } from '~/common/components'
 import { Block, InputWrapper } from '~/common/styles'
-import { Button, Calendar, Dropdown, InputText, InputTextarea, Toast } from '~/primereact'
+import { AutoComplete, Button, Calendar, Dropdown, InputText, InputTextarea, Toast } from '~/primereact'
 import { getToastInstance } from '~/services'
 import { ContainerWithTemplate } from '~/template'
+import { getInvalidClass } from '~/utils'
 
 	const groupOptions = [
 		{value: 1, label: 'Motivo 1'},
@@ -16,15 +17,12 @@ import { ContainerWithTemplate } from '~/template'
 	] 
 
 function DetalhesVisita() {
+	const [cooperadosFiltrados, setCooperadosFiltrados] = React.useState([])
 	const { control, handleSubmit } = useForm()
 	const [editing, setEditing] = React.useState(false)
 
 	const toastRef = React.useRef(null)
 	const toast = getToastInstance(toastRef)
-
-	const cooperado = 'Miguel Teixeira'
-	const terreno = 'Recanto'
-
 
 	const validateForm = form => {
 		const { cooperado, propriedade, motivo } = form
@@ -45,6 +43,17 @@ function DetalhesVisita() {
 		console.log(form) // eslint-disable-line no-console
 	}
 
+	const filtrarCooperado = event => {
+		const cooperadosFiltrados = cooperados
+			.filter(i => {
+				const pesquisaNormalizada = getStringNormalized(event.query.toLowerCase())
+				const nomeCooperadoNormalizado = getStringNormalized(i.label.toLowerCase())
+				return nomeCooperadoNormalizado.startsWith(pesquisaNormalizada)
+			})
+
+		setCooperadosFiltrados(cooperadosFiltrados)
+	}
+
 	return (
 		<ContainerWithTemplate contentClassName='p-mt-5'>
 			<Block className='p-p-3 p-fluid'>
@@ -54,22 +63,23 @@ function DetalhesVisita() {
 					<Controller
 						name='cooperado'
 						control={control}
-						defaultValue={cooperado}
+						defaultValue={'Miguel Teixeira'}
 						render={({ name, value }) => (
-							<InputContainer name={name} label='Cooperado'>
-								<InputText
-									disabled
-									id={name}
-									name={name}
+							<InputContainer name={name} label='Cooperado' error={errors[name]}>
+								<AutoComplete
+									field='label'
 									value={value}
-								/>
+									suggestions={cooperadosFiltrados}
+									completeMethod={filtrarCooperado}
+									onChange={e => onChange(e.value)}
+									className={getInvalidClass(errors[name])}/>
 							</InputContainer>
 						)}
 					/>
 					<Controller
 						name='propriedade'
 						control={control}
-						defaultValue={terreno}
+						defaultValue={'Recanto'}
 						render={({ name, value }) => (
 							<InputContainer name={name} label='Propriedade'>
 								<InputText

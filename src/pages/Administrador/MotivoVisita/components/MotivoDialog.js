@@ -4,6 +4,7 @@ import { Button, Dialog, InputText } from '~/primereact'
 import { Controller } from 'react-hook-form'
 import { InputContainer } from '~/common/components'
 import { getInvalidClass } from '~/utils'
+import { nameValidation } from '~/config/validations'
 
 function MotivoModal({ headerName, visible, hideModal, onSubmit, errors, formData, control }) {
 	return (
@@ -28,9 +29,9 @@ function MotivoModal({ headerName, visible, hideModal, onSubmit, errors, formDat
 				)}
 				<Controller
 					name='nome'
-					defaultValue={formData?formData.nome:''}
 					control={control}
-					rules={{required: 'Insira um nome para o novo motivo.'}}
+					rules={nameValidation}
+					defaultValue={formData?formData.nome:''}
 					render={({ name, value, onChange }) => (
 						<InputContainer name={name} label='Nome' error={errors[name]}>
 							<InputText

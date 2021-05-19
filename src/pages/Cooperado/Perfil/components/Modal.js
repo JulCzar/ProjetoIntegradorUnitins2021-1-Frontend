@@ -5,6 +5,7 @@ import { InputContainer } from '~/common/components'
 import { InputWrapper } from '~/common/styles'
 import { Dialog, InputNumber, InputText } from '~/primereact'
 import { getInvalidClass } from '~/utils'
+import * as validation from '~/config/validations'
 
 function Modal({ editable = true, formData, headerName, buttons, visible, control, errors, onSubmit, hideModal }) {
 	return (
@@ -22,7 +23,7 @@ function Modal({ editable = true, formData, headerName, buttons, visible, contro
 						name='nome'
 						defaultValue={formData?formData.nome:''}
 						control={control}
-						rules={{required: 'É necessário dar um nome a propriedade'}}
+						rules={validation.nameValidation}
 						render={({ name, value, onChange }) => (
 							<InputContainer name={name} error={errors[name]} label='Nome'>
 								<InputText
@@ -37,50 +38,48 @@ function Modal({ editable = true, formData, headerName, buttons, visible, contro
 					/>
 					<Controller
 						name='area'
-						defaultValue={formData?formData.area:null}
 						control={control}
-						rules={{required: 'É necessário informar a area da propriedade'}}
+						rules={validation.propertyAreaValidation}
+						defaultValue={formData?formData.area:null}
 						render={({ name, value, onChange }) => (
-							<InputContainer name={name} error={errors[name]} label='Tamanho'>
-								<InputNumber
-									name={name}
-									showButtons
-									value={value}
-									suffix=' hectares'
-									disabled={!editable}
-									buttonLayout="horizontal"
-									incrementButtonIcon="pi pi-plus"
-									decrementButtonIcon="pi pi-minus"
-									onChange={evt => onChange(evt.value)}
-									className={getInvalidClass(errors[name])}
-								/>
-							</InputContainer>
-						)}
-					/>
+						<InputContainer name={name} error={errors[name]} label='Tamanho'>
+							<InputNumber
+								name={name}
+								showButtons
+								value={value}
+								suffix=' hectares'
+								disabled={!editable}
+								buttonLayout="horizontal"
+								incrementButtonIcon="pi pi-plus"
+								decrementButtonIcon="pi pi-minus"
+								onChange={evt => onChange(evt.value)}
+								className={getInvalidClass(errors[name])}
+							/>
+						</InputContainer>
+					)}/>
 				</InputWrapper>
 				<Controller
 					name='localidade'
-					defaultValue={formData?formData.localidade:''}
 					control={control}
-					rules={{required: 'É preciso informar o local da Propriedade'}}
+					rules={validation.propertyLocalValidation}
+					defaultValue={formData?formData.localidade:''}
 					render={({ name, value, onChange }) => (
-						<InputContainer name={name} error={errors[name]} label='Localidade'>
-							<InputText
-								name={name}
-								value={value}
-								disabled={!editable}
-								className={getInvalidClass(errors[name])}
-								onChange={evt => onChange(evt.target.value)}
-							/>
-						</InputContainer>
-					)}
-				/>
+					<InputContainer name={name} error={errors[name]} label='Localidade'>
+						<InputText
+							name={name}
+							value={value}
+							disabled={!editable}
+							className={getInvalidClass(errors[name])}
+							onChange={evt => onChange(evt.target.value)}
+						/>
+					</InputContainer>
+				)}/>
 				<InputWrapper columns={2} gap='10px'>
 					<Controller
 						name='registro'
-						defaultValue={formData?formData.registro:''}
 						control={control}
-						rules={{required: 'O id da propriedade é necessário'}}
+						rules={validation.propertyIdValidation}
+						defaultValue={formData?formData.registro:''}
 						render={({ name, value, onChange }) => (
 							<InputContainer name={name} error={errors[name]} label='# da Matrícula'>
 								<InputText
@@ -95,9 +94,9 @@ function Modal({ editable = true, formData, headerName, buttons, visible, contro
 					/>
 					<Controller
 						name='tecnico'
-						defaultValue={formData?formData.tecnico:''}
 						control={control}
-						rules={{required: 'É necessário selecionar o tecnico'}}
+						rules={validation.selectTecnicoValidation}
+						defaultValue={formData?formData.tecnico:''}
 						render={({ name, value, onChange }) => (
 							<InputContainer name={name} error={errors[name]} label='Técnico Responsável'>
 								<InputText
