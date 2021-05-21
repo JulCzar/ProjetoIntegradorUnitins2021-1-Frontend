@@ -7,7 +7,7 @@ import { Controller, useForm } from 'react-hook-form'
 
 import { CardHeader, InputContainer, passwordFooter, passwordHeader } from '~/common/components'
 import { Button, InputText, Password } from '~/primereact'
-import { ContainerWithCard } from '~/template'
+import { ContainerWithCard } from '~/pages/templates'
 import * as action from '~/store/actions/auth'
 import { getInvalidClass } from '~/utils'
 import { emailValidation, passwordValidation } from '~/config/validations'

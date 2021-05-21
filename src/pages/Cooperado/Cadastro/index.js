@@ -3,7 +3,7 @@ import { Controller, useForm } from 'react-hook-form'
 
 import { Button, InputMask, InputText, ListBox, Toast} from '~/primereact'
 import { InputContainer } from '~/common/components'
-import { ManagementTemplate } from '~/template'
+import { ManagementTemplate } from '~/pages/templates'
 import { InputWrapper } from '~/common/styles'
 import { getToastInstance } from '~/services'
 

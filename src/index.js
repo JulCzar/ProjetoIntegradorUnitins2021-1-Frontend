@@ -13,7 +13,7 @@ import Routes from '~/routes'
 import 'primereact/resources/primereact.min.css'
 import 'primeicons/primeicons.css'
 import 'primeflex/primeflex.css'
-import '~/theme/style.css'
+import '~/assets/theme.css'
 
 import ptBr from '~/config/pt-br.json'
 

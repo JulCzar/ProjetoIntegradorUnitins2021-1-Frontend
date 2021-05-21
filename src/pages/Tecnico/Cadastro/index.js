@@ -7,7 +7,7 @@ import { InputContainer, passwordFooter, passwordHeader } from '~/common/compone
 import {  api, getToastInstance } from '~/services'
 import { Button, Dropdown, InputMask, InputText, Password, Toast } from '~/primereact'
 import { verifyPassword, getPhoneObject, getInvalidClass } from '~/utils'
-import { ManagementTemplate } from '~/template'
+import { ManagementTemplate } from '~/pages/templates'
 import * as validation from '~/config/validations'
 
 const Cadastro = () => {

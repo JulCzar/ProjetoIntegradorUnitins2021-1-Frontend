@@ -3,7 +3,7 @@ import { Controller, useForm } from 'react-hook-form'
 
 import { Button, Column, DataTable, Divider, InputMask, InputText} from '~/primereact'
 import { CardHeader, InputContainer, } from '~/common/components'
-import { ManagementTemplate } from '~/template'
+import { ManagementTemplate } from '~/pages/templates'
 import { InputWrapper } from '~/common/styles'
 import { getInvalidClass } from '~/utils'
 import Modal from './components/Modal'
