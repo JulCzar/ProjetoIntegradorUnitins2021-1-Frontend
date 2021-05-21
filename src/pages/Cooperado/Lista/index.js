@@ -55,8 +55,8 @@ function Busca() {
 			<DataTable emptyMessage='Nenhum item encontrado' value={filteredCooperados} className="p-datatable-striped">
 				<Column field="nome_cooperado" header="Nome"/>
 				<Column field="cpf_cooperado" header="CPF"/>
-				<Column bodyClassName='p-d-flex p-jc-around' headerClassName='p-d-flex p-jc-center' header='Ações' body={() => (
-					<Link to='/cooperado/perfil'>Detalhes</Link>
+				<Column bodyClassName='p-d-flex p-jc-around' headerClassName='p-d-flex p-jc-center' header='Ações' body={rowData => (
+					<Link to={`/cooperados/${rowData.id}`}>Detalhes</Link>
 				)}/>
 			</DataTable>
 			<Button onClick={() => history.push('/cadastrar/cooperado')} className='p-mt-3' label='Novo'/>

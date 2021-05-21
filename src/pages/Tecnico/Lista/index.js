@@ -75,7 +75,7 @@ function Busca() {
 					bodyClassName='p-d-flex p-jc-around'
 					headerClassName='p-d-flex p-jc-center'
 					body={({ id }) => (		
-						<Link to={`/tecnico/perfil/${id}`}>Detalhes</Link>
+						<Link to={`/tecnicos/${id}`}>Detalhes</Link>
 					)}
 				/>
 			</DataTable>

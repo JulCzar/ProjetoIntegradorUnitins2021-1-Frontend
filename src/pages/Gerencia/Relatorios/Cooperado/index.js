@@ -26,7 +26,7 @@ function RelatorioCooperado() {
     const data = JSON.stringify(form)
 
 		reset()
-		history.push(`/cooperado/relatorio/${btoa(data)}`)
+		history.push(`/cooperados/relatorio/${btoa(data)}`)
   }
 
 	/** @param {'start' | 'end'} key */

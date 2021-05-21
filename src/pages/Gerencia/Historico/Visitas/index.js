@@ -14,7 +14,7 @@ function Visita() {
 				<Column headerStyle={{textAlign: 'center'}} bodyStyle={{textAlign: 'center'}} field="motivo" header="Motivo"/>
 				<Column headerStyle={{textAlign: 'center'}} bodyStyle={{textAlign: 'center'}} header="Ações" body={() => (
 					<div className='p-d-flex p-jc-around'>
-						<Link to='/admin/historico/visita'>detalhes</Link>
+						<Link to='/historico/visita'>detalhes</Link>
 						<i className='fas fa-print'/>
 					</div>
 				)}/>

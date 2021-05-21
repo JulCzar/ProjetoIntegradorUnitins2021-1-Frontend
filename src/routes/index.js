@@ -60,7 +60,7 @@ const Routes = function _Routes() {
 
 				{/* Cooperado */}
 				<Route path='/cooperados' component={BuscaCooperado} exact/>
-				<Route path='/cooperados/perfil' component={PerfilCooperado}/>
+				<Route path='/cooperados/:id' component={PerfilCooperado}/>
 				<Route path='/cooperados/relatorio/:data' component={Relatorio}/>
 
 				{/* Técnico */}

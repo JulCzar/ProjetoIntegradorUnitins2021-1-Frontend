@@ -62,7 +62,7 @@ const Login = ({ login }) => {
 						</InputContainer>
 					)}
 				/>
-				<Link to='/recuperar-senha'>Esqueceu sua senha?</Link>
+				<Link to='/senha/recuperar'>Esqueceu sua senha?</Link>
 				<Button className='p-mt-3' type='submit' label='Logar'/>
 			</form>
 		</ContainerWithCard>
