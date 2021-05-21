@@ -1,92 +1,196 @@
 import React from 'react'
-import { CardHeader, UnInput } from '~/common/components'
-import { Block, InputWrapper, UnForm } from '~/common/styles'
-import { Button, Column, DataTable, Dialog} from '~/primereact'
-import { ManagementTemplate } from '~/template'
+import { Controller, useForm } from 'react-hook-form'
+
+import { Button, Column, DataTable, Divider, InputMask, InputText} from '~/primereact'
+import { CardHeader, InputContainer, } from '~/common/components'
+import { ManagementTemplate } from '~/pages/templates'
+import { InputWrapper } from '~/common/styles'
+import { getInvalidClass } from '~/utils'
+import Modal from './components/Modal'
 import data from './data.json'
+import * as validation from '~/config/validations'
 
 function Perfil() {
-  const [editing, setEditing] = React.useState(false)
+	const { control, errors, handleSubmit } = useForm()
+	const editPropriedadeModal = useForm()
+	const novaPropriedadeModal = useForm()
+
   const [loading, setLoading] = React.useState(false)
+  const [editing, setEditing] = React.useState(false)
   const [editingProperty, setEditingProperty] = React.useState(false)
+  const [dadosPropriedade, setDadosPropriedade] = React.useState(null)
   const [modalVisibility, setModalVisibility] = React.useState(false)
 	const [editingModalVisibility, setEditingModalVisibility] = React.useState(false)
 
+	const editarPerfil = form => {
+		console.log(form) // eslint-disable-line
+		setLoading(true)
+
+		setTimeout(setLoading, 500, false)
+		setTimeout(setEditing, 500, false)
+	}
+
+	const editarPropriedade = form => {
+		console.log(form) // eslint-disable-line
+		setLoading(true)
+
+		setTimeout(setLoading, 500, false)
+		setTimeout(setEditingProperty, 500, false)
+	}
+
+	const handleEdit = rowData => {
+		setEditingModalVisibility(true)
+		setDadosPropriedade(rowData)
+	}
+
 	return (
 		<ManagementTemplate loading={loading} title='Perfil'>
-			<UnForm>
+			{/* Dados do Cooperado */}
+			<form onSubmit={handleSubmit(editarPerfil)}>
 				<InputWrapper columns={2} gap='10px'>
-					<UnInput disabled={!editing} name='name' label='Nome'/>
-					<UnInput disabled={!editing} name='lastname' label='Sobrenome'/>
+					<Controller
+						name='nome'
+						defaultValue=''
+						control={control}
+						rules={validation.nameValidation}
+						render={({ name, value, onChange }) => (
+							<InputContainer name={name} error={errors[name]} label='Nome'>
+								<InputText
+									name={name}
+									value={value}
+									disabled={!editing} 
+									className={getInvalidClass(errors[name])}
+									onChange={evt => onChange(evt.target.value)}
+								/>
+							</InputContainer>
+						)}
+					/>
+					<Controller
+						defaultValue=''
+						name='sobrenome'
+						control={control}
+						rules={validation.lastnameValidation}
+						render={({ name, value, onChange }) => (
+							<InputContainer name={name} error={errors[name]} label='Sobrenome'>
+								<InputText
+									name={name}
+									value={value}
+									disabled={!editing} 
+									className={getInvalidClass(errors[name])}
+									onChange={evt => onChange(evt.target.value)}
+								/>
+							</InputContainer>
+						)}
+					/>
 				</InputWrapper>
-				<UnInput disabled={!editing} name='email' label='Email' />
+				<Controller
+					name='email'
+					defaultValue=''
+					control={control}
+					rules={validation.emailValidation}
+					render={({ name, value, onChange }) => (
+						<InputContainer name={name} error={errors[name]} label='Email'>
+							<InputText
+								name={name}
+								value={value}
+								disabled={!editing}	
+								className={getInvalidClass(errors[name])}
+								onChange={evt => onChange(evt.target.value)}
+							/>
+						</InputContainer>
+					)}
+				/>
 				<InputWrapper columns={2} gap='10px'>
-					<UnInput disabled={!editing} mask='(99) 9 9999-9999' name='phone' label='Telefone'/>
-					<UnInput disabled={!editing} mask='999.999.999-99' name='cpf' label='CPF'/>
+					<Controller
+						name='phone'
+						defaultValue=''
+						control={control}
+						rules={validation.phoneValidation}
+						render={({ name, value, onChange }) => (
+							<InputContainer name={name} error={errors[name]} label='Telefone'>
+								<InputMask
+									name={name}
+									value={value}
+									disabled={!editing}	
+									mask='(99) 9 9999-9999'
+									className={getInvalidClass(errors[name])}
+									onChange={evt => onChange(evt.target.value)}
+								/>
+							</InputContainer>
+						)}
+					/>
+					<Controller
+						name='cpf'
+						defaultValue=''
+						control={control}
+						rules={validation.cpfValidation}
+						render={({ name, value, onChange }) => (
+							<InputContainer name={name} error={errors[name]} label='CPF'>
+								<InputMask
+									name={name}
+									value={value}
+									disabled={!editing}
+									mask='999.999.999-99'
+									className={getInvalidClass(errors[name])}
+									onChange={evt => onChange(evt.target.value)}
+								/>
+							</InputContainer>
+						)}
+					/>
 				</InputWrapper>
 				<InputWrapper columns={2} gap='10px'>
-					<Button type='button' label='Desativar Perfil'/>
-					{!editing
-						?<Button type='button' onClick={() => setEditing(true)} label='Editar Perfil'/>
-						:<Button type='button' onClick={() => setEditing(false)} label='Salvar'/>}
+					{!editing && <Button type='button' label='Desativar Perfil'/>}
+					{!editing && <Button onClick={() => setEditing(true)} label='Editar Perfil'/>}
+					{editing && <Button onClick={() => setEditing(false)} type='button' label='Cancelar'/>}
+					{editing && <Button label='Salvar'/>}
 				</InputWrapper>
-			</UnForm>
-		
+			</form>
+			
+			<Divider className='p-mt-5'/>
+			{/* Lista de Propriedades */}
 			<CardHeader title='Propriedades'/>
 			<DataTable emptyMessage='Nenhum item encontrado' value={data} className="p-datatable-striped">
-				<Column field="name" header="Nome"/>
-				<Column field="location" header="Localidade"/>
-				<Column className='p-d-flex p-jc-center' header='Ações' body={() => <a onClick={() => setEditingModalVisibility(true)} >Detalhes</a>}/>
+				<Column field="nome" header="Nome"/>
+				<Column field="localidade" header="Localidade"/>
+				<Column
+					className='p-d-flex p-jc-center'
+					header='Ações'
+					body={rowData => (
+						<a onClick={() => handleEdit(rowData)}>Detalhes</a>
+					)}/>
 			</DataTable>
 			<Button className='p-mt-3' onClick={() => setModalVisibility(true)} label='Nova Propriedade'/>
 			
-			<Dialog 
-				draggable={false}
-				header={<h1>Dados da Propriedade</h1>} 
-				className='p-fluid' 
-				visible={editingModalVisibility} 
-				onHide={() => setEditingModalVisibility(false)} 
-				breakpoints={{'960px': '75vw', '640px': '100vw'}} 
-				style={{width: '50vw'}}>
-				<UnForm>
+			{/* Modal de Edição da Propriedade */}
+			<Modal
+				onSubmit={editPropriedadeModal.handleSubmit(editarPropriedade)}
+				hideModal={() => setEditingModalVisibility(false)}
+				control={editPropriedadeModal.control}
+				errors={editPropriedadeModal.errors}
+				headerName='Dados da Propriedade'
+				visible={editingModalVisibility}
+				formData={dadosPropriedade}
+				editable={editingProperty}
+				buttons={
 					<InputWrapper columns={2} gap='10px'>
-						<UnInput disabled={!editingProperty} name='nome' label='Nome'/>
-						<UnInput disabled={!editingProperty} name='area' label='Tamanho'/>
+						{!editingProperty && <Button onClick={() => setEditingProperty(true)} label='Editar'/>}
+						{editingProperty && <Button label='Salvar'/>}
+						<Button type='button' label='Transferir Propriedade'/>
+						
 					</InputWrapper>
-					<UnInput disabled={!editingProperty} name='localidade' label='Localidade' />
-					<InputWrapper columns={2} gap='10px'>
-						<UnInput disabled={!editingProperty} name='registro' label='# da Matrícula'/>
-						<UnInput disabled={!editingProperty} name='grupo' label='Técnico Responsável'/>
-					</InputWrapper>
-				</UnForm>
-				<InputWrapper columns={2} gap='10px'>
-					{!editingProperty
-					?<Button onClick={() => setEditingProperty(true)} label='Editar'/>
-					:<Button onClick={() => setEditingProperty(false)} label='Salvar'/>}
-					<Button label='Transferir Propriedade'/>
-				</InputWrapper>
-			</Dialog>
-			<Dialog 
-				draggable={false}
-				header={<h1>Cadastrar Propriedade</h1>} 
-				className='p-fluid' 
-				visible={modalVisibility} 
-				onHide={() => setModalVisibility(false)} 
-				breakpoints={{'960px': '75vw', '640px': '100vw'}} 
-				style={{width: '50vw'}}>
-				<UnForm>
-					<InputWrapper columns={2} gap='10px'>
-						<UnInput name='nome' label='Nome'/>
-						<UnInput name='area' label='Tamanho'/>
-					</InputWrapper>
-					<UnInput name='localidade' label='Localidade' />
-					<InputWrapper columns={2} gap='10px'>
-						<UnInput name='registro' label='# da Matrícula'/>
-						<UnInput name='grupo' label='Técnico Responsável'/>
-					</InputWrapper>
-					<Button label='Cadastrar'/>
-				</UnForm>
-			</Dialog>
+				}
+			/>
+
+			{/* Modal de Cadastro de Propriedade */}
+			<Modal
+				onSubmit={novaPropriedadeModal.handleSubmit(editarPropriedade)}
+				hideModal={() => setModalVisibility(false)}
+				control={novaPropriedadeModal.control}
+				errors={novaPropriedadeModal.errors}
+				headerName='Cadastrar Propriedade'
+				visible={modalVisibility}
+				buttons={<Button label='Cadastrar'/>}
+			/>
 		</ManagementTemplate>
 	)
 }

@@ -1,16 +1,18 @@
 import React from 'react'
-import { useForm } from 'react-hook-form'
+import { useHistory } from 'react-router'
+import { Controller, useForm } from 'react-hook-form'
 
-import { InputWrapper, UnForm } from '~/common/styles'
-import { UnInput, UnSelect } from '~/common/components'
+import { InputWrapper } from '~/common/styles'
+import { InputContainer, passwordFooter, passwordHeader } from '~/common/components'
 import {  api, getToastInstance } from '~/services'
-import { Button, Toast } from '~/primereact'
-import { verifyPassword, getPhoneObject } from '~/utils'
-import { ManagementTemplate } from '~/template'
+import { Button, Dropdown, InputMask, InputText, Password, Toast } from '~/primereact'
+import { verifyPassword, getPhoneObject, getInvalidClass } from '~/utils'
+import { ManagementTemplate } from '~/pages/templates'
+import * as validation from '~/config/validations'
 
 const Cadastro = () => {
+	const history = useHistory()
 	const toastRef = React.useRef(null)
-	const formRef = React.useRef(null)
 	const [loading, setLoading] = React.useState(false)
 	const [groupOptions] = React.useState([{label: 'Cooperado', value: 1}])
 	
@@ -24,17 +26,24 @@ const Cadastro = () => {
 		const passwordCheck = verifyPassword(data.senha, passwordConfirm)
 		const telefone = getPhoneObject(phone)
 		
-		if (!passwordCheck.isValid) return toast.showInfos(passwordCheck.errors)
-		if (!telefone) return toast.showError('O número de telefone providenciado é inválido')
+		if (!passwordCheck.isValid || !telefone) {
+			setLoading(false)
+			if (!passwordCheck.isValid) return toast.showInfos(passwordCheck.errors)
+			if (!telefone) return toast.showError('O número de telefone providenciado é inválido')
+		}
 		
 		try {
 			await api.post('/tecnico/store', {...data, telefone})
 
 			toast.showSuccess('Cadastro Realizado com Sucesso!')
+			toast.showInfo('Você sera redirecionado para a tela de listagem em 2 segundo')
 
-			formRef.current.reset()
+			setTimeout(history.push, 2000, '/tecnico')
+
+			reset()
 		}catch ({ response }) {
-			toast.showInfo(response.data.message)
+			const errors = Object.values(response.data.errors) ?? ['Ocorreu um erro ao processar a requisição']
+			toast.showInfos(errors)
 		}finally {
 			setLoading(false)
 		}
@@ -43,24 +52,149 @@ const Cadastro = () => {
 	return (
 		<ManagementTemplate loading={loading} title='Cadastro de Técnico'>
 			<Toast ref={toastRef}/>
-			<UnForm ref={formRef} onSubmit={cadastrar}>
+			<form onSubmit={handleSubmit(cadastrar)}>
 				<InputWrapper columns={2} gap='10px'>
-					<UnInput name='nome' label='Nome' required/>
-					<UnInput name='sobrenome' label='Sobrenome' required/>
+					<Controller
+						name='nome'
+						defaultValue=''
+						control={control}
+						rules={validation.nameValidation}
+						render={({ name, value, onChange }) => (
+						<InputContainer name={name} label='Nome' error={errors[name]}>
+							<InputText
+								name={name}
+								value={value}
+								className={getInvalidClass(errors[name])}
+								onChange={evt => onChange(evt.target.value)}/>
+						</InputContainer>
+					)}/>
+					<Controller
+						defaultValue=''
+						name='sobrenome'
+						control={control}
+						rules={validation.lastnameValidation}
+						render={({ name, value, onChange }) => (
+						<InputContainer name={name} label='Sobrenome' error={errors[name]}>
+							<InputText
+								name={name}
+								value={value}
+								className={getInvalidClass(errors[name])}
+								onChange={evt => onChange(evt.target.value)}/>
+						</InputContainer>
+					)}/>
 				</InputWrapper>
-				<UnInput name='email' label='Email' required/>
+				<Controller
+					name='email'
+					control={control}
+					defaultValue=''
+					rules={validation.emailValidation}
+					render={({ name, value, onChange }) => (
+					<InputContainer name={name} label='Email' error={errors[name]}>
+						<InputText
+							name={name}
+							value={value}
+							className={getInvalidClass(errors[name])}
+							onChange={evt => onChange(evt.target.value)}/>
+					</InputContainer>
+				)}/>
 				<InputWrapper columns={2} gap='10px'>
-					<UnInput name='cpf' mask='999.999.999-99' label='CPF' required/>
-					<UnInput name='phone' mask='(99) 9 9999-9999' label='Telefone' required/>
+					<Controller
+						name='cpf'
+						defaultValue=''
+						control={control}
+						rules={validation.cpfValidation}
+						render={({ name, value, onChange }) => (
+							<InputContainer name={name} label='CPF' error={errors[name]}>
+								<InputMask
+									name={name}
+									value={value}
+									mask='999.999.999-99'
+									className={getInvalidClass(errors[name])}
+									onChange={evt => onChange(evt.target.value)}/>
+							</InputContainer>
+						)}/>
+						<Controller
+							name='phone'
+							control={control}
+							defaultValue=''
+							rules={validation.phoneValidation}
+							render={({ name, value, onChange }) => (
+							<InputContainer name={name} label='Telefone' error={errors[name]}>
+								<InputMask
+									name={name}
+									value={value}
+									mask='(99) 9 9999-9999'
+									className={getInvalidClass(errors[name])}
+									onChange={evt => onChange(evt.target.value)}/>
+							</InputContainer>
+						)}/>
 				</InputWrapper>
 				<InputWrapper columns={2} gap='10px'>
-					<UnInput name='numero_registro' label='Número do Conselho' required/>
-					<UnSelect name='id_grupo' label='Grupo de Usuário' options={groupOptions} required/>
+					<Controller
+						defaultValue=''
+						control={control}
+						name='numero_registro'
+						rules={validation.registerValidation}
+						render={({ name, value, onChange }) => (
+						<InputContainer name={name} label='Número do Conselho' error={errors[name]}>
+							<InputText
+								name={name}
+								value={value}
+								className={getInvalidClass(errors[name])}
+								onChange={evt => onChange(evt.target.value)}/>
+						</InputContainer>
+					)}/>
+					<Controller
+						name='id_grupo'
+						defaultValue=''
+						control={control}
+						rules={validation.selectGroupValidation}
+						render={({ name, value, onChange }) => (
+						<InputContainer name={name} label='Grupo de Usuário' error={errors[name]}>
+							<Dropdown
+								name={name}
+								value={value}
+								options={groupOptions}
+								className={getInvalidClass(errors[name])}
+								onChange={evt => onChange(evt.target.value)}/>
+						</InputContainer>
+					)}/>
 				</InputWrapper>
-				<UnInput type='password' name='senha' label='Senha' required toggleMask/>
-				<UnInput type='password' name='passwordConfirm' label='Confirmação de Senha' required toggleMask feedback={false}/>
-				<Button type='submit' label='Cadastrar'/>
-			</UnForm>
+				<Controller
+					name='senha'
+					defaultValue=''
+					control={control}
+					rules={validation.passwordValidation}
+					render={({ name, value, onChange }) => (
+					<InputContainer name={name} label='Senha' error={errors[name]}>
+						<Password
+							toggleMask
+							name={name}
+							value={value}
+							header={passwordHeader}
+							footer={passwordFooter}
+							className={getInvalidClass(errors[name])}
+							onChange={evt => onChange(evt.target.value)}/>
+					</InputContainer>
+				)}/>
+				<Controller
+					defaultValue=''
+					control={control}
+					name='passwordConfirm'
+					rules={validation.passwordConfirmValidation}
+					render={({ name, value, onChange }) => (
+					<InputContainer name={name} label='Confirmação de Senha' error={errors[name]}>
+						<Password
+							toggleMask
+							name={name}
+							value={value}
+							feedback={false}
+							className={getInvalidClass(errors[name])}
+							onChange={evt => onChange(evt.target.value)}/>
+					</InputContainer>
+				)}/>
+				<Button label='Cadastrar'/>
+			</form>
 		</ManagementTemplate>
 	)
 }

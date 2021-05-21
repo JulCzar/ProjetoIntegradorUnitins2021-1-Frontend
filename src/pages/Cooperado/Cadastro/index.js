@@ -1,51 +1,137 @@
 import React from 'react'
-import { CardHeader, UnInput } from '~/common/components'
-import UnInputNumber from '~/common/components/UnInputNumber'
-import { InputWrapper, UnForm } from '~/common/styles'
-import { Button, Dialog, ListBox, Toast} from '~/primereact'
+import { Controller, useForm } from 'react-hook-form'
+
+import { Button, InputMask, InputText, ListBox, Toast} from '~/primereact'
+import { InputContainer } from '~/common/components'
+import { ManagementTemplate } from '~/pages/templates'
+import { InputWrapper } from '~/common/styles'
 import { getToastInstance } from '~/services'
-import { ManagementTemplate } from '~/template'
+
+import * as validation from '~/config/validations'
+import { getInvalidClass } from '~/utils'
+import Modal from './components/Modal'
 
 const Cadastro = () => {
-	const toastRef = React.useRef(null)
+	const { control, errors, handleSubmit, reset} = useForm()
+	const modalForm = useForm()
+
 	const [modalVisibility, setModalVisibility] = React.useState(false)
-	const [properties, setProperties] = React.useState([])
+	const [propriedadeEmEdicao] = React.useState(null)
+	const [propriedades, setProperties] = React.useState([])
+	
+	const toastRef = React.useRef(null)
 	const toast = getToastInstance(toastRef)
 
 	const hideModal = () => setModalVisibility(false)
 	const showModal = () => setModalVisibility(true)
 
 	function addProperty(form) {
-		setProperties([...properties, form])
+		setProperties([...propriedades, form])
 		hideModal()
 	}
 
 	function cadastrar(form) {
-		if (!properties.length) return toast.showWarn('É necessário inserir pelo menos uma propriedade')
-		console.log({...form, properties}) // eslint-disable-line
+		if (!propriedades.length) return toast.showWarn('É necessário inserir pelo menos uma propriedade')
+		console.log({...form, propriedades}) // eslint-disable-line
+		reset()
 	}
 
 	return (
-		<ManagementTemplate>
+		<ManagementTemplate title='Cadastro de Cooperado'>
 			<Toast ref={toastRef}/>
 
-			<CardHeader title='Cadastro de Cooperado'/>
-
-			<UnForm onSubmit={cadastrar}>
+			<form onSubmit={handleSubmit(cadastrar)}>
 				<InputWrapper columns={2} gap='10px'>
-					<UnInput name='name' label='Nome' required/>
-					<UnInput name='lastname' label='Sobrenome' required/>
+					<Controller
+						name='nome'
+						defaultValue=''
+						control={control}
+						rules={validation.nameValidation}
+						render={({ name, value, onChange }) => (
+							<InputContainer name={name} error={errors[name]} label='Nome'>
+								<InputText
+									name={name}
+									value={value}
+									className={getInvalidClass(errors[name])}
+									onChange={evt => onChange(evt.target.value)}
+								/>
+							</InputContainer>
+						)}
+					/>
+					<Controller
+						defaultValue=''
+						name='sobrenome'
+						control={control}
+						rules={validation.lastnameValidation}
+						render={({ name, value, onChange }) => (
+							<InputContainer name={name} error={errors[name]} label='Sobrenome'>
+								<InputText
+									name={name}
+									value={value}
+									className={getInvalidClass(errors[name])}
+									onChange={evt => onChange(evt.target.value)}
+								/>
+							</InputContainer>
+						)}
+					/>
 				</InputWrapper>
-				<UnInput name='email' label='Email' required/>
+				<Controller
+					name='email'
+					defaultValue=''
+					control={control}
+					rules={validation.emailValidation}
+					render={({ name, value, onChange }) => (
+						<InputContainer name={name} error={errors[name]} label='Email'>
+							<InputText
+								name={name}
+								value={value}
+								className={getInvalidClass(errors[name])}
+								onChange={evt => onChange(evt.target.value)}
+							/>
+						</InputContainer>
+					)}
+				/>
 				<InputWrapper columns={2} gap='10px'>
-					<UnInput name='cpf' mask='999.999.999-99' label='CPF' required/>
-					<UnInput name='phone' mask='(99) 9 9999-9999' label='Telefone' required/>
+					<Controller
+						name='cpf'
+						defaultValue=''
+						control={control}
+						rules={validation.cpfValidation}
+						render={({ name, value, onChange }) => (
+							<InputContainer name={name} error={errors[name]} label='CPF'>
+								<InputMask
+									name={name}
+									value={value}
+									mask='999.999.999-99'
+									className={getInvalidClass(errors[name])}
+									onChange={evt => onChange(evt.target.value)}
+								/>
+							</InputContainer>
+						)}
+					/>
+					<Controller
+						name='phone'
+						defaultValue=''
+						control={control}
+						rules={validation.phoneValidation}
+						render={({ name, value, onChange }) => (
+							<InputContainer name={name} error={errors[name]} label='Telefone'>
+								<InputMask
+									name={name}
+									value={value}
+									mask='(99) 9 9999-9999'
+									className={getInvalidClass(errors[name])}
+									onChange={evt => onChange(evt.target.value)}
+								/>
+							</InputContainer>
+						)}
+					/>
 				</InputWrapper>
 				<h2>Propriedades</h2>
-				{properties.length
+				{propriedades.length
 					?<ListBox
 						className='p-mb-5'
-						options={properties}
+						options={propriedades}
 						optionLabel='nome'/>
 					:<h3>É Necessário adicionar pelo menos uma propriedade</h3>
 				}
@@ -53,30 +139,18 @@ const Cadastro = () => {
 					<Button type='button' label='Adicionar Propriedade' onClick={showModal}/>
 					<Button label='Cadastrar'/>
 				</InputWrapper>
-			</UnForm>
-			
-			<Dialog draggable={false} className='p-fluid' header={<h3>Dados da Propriedade</h3>}
-				breakpoints={{'960px': '75vw', '640px': '100vw'}}
-				visible={modalVisibility}
-				onHide={hideModal}>
-				<UnForm onSubmit={addProperty}>
-					<InputWrapper columns={2} gap='10px'>
-						<UnInput name='nome' label='Nome' required/>
-						<UnInputNumber required showButtons
-							name='area' buttonLayout="horizontal"
-							label='Tamanho' suffix=' hectares'
-							incrementButtonIcon="pi pi-plus"
-							decrementButtonIcon="pi pi-minus"/>
-					</InputWrapper>
-					<UnInput name='localidade' label='Localidade' required/>
-					<InputWrapper columns={2} gap='10px'>
-						<UnInput name='registro' label='# da Matrícula' required/>
-						<UnInput name='grupo' label='Técnico Responsável' required/>
-					</InputWrapper>
-					<Button type='submit' label='Salvar'/>
-				</UnForm>
-			</Dialog>
+			</form>
 
+			{/* Modal de cadastro da propriedade */}
+			<Modal
+				hideModal={hideModal}
+				errors={modalForm.errors}
+				visible={modalVisibility}
+				control={modalForm.control}
+				formData={propriedadeEmEdicao}
+				headerName='Dados da Propriedade'
+				onSubmit={modalForm.handleSubmit(addProperty)}
+			/>
 		</ManagementTemplate>
 	)
 }

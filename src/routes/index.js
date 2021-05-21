@@ -1,72 +1,77 @@
 import React from 'react'
-import { Switch, Route, BrowserRouter, Redirect } from 'react-router-dom'
+import { Switch, Route, BrowserRouter } from 'react-router-dom'
 
 import {
-	AgendarVisita,
-	AlterarSenha,
-	BuscaCooperado,
-	BuscaTecnico,
-	BuscaAdministrador,
-	CadastroCooperado,
-	CadastroTecn,
-	DadosVisita,
-	DetalhesVisita,
-	Login,
-	MotivoVisita,
-	PageNotFound,
-	PainelExibicao,
-	PerfilAdmin,
-	RecuperarSenha,
-	HistoricoVisitas,
-	PerfilCooperado,
-	PerfilTecnico,
+	RelatorioLandingPropriedade,
 	RelatorioLandingCooperado,
 	RelatorioLandingTecnico,
-	ListarGrupos,
+	BuscaAdministrador,
+	CadastroCooperado,
+	HistoricoVisitas,
+	PerfilCooperado,
 	VisitasMarcadas,
-	RelatorioLandingPropriedade
+	BuscaCooperado,
+	DetalhesVisita,
+	PainelExibicao,
+	RecuperarSenha,
+	AgendarVisita,
+	PerfilTecnico,
+	AlterarSenha,
+	BuscaTecnico,
+	CadastroTecn,
+	ListarGrupos,
+	MotivoVisita,
+	PageNotFound,
+	DadosVisita,
+	PerfilAdmin,
+	Login
 } from '~/pages'
 
-import Relatorio from '~/pages/Cooperado/Relatorio'
+import Relatorio from '~/pages/Relatorio'
 
 const Routes = function _Routes() {
 	return (
 		<BrowserRouter>
 			<Switch>
 				{/* Genéricas */}
-				<Route path='/' exact><Redirect to='/painel'/></Route>
-				<Route path='/recuperar-senha' component={RecuperarSenha}/>
-				<Route path='/alterar-senha' component={AlterarSenha}/>
-				<Route path='/painel' component={PainelExibicao}/>
+				<Route path='/' component={PainelExibicao} exact/>
 				<Route path='/login' component={Login}/>
+
+				{/* Senha */}
+				<Route path='/senha/recuperar' component={RecuperarSenha}/>
+				<Route path='/senha/alterar' component={AlterarSenha}/>
 
 				{/* Cadastros */}
 				<Route path='/cadastrar/tecnico' component={CadastroTecn}/>
 				<Route path='/cadastrar/cooperado' component={CadastroCooperado}/>
 
-				{/* Administrador */}
-				<Route path='/admin' component={BuscaAdministrador} exact/>
+				{/* Gerencia */}
+				<Route path='/admins' component={BuscaAdministrador} exact/>
 				<Route path='/perfil' component={PerfilAdmin} exact/>
-				<Route path='/admin/grupos' component={ListarGrupos} exact/>
-				<Route path='/admin/motivos' component={MotivoVisita}/>
-				<Route path='/admin/historico' component={HistoricoVisitas} exact/>
-				<Route path='/admin/historico/visita' component={DadosVisita}/>
-				<Route path='/relatorio/propriedade' component={RelatorioLandingPropriedade}/>
+				<Route path='/grupos' component={ListarGrupos} exact/>
+				<Route path='/motivos' component={MotivoVisita}/>
+				<Route path='/historico' component={HistoricoVisitas} exact/>
+				<Route path='/historico/visita' component={DadosVisita}/>
+
+				{/* Relatórios */}
 				<Route path='/relatorio/tecnico' component={RelatorioLandingTecnico}/>
 				<Route path='/relatorio/cooperado' component={RelatorioLandingCooperado}/>
+				<Route path='/relatorio/propriedade' component={RelatorioLandingPropriedade}/>
 
 				{/* Cooperado */}
-				<Route path='/cooperado' component={BuscaCooperado} exact/>
-				<Route path='/cooperado/perfil' component={PerfilCooperado}/>
-				<Route path='/cooperado/relatorio/:data' component={Relatorio}/>
+				<Route path='/cooperados' component={BuscaCooperado} exact/>
+				<Route path='/cooperados/:id' component={PerfilCooperado}/>
+				<Route path='/cooperados/relatorio/:data' component={Relatorio}/>
 
 				{/* Técnico */}
-				<Route path='/tecnico' component={BuscaTecnico} exact/>
-				<Route path='/tecnico/perfil' component={PerfilTecnico}/>
-				<Route path='/tecnico/visitas' component={VisitasMarcadas} exact/>
-				<Route path='/tecnico/visitas/agendar' component={AgendarVisita}/>
-				<Route path='/tecnico/visitas/detalhes' component={DetalhesVisita}/>
-    
+				<Route path='/tecnicos' component={BuscaTecnico} exact/>
+				<Route path='/tecnicos/:id' component={PerfilTecnico}/>
+
+				{/* Visitas */}
+				<Route path='/visitas' component={VisitasMarcadas} exact/>
+				<Route path='/visitas/agendar' component={AgendarVisita}/>
+				<Route path='/visitas/detalhe/:id' component={DetalhesVisita}/>
+
 				{/* Grupo */}
 				<Route path='/listar-grupos' component={ListarGrupos}/>
 

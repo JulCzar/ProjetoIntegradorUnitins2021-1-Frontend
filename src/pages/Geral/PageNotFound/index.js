@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { ContainerWithTemplate } from '~/template'
+import { ContainerWithTemplate } from '~/pages/templates'
 
 const Container = styled('div')`
 	height: 70vh;

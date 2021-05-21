@@ -8,13 +8,13 @@ export const LOGIN_SUCCESS = (state, action) => {
 	}
 }
 
-export const LOGIN_FAILURE = (state, action) => ({
+export const LOGIN_FAILURE = state => ({
 	...state,
 	user: {},
 	token: null
 })
 
-export const LOGOUT = (state, action) => ({
+export const LOGOUT = state => ({
 	...state,
 	user: {},
 	token: null
