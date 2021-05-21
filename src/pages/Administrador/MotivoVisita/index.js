@@ -27,7 +27,7 @@ function MotivoVisita() {
 		try {
 			const { data } = await api.get('/motivos')
 			
-			setMotivos(data.motivos_visita)
+			setMotivos(data)
 		} catch (err) {
 			toast.showWarn('Houve um erro ao obter a lista de motivos')
 		} finally {

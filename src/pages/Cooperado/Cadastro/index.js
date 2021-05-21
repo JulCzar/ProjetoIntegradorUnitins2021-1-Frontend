@@ -17,7 +17,7 @@ const Cadastro = () => {
 
 	const [modalVisibility, setModalVisibility] = React.useState(false)
 	const [propriedadeEmEdicao] = React.useState(null)
-	const [properties, setProperties] = React.useState([])
+	const [propriedades, setProperties] = React.useState([])
 	
 	const toastRef = React.useRef(null)
 	const toast = getToastInstance(toastRef)
@@ -26,13 +26,13 @@ const Cadastro = () => {
 	const showModal = () => setModalVisibility(true)
 
 	function addProperty(form) {
-		setProperties([...properties, form])
+		setProperties([...propriedades, form])
 		hideModal()
 	}
 
 	function cadastrar(form) {
-		if (!properties.length) return toast.showWarn('É necessário inserir pelo menos uma propriedade')
-		console.log({...form, properties}) // eslint-disable-line
+		if (!propriedades.length) return toast.showWarn('É necessário inserir pelo menos uma propriedade')
+		console.log({...form, propriedades}) // eslint-disable-line
 		reset()
 	}
 
@@ -128,10 +128,10 @@ const Cadastro = () => {
 					/>
 				</InputWrapper>
 				<h2>Propriedades</h2>
-				{properties.length
+				{propriedades.length
 					?<ListBox
 						className='p-mb-5'
-						options={properties}
+						options={propriedades}
 						optionLabel='nome'/>
 					:<h3>É Necessário adicionar pelo menos uma propriedade</h3>
 				}

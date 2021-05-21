@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Controller } from 'react-hook-form'
 
-import { Button, Dialog, InputText } from '~/primereact'
+import { Dialog, InputText } from '~/primereact'
 import { InputContainer } from '~/common/components'
 import { getInvalidClass } from '~/utils'
 import Checklist from './Checklist'
@@ -16,7 +16,8 @@ function GroupDialog({
 	control,
 	options,
 	onHide,
-	errors
+	errors,
+	buttons
 }) {
 	return (
 		<Dialog
@@ -46,7 +47,7 @@ function GroupDialog({
 				<Controller
 					name='permissoes'
 					control={control}
-					defaultValue={formData?formData.options:[]}
+					defaultValue={formData?formData.permissoes:[]}
 					render={({ value, onChange }) => (
 						<Checklist
 							options={options}
@@ -56,7 +57,7 @@ function GroupDialog({
 						/>
 					)}
 				/>
-				<Button label='Cadastrar'/>
+				{buttons}
 			</form>
 		</Dialog>
 	)
@@ -76,8 +77,9 @@ GroupDialog.propTypes = {
 	errors: PropTypes.any,
 	formData: PropTypes.shape({
 		nome: PropTypes.string,
-		options: PropTypes.arrayOf(PropTypes.number)
-	})
+		permissoes: PropTypes.arrayOf(PropTypes.number)
+	}),
+	buttons: PropTypes.element
 }
 
 export default GroupDialog

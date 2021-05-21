@@ -1,7 +1,7 @@
 import React from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
-import { Button, Column, DataTable, InputMask, InputText} from '~/primereact'
+import { Button, Column, DataTable, Divider, InputMask, InputText} from '~/primereact'
 import { CardHeader, InputContainer, } from '~/common/components'
 import { ManagementTemplate } from '~/template'
 import { InputWrapper } from '~/common/styles'
@@ -145,7 +145,8 @@ function Perfil() {
 					{editing && <Button label='Salvar'/>}
 				</InputWrapper>
 			</form>
-		
+			
+			<Divider className='p-mt-5'/>
 			{/* Lista de Propriedades */}
 			<CardHeader title='Propriedades'/>
 			<DataTable emptyMessage='Nenhum item encontrado' value={data} className="p-datatable-striped">
