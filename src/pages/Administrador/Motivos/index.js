@@ -37,6 +37,7 @@ function MotivoVisita() {
 
 	const cadastrarMotivo = async form => {
 		setLoading(true)
+		console.log(form)
 		try {
 			await api.post('/motivos', form)
 

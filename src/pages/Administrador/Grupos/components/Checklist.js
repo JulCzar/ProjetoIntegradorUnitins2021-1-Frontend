@@ -12,6 +12,13 @@ function Checklist({ options, value, label, onChange = () => {} }) {
 			onChange([...value, target.value])
 	}
 
+	const toggleCheckLabel = v => {
+		if(value.includes(v))
+			onChange(value.filter(elem => (elem !== v)))
+		else
+			onChange([...value, v])
+	}
+
 	return (
 		<div className='p-field'>
 			<CardHeader title={label} />
@@ -22,7 +29,7 @@ function Checklist({ options, value, label, onChange = () => {} }) {
 							checked={value.includes(o.value)}
 							value={o.value}
 							onChange={toggleCheck}/>
-						<label className='p-ml-1'>{o.label}</label>
+						<label onClick={() => toggleCheckLabel(o.value)} className='p-ml-1'>{o.label}</label>
 					</div>
 				))}
 			</ListOfOptions>
