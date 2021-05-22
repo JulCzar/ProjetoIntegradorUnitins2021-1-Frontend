@@ -5,19 +5,23 @@ import { Button, InputMask, InputText, ListBox, Toast} from '~/primereact'
 import { InputContainer } from '~/common/components'
 import { ManagementTemplate } from '~/pages/templates'
 import { InputWrapper } from '~/common/styles'
-import { getToastInstance } from '~/services'
+import { api, getToastInstance } from '~/services'
 
 import * as validation from '~/config/validations'
-import { getInvalidClass } from '~/utils'
+import { getInvalidClass, getPhoneObject } from '~/utils'
 import Modal from './components/Modal'
+import { useHistory } from 'react-router'
 
 const Cadastro = () => {
 	const { control, errors, handleSubmit, reset} = useForm()
 	const modalForm = useForm()
 
 	const [modalVisibility, setModalVisibility] = React.useState(false)
-	const [propriedadeEmEdicao] = React.useState(null)
 	const [propriedades, setProperties] = React.useState([])
+	const [tecnicos, setTecnicos] = React.useState([])
+	const [loading, setLoading] = React.useState(false)
+	const [propriedadeEmEdicao] = React.useState(null)
+	const history = useHistory()
 	
 	const toastRef = React.useRef(null)
 	const toast = getToastInstance(toastRef)
@@ -25,19 +29,57 @@ const Cadastro = () => {
 	const hideModal = () => setModalVisibility(false)
 	const showModal = () => setModalVisibility(true)
 
+	React.useEffect(() => {
+		carregarTecnicos()
+	},[])
+	async function carregarTecnicos() {
+		setLoading(true)
+		try {
+			const { data } = await api.get('/tecnico/index')
+			
+			setTecnicos(data)
+		} catch ({ response }) {
+			const apiResponse = response?.data?.errors 
+			toast.showErrors(apiResponse?apiResponse:['Houve um erro ao processar a requisição'])
+		} finally {
+			setLoading(false)	
+		}
+	}
 	function addProperty(form) {
 		setProperties([...propriedades, form])
 		hideModal()
 	}
 
-	function cadastrar(form) {
+	async function cadastrar(form) {
 		if (!propriedades.length) return toast.showWarn('É necessário inserir pelo menos uma propriedade')
-		console.log({...form, propriedades}) // eslint-disable-line
-		reset()
+		setLoading(true)
+
+		for (const p of propriedades) p.id_tecnico = p.id_tecnico.id
+
+		const {phone, ...data } = form
+		const telefone = getPhoneObject(phone)
+		if (!telefone) {
+			setLoading(false)
+			return toast.showError('O número de telefone providenciado é inválido')
+		}
+		try {
+			console.log({...data, telefone, propriedades})
+			await api.post('/cooperado/store', {...data, telefone, propriedades})
+			toast.showSuccess('Cadastro realizado com sucesso')
+			toast.showInfo('Você será redirecionado em 2 segundos')
+			reset()
+			setProperties([])
+			setTimeout(history.goBack, 2000)
+		} catch ({ response }) {
+			const apiResponse = response?.data?.errors
+			toast.showErrors(apiResponse?apiResponse:['Houve um erro ao processar a requisição'])
+		} finally {
+			setLoading(false)	
+		}
 	}
 
 	return (
-		<ManagementTemplate title='Cadastro de Cooperado'>
+		<ManagementTemplate title='Cadastro de Cooperado' loading={loading}>
 			<Toast ref={toastRef}/>
 
 			<form onSubmit={handleSubmit(cadastrar)}>
@@ -143,6 +185,7 @@ const Cadastro = () => {
 
 			{/* Modal de cadastro da propriedade */}
 			<Modal
+				tecnicos={tecnicos}
 				hideModal={hideModal}
 				errors={modalForm.errors}
 				visible={modalVisibility}

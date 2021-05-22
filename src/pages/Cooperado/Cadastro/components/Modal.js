@@ -4,10 +4,23 @@ import PropTypes from 'prop-types'
 import { Controller } from 'react-hook-form'
 import { InputWrapper } from '~/common/styles'
 import { InputContainer } from '~/common/components'
-import { Button, Dialog, InputNumber, InputText } from '~/primereact'
+import { AutoComplete, Button, Dialog, InputNumber, InputText } from '~/primereact'
 import * as validation from '~/config/validations'
+import { getStringNormalized } from '~/utils'
 
-function Modal({ headerName, hideModal, visible, onSubmit, formData, control, errors }) {
+function Modal({ headerName, hideModal, visible, onSubmit, formData, control, errors, tecnicos }) {
+	const [suggestions, setSuggestions] = React.useState([])
+	function complete(evt) {
+		const queryNormalized = getStringNormalized(evt.query.toLowerCase())	
+		const filteredTecnicos = tecnicos.filter(t => {
+			const normalizedTecnico = getStringNormalized(t.nome_tecnico.toLowerCase())
+			if (normalizedTecnico.includes(queryNormalized)) 
+				return true
+
+			return false
+		})
+		setSuggestions(filteredTecnicos)
+	}
 	return (
 		<Dialog draggable={false} className='p-fluid' header={<h3>{headerName}</h3>}
 			breakpoints={{'960px': '75vw', '640px': '100vw'}}
@@ -30,15 +43,17 @@ function Modal({ headerName, hideModal, visible, onSubmit, formData, control, er
 						</InputContainer>
 					)}/>
 					<Controller
-						name='area'
+						name='tamanho_area'
 						control={control}
 						rules={validation.propertyAreaValidation}
 						defaultValue={formData?formData.area:null}
 						render={({ name, value, onChange }) => (
 						<InputContainer name={name} error={errors[name]} label='Tamanho'>
 							<InputNumber
+								min={0.01}
 								name={name}
 								showButtons
+								steps={0.01}
 								value={value}
 								suffix=' hectares'
 								buttonLayout='horizontal'
@@ -66,7 +81,7 @@ function Modal({ headerName, hideModal, visible, onSubmit, formData, control, er
 				/>
 				<InputWrapper columns={2} gap='10px'>
 					<Controller
-						name='registro'
+						name='matricula'
 						control={control}
 						rules={validation.propertyIdValidation}
 						defaultValue={formData?formData.registro:''}
@@ -81,16 +96,23 @@ function Modal({ headerName, hideModal, visible, onSubmit, formData, control, er
 						)}
 					/>
 					<Controller
-						name='tecnico'
+						name='id_tecnico'
 						control={control}
 						rules={validation.selectTecnicoValidation}
 						defaultValue={formData?formData.tecnico:''}
 						render={({ name, value, onChange }) => (
 						<InputContainer name={name} error={errors[name]} label='Técnico Responsável'>
-							<InputText
+							<AutoComplete
 								name={name}
 								value={value}
-								onChange={evt => onChange(evt.target.value)}
+								forceSelection
+								field='nome_tecnico'
+								suggestions={suggestions}
+								completeMethod={complete}
+								onChange={evt => {
+									onChange(evt.value)
+									console.log(evt)
+								}}
 							/>
 						</InputContainer>
 					)}/>
@@ -104,6 +126,7 @@ function Modal({ headerName, hideModal, visible, onSubmit, formData, control, er
 Modal.propTypes = {
 	headerName: PropTypes.string,
 	hideModal: PropTypes.func,
+	tecnicos: PropTypes.array,
 	onSubmit: PropTypes.func,
 	visible: PropTypes.bool,
 	control: PropTypes.any,

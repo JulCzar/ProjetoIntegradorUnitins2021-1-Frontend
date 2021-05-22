@@ -38,7 +38,7 @@ const Cadastro = () => {
 			toast.showSuccess('Cadastro Realizado com Sucesso!')
 			toast.showInfo('Você sera redirecionado para a tela de listagem em 2 segundo')
 
-			setTimeout(history.push, 2000, '/tecnico')
+			setTimeout(history.goBack, 2000)
 
 			reset()
 		}catch ({ response }) {
