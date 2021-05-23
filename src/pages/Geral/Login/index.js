@@ -1,29 +1,42 @@
 import React from 'react'
 import PropType from 'prop-types'
 import { connect } from 'react-redux'
-import { Link } from 'react-router-dom'
 import { bindActionCreators } from 'redux'
+import { Link, useHistory } from 'react-router-dom'
 import { Controller, useForm } from 'react-hook-form'
 
 import { CardHeader, InputContainer, passwordFooter, passwordHeader } from '~/common/components'
-import { Button, InputText, Password } from '~/primereact'
+import { emailValidation } from '~/config/validations'
+import { Button, InputText, Password, Toast } from '~/primereact'
 import { ContainerWithCard } from '~/pages/templates'
 import * as action from '~/store/actions/auth'
 import { getInvalidClass } from '~/utils'
-import { emailValidation, passwordValidation } from '~/config/validations'
+import { getToastInstance } from '~/services'
 
-const Login = ({ login }) => {
+const Login = ({ login, token }) => {
 	const { control, errors, handleSubmit, reset } = useForm()
+	const [loading, setLoading] = React.useState(false)
+	const history = useHistory()
+
+	const toastRef = React.useRef(null)
+	const toast = getToastInstance(toastRef) // eslint-disable-line
+
+	React.useEffect(() => {
+		if (!token) return
+
+		history.push('/')
+	}, [token])
 
 	async function logar(form) {
-		console.log(form) // eslint-disable-line
+		setLoading(true)
 		await login(form)
 
 		reset()
 	}
 
 	return (
-		<ContainerWithCard cardClassName='p-fluid' cardWidth='380px'>
+		<ContainerWithCard loading={loading} cardClassName='p-fluid' cardWidth='380px'>
+			<Toast ref={toastRef}/>
 			<CardHeader title='Login'/>
 			<form onSubmit={handleSubmit(logar)}>
 				<Controller
@@ -43,10 +56,10 @@ const Login = ({ login }) => {
 					)}
 				/>
 				<Controller
-					name='senha'
+					name='password'
 					defaultValue=''
 					control={control}
-					rules={passwordValidation}
+					// rules={passwordValidation}
 					render={({ name, value, onChange }) => (
 						<InputContainer name={name} label='Senha' error={errors[name]}>
 							<Password
@@ -70,7 +83,11 @@ const Login = ({ login }) => {
 }
 
 Login.propTypes = {
-	login: PropType.func
+	login: PropType.func,
+	token: PropType.oneOfType([
+		PropType.bool,
+		PropType.string
+	])
 }
 
 export default connect(

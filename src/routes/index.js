@@ -1,82 +1,53 @@
-import React from 'react'
 import { Switch, Route, BrowserRouter } from 'react-router-dom'
-
-import {
-	RelatorioLandingPropriedade,
-	RelatorioLandingCooperado,
-	RelatorioLandingTecnico,
-	BuscaAdministrador,
-	CadastroCooperado,
-	HistoricoVisitas,
-	PerfilCooperado,
-	VisitasMarcadas,
-	BuscaCooperado,
-	DetalhesVisita,
-	PainelExibicao,
-	RecuperarSenha,
-	AgendarVisita,
-	PerfilTecnico,
-	AlterarSenha,
-	BuscaTecnico,
-	CadastroTecn,
-	ListarGrupos,
-	MotivoVisita,
-	PageNotFound,
-	DadosVisita,
-	PerfilAdmin,
-	Login
-} from '~/pages'
-
-import Relatorio from '~/pages/Relatorio'
+import * as ROUTES from '~/pages'
+import React from 'react'
 
 const Routes = function _Routes() {
 	return (
 		<BrowserRouter>
 			<Switch>
 				{/* Genéricas */}
-				<Route path='/' component={PainelExibicao} exact/>
-				<Route path='/login' component={Login}/>
+				<Route path='/' component={ROUTES.PainelExibicao} exact/>
+				<Route path='/logout' component={ROUTES.Logout}/>
+				<Route path='/login' component={ROUTES.Login}/>
 
 				{/* Senha */}
-				<Route path='/senha/recuperar' component={RecuperarSenha}/>
-				<Route path='/senha/alterar' component={AlterarSenha}/>
+				<Route path='/senha/recuperar' component={ROUTES.RecuperarSenha}/>
+				<Route path='/senha/alterar' component={ROUTES.AlterarSenha}/>
 
 				{/* Cadastros */}
-				<Route path='/cadastrar/tecnico' component={CadastroTecn}/>
-				<Route path='/cadastrar/cooperado' component={CadastroCooperado}/>
+				<Route path='/cadastrar/tecnico' component={ROUTES.CadastroTecn}/>
+				<Route path='/cadastrar/cooperado' component={ROUTES.CadastroCooperado}/>
 
 				{/* Gerencia */}
-				<Route path='/admins' component={BuscaAdministrador} exact/>
-				<Route path='/perfil' component={PerfilAdmin} exact/>
-				<Route path='/grupos' component={ListarGrupos} exact/>
-				<Route path='/motivos' component={MotivoVisita}/>
-				<Route path='/historico' component={HistoricoVisitas} exact/>
-				<Route path='/historico/visita' component={DadosVisita}/>
+				<Route path='/admins' component={ROUTES.BuscaAdministrador} exact/>
+				<Route path='/perfil' component={ROUTES.PerfilAdmin} exact/>
+				<Route path='/grupos' component={ROUTES.ListarGrupos} exact/>
+				<Route path='/motivos' component={ROUTES.MotivoVisita}/>
+				<Route path='/historico' component={ROUTES.HistoricoVisitas} exact/>
+				<Route path='/historico/visita' component={ROUTES.DadosVisita}/>
 
 				{/* Relatórios */}
-				<Route path='/relatorio/tecnico' component={RelatorioLandingTecnico}/>
-				<Route path='/relatorio/cooperado' component={RelatorioLandingCooperado}/>
-				<Route path='/relatorio/propriedade' component={RelatorioLandingPropriedade}/>
+				<Route path='/relatorio/tecnico' component={ROUTES.RelatorioLandingTecnico}/>
+				<Route path='/relatorio/cooperado' component={ROUTES.RelatorioLandingCooperado}/>
+				<Route path='/relatorio/propriedade' component={ROUTES.RelatorioLandingPropriedade}/>
 
 				{/* Cooperado */}
-				<Route path='/cooperados' component={BuscaCooperado} exact/>
-				<Route path='/cooperados/:id' component={PerfilCooperado}/>
-				<Route path='/cooperados/relatorio/:data' component={Relatorio}/>
+				<Route path='/cooperados/relatorio/:data' component={ROUTES.RelatorioCooperado}/>
+				<Route path='/cooperados' component={ROUTES.BuscaCooperado} exact/>
+				<Route path='/cooperados/:id' component={ROUTES.PerfilCooperado}/>
 
 				{/* Técnico */}
-				<Route path='/tecnicos' component={BuscaTecnico} exact/>
-				<Route path='/tecnicos/:id' component={PerfilTecnico}/>
+				<Route path='/tecnicos' component={ROUTES.BuscaTecnico} exact/>
+				<Route path='/tecnicos/:id' component={ROUTES.PerfilTecnico}/>
 
 				{/* Visitas */}
-				<Route path='/visitas' component={VisitasMarcadas} exact/>
-				<Route path='/visitas/agendar' component={AgendarVisita}/>
-				<Route path='/visitas/detalhe/:id' component={DetalhesVisita}/>
-
-				{/* Grupo */}
-				<Route path='/listar-grupos' component={ListarGrupos}/>
+				<Route path='/visitas' component={ROUTES.VisitasMarcadas} exact/>
+				<Route path='/visitas/agendar' component={ROUTES.AgendarVisita}/>
+				<Route path='/visitas/detalhe/:id' component={ROUTES.DetalhesVisita}/>
 
 				{/* Page Not Found, Precisa ser a ultima rota! */}
-				<Route path='*' component={PageNotFound}/>
+				<Route path='*' component={ROUTES.PageNotFound}/>
 			</Switch>
 		</BrowserRouter>
 	)

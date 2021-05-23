@@ -11,13 +11,13 @@ import { useHistory } from 'react-router'
 import { Block} from '~/common/styles'
 
 function ManagementTemplate({
-	children,
-	contentClassName = '',
-	contentStyle = {},
 	contentContainerClassName ='',
 	contentContainerStyle = {},
-	title,
-	loading
+	contentClassName = '',
+	contentStyle = {},
+	children,
+	loading,
+	title
 }) {
 	const history = useHistory()
 	

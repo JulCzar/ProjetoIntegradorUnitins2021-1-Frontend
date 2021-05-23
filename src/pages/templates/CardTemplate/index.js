@@ -2,6 +2,7 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 import { Card, Container, Content } from '~/common/styles'
+import Loading from '../components/Loading'
 
 function CardTemplate({
 	children,
@@ -9,10 +10,12 @@ function CardTemplate({
 	contentStyle = {},
 	cardClassName ='',
 	cardStyle = {},
-	cardWidth
+	cardWidth,
+	loading
 }) {
 	return (
 		<Container className='p-d-flex'>
+		{loading && <Loading/>}
 			<Content className={`p-d-flex p-jc-center p-ai-center ${contentClassName}`} style={contentStyle}>
 				<Card className={cardClassName} width={cardWidth} style={cardStyle}>
 					{children}
@@ -28,6 +31,7 @@ CardTemplate.propTypes = {
 	cardClassName: PropTypes.string,
 	contentStyle: PropTypes.any,
 	cardStyle: PropTypes.any,
+	loading: PropTypes.bool,
 	cardWidth: PropTypes.string
 }
 

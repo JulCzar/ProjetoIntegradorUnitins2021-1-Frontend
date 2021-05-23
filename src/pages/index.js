@@ -10,12 +10,12 @@ export { default as PerfilAdmin } from './Gerencia/Perfil'
 export { default as RelatorioLandingPropriedade } from './Gerencia/Relatorios/Propriedade'
 export { default as RelatorioLandingCooperado} from './Gerencia/Relatorios/Cooperado'
 export { default as RelatorioLandingTecnico } from './Gerencia/Relatorios/Tecnico'
+export { default as RelatorioCooperado } from './Gerencia/Relatorio/Cooperado'
 
 // Cooperado
 export { default as CadastroCooperado} from './Cooperado/Cadastro'
 export { default as PerfilCooperado } from './Cooperado/Perfil'
 export { default as BuscaCooperado } from './Cooperado/Lista'
-export { default as Login } from './Geral/Login'
 
 // Visitas
 export { default as VisitasMarcadas } from './Visitas/Marcadas'
@@ -32,3 +32,5 @@ export { default as RecuperarSenha } from './Geral/RecuperarSenha'
 export { default as AlterarSenha } from './Geral/AlterarSenha'
 export { default as PageNotFound } from './Geral/PageNotFound'
 export { default as PainelExibicao } from './Geral/Painel'
+export { default as Logout } from './Geral/Logout'
+export { default as Login } from './Geral/Login'

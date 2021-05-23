@@ -1,27 +1,16 @@
-import { put, takeLeading } from 'redux-saga/effects'
+import { call, put, takeLeading } from 'redux-saga/effects'
 import { push } from 'connected-react-router'
 import * as actions from '~/store/actions/auth'
 import api from '~/services/api'
 
 const login = function* _login(action) {
-	const { data } = action.payload
+	const { data: form } = action.payload
 	
+	const { data } = yield call(api.post, '/auth/login', form)
+
 	yield put(actions.loginSuccess(data))
 
 	yield put(push('/tecnico'))
-}
-
-const storeTecnico = function* () {
-	const { data } = action.payload
-
-	try {
-		const { data: response } = yield put(api.post, '/tecnico/store', data)
-
-		return response
-	}
-	catch (err) {
-		console.warn(err) // eslint-disable-line
-	}
 }
 
 const logout = function* _logout() {
@@ -32,7 +21,6 @@ const logout = function* _logout() {
 
 const AUTH_SAGA = [
 	takeLeading('LOGIN', login),
-	takeLeading('CADASTRAR_TECNICO', storeTecnico),
 	takeLeading('LOGOUT', logout)
 ]
 

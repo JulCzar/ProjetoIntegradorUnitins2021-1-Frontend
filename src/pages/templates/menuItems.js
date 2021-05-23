@@ -1,40 +1,30 @@
-import { store } from '~/store'
-
-function MenuItem(label, destination) {
-	this.label = label
-	this.destination = destination
-	this.value = this
-}
-
-/**
- * 
- * @param {*} param0 
- * @returns {MenuItem}
- */
-const parseMenuItem = ({label, destination, ...rest}) => ({
-	...(new MenuItem(label, destination)),
-	...rest
-})
-
 /**
  * @returns {{label: string, destination: string, icon?: string}[]}
  */
-function getMenuItems() {
-	const { auth } = store.getState()
-	
+	export function getMenuItems({ permissions = [], token } = {}) {
 	const allItems = [
 		{label: 'Home', destination:'/'},
 		{label: 'Visitas', destination: '/visitas'},
-		{label: 'Gestão', destination:'/perfil'},
-		{label: 'login', destination:'/login', icon:'pi pi-fw pi-sign-in'},
-		{label: auth.user.name, destination: '/perfil'}
+		{label: 'Gestão', destination:'/perfil', access_level: [1,2,3,4,5,6,7]},
+		{label: 'login', destination:'/login', icon:'pi pi-fw pi-sign-in', showIf: !token},
+		{label: 'Sair', destination: '/logout', icon: 'pi pi-fw pi-sign-out', showIf: token}
 	]
 
 	// const checkPermissions = () => {}
-	
-	return allItems.filter(i => i.label)
+	const showItem = i => {
+		if (i.showIf !== undefined) {
+			return (typeof i.showIf === 'function')?i.showIf():i.showIf
+		}
+		if (!i.access_level) return true
+
+		if (Array.isArray(i.access_level)) {
+			for (const al of i.access_level) 
+				if (permissions.includes(al)) return true
+			
+			return false
+		}
+
+		return permissions.includes(i.access_level)
+	}
+	return allItems.filter(showItem)
 }
-
-const items = getMenuItems()
-
-export const menuItems = items.map(parseMenuItem)

@@ -11,14 +11,31 @@ import { ManagementTemplate } from '~/pages/templates'
 import * as validation from '~/config/validations'
 
 const Cadastro = () => {
-	const history = useHistory()
-	const toastRef = React.useRef(null)
-	const [loading, setLoading] = React.useState(false)
-	const [groupOptions] = React.useState([{label: 'Cooperado', value: 1}])
-	
 	const { control, errors, handleSubmit, reset } = useForm()
-
+	const [groupOptions, setGroupOptions] = React.useState([])
+	const [loading, setLoading] = React.useState(false)
+	const history = useHistory()
+	
+	const toastRef = React.useRef(null)
 	const toast = getToastInstance(toastRef)
+
+	React.useEffect(() => {
+		loadGroups()
+	}, [])
+	
+	async function loadGroups() {
+		try {
+			setLoading(true)
+			const { data } = await api.get('/grupos')
+
+			setGroupOptions(data)
+		} catch ({ response }) {
+			const apiResponse = response?.data?.errors
+			toast.showErrors(apiResponse || ['Houve um problema ao carregar a lista de grupos'])
+		} finally {
+			setLoading(false)
+		}
+	}
 
 	async function cadastrar(form) {
 		setLoading(true)
@@ -154,6 +171,8 @@ const Cadastro = () => {
 							<Dropdown
 								name={name}
 								value={value}
+								optionValue='id'
+								optionLabel='nome'
 								options={groupOptions}
 								className={getInvalidClass(errors[name])}
 								onChange={evt => onChange(evt.target.value)}/>
