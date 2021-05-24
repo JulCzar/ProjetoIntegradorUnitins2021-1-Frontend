@@ -5,7 +5,7 @@ import { Button, InputText } from '~/primereact'
 import styled from 'styled-components'
 import { Controller, useForm } from 'react-hook-form'
 import { getInvalidClass } from '~/utils'
-import { emailValidation } from '~/config/validations'
+import * as validate from '~/config/validations'
 
 const Alert = styled('div')`
 	font-size: .75rem;
@@ -32,7 +32,7 @@ function RecuperarSenha() {
 							name='email'
 							defaultValue=''
 							control={control}
-							rules={emailValidation}
+							rules={validate.email}
 							render={({ name, value, onChange}) => (
 								<InputContainer name={name} label='E-mail cadastrado' error={errors[name]}>
 									<InputText

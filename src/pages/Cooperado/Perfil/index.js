@@ -5,16 +5,17 @@ import React from 'react'
 import { Button, Column, DataTable, Divider, InputMask, InputText, Toast} from '~/primereact'
 import { CardHeader, InputContainer, } from '~/common/components'
 import { ManagementTemplate } from '~/pages/templates'
-import * as validation from '~/config/validations'
+import * as validate from '~/config/validations'
 import { InputWrapper } from '~/common/styles'
-import { getInvalidClass, getPhoneObject } from '~/utils'
+import { getApiResponseErrors, getInvalidClass, getPhoneObject } from '~/utils'
 import Modal from './components/Modal'
 import { api, getToastInstance } from '~/services'
 
 function Perfil() {
 	const { control, errors, handleSubmit, setValue, reset } = useForm()
-	const editPropriedadeModal = useForm()
-	const novaPropriedadeModal = useForm()
+	const editPropriedadeForm = useForm()
+	const novaPropriedadeForm = useForm()
+	
 	const toastRef = React.useRef(null)
 	const toast = getToastInstance(toastRef)
 
@@ -22,7 +23,8 @@ function Perfil() {
 	const history = useHistory()
   const [loading, setLoading] = React.useState(false)
   const [editing, setEditing] = React.useState(false)
-  const [, setTecnicos] = React.useState([])
+  const [tecnicos, setTecnicos] = React.useState([])
+  const [propriedades, setPropriedades] = React.useState([])
   const [dadosCooperado, setDadosCooperado] = React.useState(null)
   const [editingProperty, setEditingProperty] = React.useState(false)
   const [modalVisibility, setModalVisibility] = React.useState(false)
@@ -32,18 +34,8 @@ function Perfil() {
 	React.useEffect(() => {
 		carregarDados()
 		carregarTecnicos()
+		carregarPropriedades()
 	}, [])
-
-	async function carregarTecnicos() {
-		try {
-			const { data } = await api.get('/tecnico/index')
-			
-			setTecnicos(data)
-		} catch ({ response }) {
-			const apiResponse = response?.data?.errors 
-			toast.showErrors(apiResponse?apiResponse:['Houve um erro ao processar a requisição'])
-		} 
-	}
 
 	async function carregarDados() {
 		try {
@@ -63,6 +55,37 @@ function Perfil() {
 		}
 	}
 
+	async function carregarPropriedades() {
+		try {
+			setLoading(true)
+			
+			const { data } = await api.get(`/propriedades/${id}`)
+
+			setPropriedades(data)
+
+			reset()
+
+			Object.entries(data).forEach(([key, value]) => setValue(key, value))
+		} catch (error) {
+			history.push('/error')
+		} finally {
+			setLoading(false)
+		}
+	}
+
+	async function carregarTecnicos() {
+		setLoading(true)
+		try {
+			const { data } = await api.get('/tecnico/index')
+			
+			setTecnicos(data)
+		} catch ({ response }) {
+			toast.showErrors(getApiResponseErrors(response))
+		} finally {
+			setLoading(false)	
+		}
+	}
+
 	async function editarPerfil(form) {
 		const {phone, ...data } = form
 		const telefone = getPhoneObject(phone)
@@ -75,38 +98,86 @@ function Perfil() {
 
 			toast.showSuccess('Dados Alterados')
 		} catch ({ response }) {
-			const apiResponse = response?.data?.errors
-			toast.showErrors(apiResponse||['Não foi possível processar a requisição'])
+			toast.showErrors(getApiResponseErrors(response))
 		} finally {
 			setLoading(false)
 			setEditing(false)
 		}
 	}
 
-	const editarPropriedade = form => {
-		console.log(form) // eslint-disable-line
-		setLoading(true)
+	async function editarPropriedade(form) {
+		const data = {
+			...form,
+			id_tecnico: form.tecnico.id,
+			id_cooperado: id
+		}
+		try {
+			setLoading(true)
+			
+			await api.put(`/propriedade/${dadosPropriedade.id}`, data)
 
-		setTimeout(setLoading, 500, false)
-		setTimeout(setEditingProperty, 500, false)
+			toast.showSuccess('Dados Salvos')
+
+			setEditingModalVisibility(false)
+
+			carregarPropriedades()
+		} catch ({ response }) {
+			toast.showErrors(getApiResponseErrors(response))
+		} finally {
+			setLoading(false)
+			setEditingProperty(false)
+		}
 	}
 
-	const cadastrarPropriedade = form => {
-		console.log(form) // eslint-disable-line
-		setLoading(true)
+	async function cadastrarPropriedade(form) {
+		const data = {
+			...form,
+			id_tecnico: form.tecnico.id,
+			id_cooperado: id
+		}
+		try {
+			setLoading(true)
 
-		setTimeout(setLoading, 500, false)
-		setTimeout(setEditingProperty, 500, false)
+			await api.post('/propriedade/store', data)
+
+			toast.showSuccess('Dados Salvos')
+
+			setModalVisibility(false)
+
+			carregarPropriedades()
+		} catch ({ response }) {
+			toast.showErrors(getApiResponseErrors(response))
+		} finally {
+			setLoading(false)
+		}
 	}
 
 	const handleEdit = rowData => {
 		setEditingModalVisibility(true)
-		setDadosPropriedade(rowData)
+		
+		const propriedade = {
+			...rowData,
+			tecnico: tecnicos
+				.filter(i => rowData.id_tecnico == i.id)
+				.pop()
+		}
+		
+		setDadosPropriedade(propriedade)
+
 	}
 
 	const cancelEdit = () => {
+		editPropriedadeForm.reset()
+		setEditingProperty(false)
 		setEditing(false)
 		reset()
+	}
+
+	const hideModal = () => {
+		setEditing(false)
+		setEditingProperty(false)
+		setEditingModalVisibility(false)
+		setModalVisibility(false)
 	}
 
 	return (
@@ -118,7 +189,7 @@ function Perfil() {
 					<Controller
 						name='nome'
 						control={control}
-						rules={validation.nameValidation}
+						rules={validate.name}
 						defaultValue={dadosCooperado?dadosCooperado.nome:''}
 						render={({ name, value, onChange }) => (
 							<InputContainer name={name} error={errors[name]} label='Nome'>
@@ -135,7 +206,7 @@ function Perfil() {
 					<Controller
 						name='sobrenome'
 						control={control}
-						rules={validation.lastnameValidation}
+						rules={validate.lastname}
 						defaultValue={dadosCooperado?dadosCooperado.sobrenome:''}
 						render={({ name, value, onChange }) => (
 							<InputContainer name={name} error={errors[name]} label='Sobrenome'>
@@ -153,7 +224,7 @@ function Perfil() {
 				<Controller
 					name='email'
 					control={control}
-					rules={validation.emailValidation}
+					rules={validate.email}
 					defaultValue={dadosCooperado?dadosCooperado.email:''}
 					render={({ name, value, onChange }) => (
 						<InputContainer name={name} error={errors[name]} label='Email'>
@@ -171,7 +242,7 @@ function Perfil() {
 					<Controller
 						name='phone'
 						control={control}
-						rules={validation.phoneValidation}
+						rules={validate.phone}
 						defaultValue={dadosCooperado?dadosCooperado.phone:''}
 						render={({ name, value, onChange }) => (
 							<InputContainer name={name} error={errors[name]} label='Telefone'>
@@ -189,7 +260,7 @@ function Perfil() {
 					<Controller
 						name='cpf'
 						control={control}
-						rules={validation.cpfValidation}
+						rules={validate.cpf}
 						defaultValue={dadosCooperado?dadosCooperado.cpf:''}
 						render={({ name, value, onChange }) => (
 							<InputContainer name={name} error={errors[name]} label='CPF'>
@@ -216,7 +287,7 @@ function Perfil() {
 			<Divider className='p-mt-5'/>
 			{/* Lista de Propriedades */}
 			<CardHeader title='Propriedades'/>
-			<DataTable emptyMessage='Nenhum item encontrado' value={dadosCooperado?.propriedades || []} className="p-datatable-striped">
+			<DataTable emptyMessage='Nenhum item encontrado' value={propriedades} className="p-datatable-striped">
 				<Column field="nome" header="Nome"/>
 				<Column field="localidade" header="Localidade"/>
 				<Column
@@ -230,19 +301,21 @@ function Perfil() {
 			
 			{/* Modal de Edição da Propriedade */}
 			<Modal
-				onSubmit={editPropriedadeModal.handleSubmit(editarPropriedade)}
-				hideModal={() => setEditingModalVisibility(false)}
-				control={editPropriedadeModal.control}
-				errors={editPropriedadeModal.errors}
+				onSubmit={editPropriedadeForm.handleSubmit(editarPropriedade)}
+				control={editPropriedadeForm.control}
+				errors={editPropriedadeForm.errors}
 				headerName='Dados da Propriedade'
 				visible={editingModalVisibility}
 				formData={dadosPropriedade}
 				editable={editingProperty}
+				hideModal={hideModal}
+				tecnicos={tecnicos}
 				buttons={
 					<InputWrapper columns={2} gap='10px'>
+						{!editingProperty && <Button type='button' label='Transferir Propriedade'/>}
 						{!editingProperty && <Button onClick={() => setEditingProperty(true)} label='Editar'/>}
+						{editingProperty && <Button type='button' onClick={cancelEdit} label='Cancelar'/>}
 						{editingProperty && <Button label='Salvar'/>}
-						<Button type='button' label='Transferir Propriedade'/>
 						
 					</InputWrapper>
 				}
@@ -250,13 +323,14 @@ function Perfil() {
 
 			{/* Modal de Cadastro de Propriedade */}
 			<Modal
-				onSubmit={novaPropriedadeModal.handleSubmit(cadastrarPropriedade)}
-				hideModal={() => setModalVisibility(false)}
-				control={novaPropriedadeModal.control}
-				errors={novaPropriedadeModal.errors}
+				onSubmit={novaPropriedadeForm.handleSubmit(cadastrarPropriedade)}
+				control={novaPropriedadeForm.control}
+				buttons={<Button label='Adicionar'/>}
+				errors={novaPropriedadeForm.errors}
 				headerName='Cadastrar Propriedade'
 				visible={modalVisibility}
-				buttons={<Button label='Cadastrar'/>}
+				hideModal={hideModal}
+				tecnicos={tecnicos}
 			/>
 		</ManagementTemplate>
 	)

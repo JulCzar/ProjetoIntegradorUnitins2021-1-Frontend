@@ -12,7 +12,7 @@ export function getDateValidation(message) {
 	}
 }
 
-export const emailValidation = {
+export const email = {
 	required: 'É necessário informar um email para continuar.',
 	pattern: {
 		value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
@@ -20,7 +20,7 @@ export const emailValidation = {
 	}
 }
 
-export const phoneValidation = {
+export const phone = {
 	required: 'O campo telefone não pode ficar vazio.',
 	pattern: {
 		value: /^\([0-9]{2}\) [0-9]{1} [0-9]{4}-[0-9]{4}/i,
@@ -28,7 +28,7 @@ export const phoneValidation = {
 	}
 }
 
-export const cpfValidation = {
+export const cpf = {
 	required: 'O campo cpf não pode ficar vazio.',
 	pattern: {
 		value: /^[0-9]{3}.[0-9]{3}.[0-9]{3}-[0-9]{2}/i,
@@ -36,31 +36,31 @@ export const cpfValidation = {
 	}
 }
 
-export const nameValidation = {
+export const name = {
 	required: 'O campo nome não pode ficar vazio.'
 }
 
-export const lastnameValidation = {
+export const lastname = {
 	required: 'O campo sobrenome não pode ficar vazio.'
 }
 
-export const propertyAreaValidation = {
+export const propertyArea = {
 	required: 'É necessário informar a área da propriedade.'
 }
 
-export const propertyLocalValidation = {
+export const propertyLocal = {
 	required: 'É necessário informar a localidade da propriedade.'
 }
 
-export const propertyIdValidation = {
+export const propertyId = {
 	required: 'É necessário informar o id da propriedade.'
 }
 
-export const registerValidation = {
+export const register = {
 	required: 'É necessário informar o registro.'
 }
 
-export const passwordValidation = {
+export const password = {
 	required: 'Informe uma senha.',
 	minLength: {
 		value: 8,
@@ -68,34 +68,34 @@ export const passwordValidation = {
 	}
 }
 
-export const passwordConfirmValidation = {
+export const passwordConfirm = {
 	required: 'Confirme sua senha.'
 }
 
-export const selectCooperadoValidation = {
+export const selectCooperado = {
 	required: 'Você precisa selecionar um cooperado.'
 }
 
-export const selectTecnicoValidation = {
+export const selectTecnico = {
 	required: 'Você precisa selecionar um técnico.'
 }
 
-export const selectPropertyValidation = {
+export const selectProperty = {
 	required: 'Você precisa selecionar uma Propriedade.'
 }
 
-export const selectReasonValidation = {
+export const selectReason = {
 	required: 'Você precisa selecionar pelo menos um motivo.'
 }
 
-export const selectGroupValidation = {
+export const selectGroup = {
 	required: 'Você precisa selecionar um grupo.'
 }
 
-export const startRelatorioValidation = getDateValidation('Você precisa informar o inicio do relatório.')
-export const endRelatorioValidation = getDateValidation('Você precisa informar o final do relatório.')
-export const dayValidation = getDateValidation('Você precisa informar a data.')
-export const hourValidation = {
+export const startRelatorio = getDateValidation('Você precisa informar o inicio do relatório.')
+export const endRelatorio = getDateValidation('Você precisa informar o final do relatório.')
+export const day = getDateValidation('Você precisa informar a data.')
+export const hour = {
 	required: 'Você precisa informar a hora',
 	pattern: {
 		value: /^[0-9]{2}:[0-9]{2}/i,

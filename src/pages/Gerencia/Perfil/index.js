@@ -1,11 +1,12 @@
 import React from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import { InputContainer } from '~/common/components'
-import { InputWrapper } from '~/common/styles'
-import * as validation from '~/config/validations'
+
 import { Button, InputMask, InputText, Toast} from '~/primereact'
-import { getToastInstance } from '~/services'
 import { ManagementTemplate } from '~/pages/templates'
+import { InputContainer } from '~/common/components'
+import * as validate from '~/config/validations'
+import { InputWrapper } from '~/common/styles'
+import { getToastInstance } from '~/services'
 import { getInvalidClass } from '~/utils'
 
 function Perfil() {
@@ -39,7 +40,7 @@ function Perfil() {
 						name='nome'
 						defaultValue=''
 						control={control}
-						rules={validation.nameValidation}
+						rules={validate.name}
 						render={({ name, value, onChange }) => (
 							<InputContainer name={name} label='Nome' error={errors[name]}>
 								<InputText
@@ -56,7 +57,7 @@ function Perfil() {
 						defaultValue=''
 						name='sobrenome'
 						control={control}
-						rules={validation.lastnameValidation}
+						rules={validate.lastname}
 						render={({ name, value, onChange }) => (
 							<InputContainer name={name} label='Sobrenome' error={errors[name]}>
 								<InputText
@@ -72,7 +73,7 @@ function Perfil() {
 				<Controller name='email'
 					defaultValue=''
 					control={control}
-					rules={validation.emailValidation}
+					rules={validate.email}
 					render={({ name, value, onChange }) => (
 						<InputContainer name={name} label='Email' error={errors[name]}>
 							<InputText
@@ -89,7 +90,7 @@ function Perfil() {
 						name='phone'
 						defaultValue=''
 						control={control}
-						rules={validation.phoneValidation}
+						rules={validate.phone}
 						render={({ name, value, onChange }) => (
 							<InputContainer name={name} label='Telefone' error={errors[name]}>
 								<InputMask
@@ -106,7 +107,7 @@ function Perfil() {
 							name='cpf'
 							defaultValue=''
 							control={control}
-							rules={validation.cpfValidation}
+							rules={validate.cpf}
 							render={({ name, value, onChange }) => (
 								<InputContainer name={name} label='CPF' error={errors[name]}>
 									<InputMask

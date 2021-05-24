@@ -68,9 +68,7 @@ function Busca() {
 			>
 				<Column field="nome_tecnico" header="Nome"/>
 				<Column field="cpf_tecnico" header="CPF"/>
-				<Column header={(
-					<span className='p-d-flex p-jc-center'>Status</span>
-				)} body={StatusBody}/>
+				<Column header={<span className='p-d-flex p-jc-center'>Status</span>} body={StatusBody}/>
 				<Column header='Ações'
 					bodyClassName='p-d-flex p-jc-around'
 					headerClassName='p-d-flex p-jc-center'

@@ -5,56 +5,57 @@ import { InputContainer } from '~/common/components'
 import { InputWrapper } from '~/common/styles'
 import { Button, confirmPopup, Dropdown, InputMask, InputText, Toast} from '~/primereact'
 import { ManagementTemplate } from '~/pages/templates'
-import { getInvalidClass, getPhoneObject } from '~/utils'
+import { getApiResponseErrors, getInvalidClass, getPhoneObject } from '~/utils'
 import { api, getToastInstance } from '~/services'
-import * as validation from '~/config/validations'
+import * as validate from '~/config/validations'
 
 function Perfil() {
 	const { control, errors, handleSubmit, reset, setValue } = useForm()
   const [editing, setEditing] = React.useState(false)
   const [loading, setLoading] = React.useState(false)
-	const [ data, setData ] = React.useState(null)
+  const [grupos, setGrupos] = React.useState([])
+	const [data, setData] = React.useState(null)
 	const history = useHistory()
 	const { id } = useParams()
 	
 	const toastRef = React.useRef(null)
 	const toast = getToastInstance(toastRef)
 
-	const [groupOptions] = React.useState([
-		{label: 'Recanto', value: 1},
-		{label: 'Cargueiros', value: 2},
-		{label: 'Brejão', value: 3},
-		{label: 'Veredas', value: 4},
-		{label: 'Itabirinhas', value: 5}
-	])
-
 	React.useEffect(() => {
-		getUserData()
+		carregarPerfil()
+		carregarGrupos()
 	}, [])
 	
-	async function getUserData() {
+	async function carregarPerfil() {
 		setLoading(true)
 		try {
 			const { data } = await api.get(`/tecnico/data/${id}`)
 
 			setData(data)
-
+			if (data.grupo) data.id_grupo = data.grupo.id
 			Object.keys(data).forEach(key => setValue(key, data[key]))
 		} catch (err) {
-			console.log(err)
 			history.push('/error')
 		} finally {
 			setLoading(false)
 		}
 	}
 
+	async function carregarGrupos() {
+		try {
+			const { data } = await api.get('/grupos')
+
+			setGrupos(data.map(({id, nome}) => ({label: nome, value: id})))
+		} catch ({ response }) {
+			toast.showErrors(getApiResponseErrors(response))
+		}
+	}
+
 	const editarPerfil = async form => {
-		console.log('do form', form) // eslint-disable-line
 		setLoading(true)
 
 		const { phone, ...restForm } = form
 		const telefone = getPhoneObject(phone)
-		console.log('para API', {...restForm, telefone})
 		
 		if (!telefone) {
 			setLoading(false)
@@ -76,7 +77,7 @@ function Perfil() {
 		}finally {
 			setLoading(false)
 			setEditing(false)
-			getUserData()
+			carregarPerfil()
 		}
 	}
 
@@ -103,7 +104,7 @@ function Perfil() {
 					const hasApiResponse = response?.data?.errors
 					toast.showWarns(hasApiResponse?response?.data?.errors:['Houve um erro ao processar a requisição.'])
 				} finally {
-					getUserData()
+					carregarPerfil()
 					setLoading(false)
 				}
 			}
@@ -124,7 +125,7 @@ function Perfil() {
 					const hasApiResponse = response?.data?.errors
 					toast.showWarns(hasApiResponse?response?.data?.errors:['Houve um erro ao processar a requisição.'])
 				} finally {
-					getUserData()
+					carregarPerfil()
 					setLoading(false)
 				}
 			}
@@ -139,7 +140,7 @@ function Perfil() {
 					<Controller
 						name='nome'
 						control={control}
-						rules={validation.nameValidation}
+						rules={validate.name}
 						defaultValue={data?data.nome:''}
 						render={({ name, value, onChange }) => (
 						<InputContainer name={name} label='Nome' error={errors[name]}>
@@ -154,7 +155,7 @@ function Perfil() {
 					<Controller
 						name='sobrenome'
 						control={control}
-						rules={validation.lastnameValidation}
+						rules={validate.lastname}
 						defaultValue={data?data.sobrenome:''}
 						render={({ name, value, onChange }) => (
 						<InputContainer name={name} label='Sobrenome' error={errors[name]}>
@@ -171,7 +172,7 @@ function Perfil() {
 					name='email'
 					control={control}
 					defaultValue={data?data.email:''}
-					rules={validation.emailValidation}
+					rules={validate.email}
 					render={({ name, value, onChange }) => (
 					<InputContainer name={name} label='Email' error={errors[name]}>
 						<InputText
@@ -186,7 +187,7 @@ function Perfil() {
 					<Controller
 						name='cpf'
 						control={control}
-						rules={validation.cpfValidation}
+						rules={validate.cpf}
 						defaultValue={data?data.cpf:''}
 						render={({ name, value, onChange }) => (
 							<InputContainer name={name} label='CPF' error={errors[name]}>
@@ -202,7 +203,7 @@ function Perfil() {
 						<Controller
 							name='phone'
 							control={control}
-							rules={validation.phoneValidation}
+							rules={validate.phone}
 							defaultValue={data?data.phone:''}
 							render={({ name, value, onChange }) => (
 							<InputContainer name={name} label='Telefone' error={errors[name]}>
@@ -220,7 +221,7 @@ function Perfil() {
 					<Controller
 						name='numero_registro'
 						control={control}
-						rules={validation.registerValidation}
+						rules={validate.register}
 						defaultValue={data?data.numero_registro:''}
 						render={({ name, value, onChange }) => (
 						<InputContainer name={name} label='Número do Conselho' error={errors[name]}>
@@ -236,14 +237,14 @@ function Perfil() {
 						name='id_grupo'
 						defaultValue=''
 						control={control}
-						rules={validation.selectGroupValidation}
+						rules={validate.selectGroup}
 						render={({ name, value, onChange }) => (
 						<InputContainer name={name} label='Grupo de Usuário' error={errors[name]}>
 							<Dropdown
 								name={name}
 								value={value}
+								options={grupos}
 								disabled={!editing}
-								options={groupOptions}
 								className={getInvalidClass(errors[name])}
 								onChange={evt => onChange(evt.target.value)}/>
 						</InputContainer>

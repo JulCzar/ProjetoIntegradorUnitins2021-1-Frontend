@@ -3,7 +3,7 @@ import { Controller, useForm } from 'react-hook-form'
 import { useHistory } from 'react-router'
 import { InputContainer } from '~/common/components'
 import { InputWrapper } from '~/common/styles'
-import * as validation from '~/config/validations'
+import * as validate from '~/config/validations'
 import { Button, Calendar, Dropdown} from '~/primereact'
 import { ManagementTemplate } from '~/pages/templates'
 import { getInvalidClass } from '~/utils'
@@ -50,7 +50,7 @@ function RelatorioCooperado() {
 					name='start'
 					control={control}
 					defaultValue={null}
-					rules={validation.startRelatorioValidation}
+					rules={validate.startRelatorio}
 					render={({ name, value, onChange }) => (
 					<InputContainer name={name} label='Inicio' error={errors[name]}>
 						<Calendar
@@ -67,7 +67,7 @@ function RelatorioCooperado() {
 					name='end'
 					control={control}
 					defaultValue={null}
-					rules={validation.endRelatorioValidation}
+					rules={validate.endRelatorio}
 					render={({ name, value, onChange }) => (
 					<InputContainer name={name} label='Fim' error={errors[name]}>
 						<Calendar
@@ -85,7 +85,7 @@ function RelatorioCooperado() {
 				name='cooperado'
 				control={control}
 				defaultValue={null}
-				rules={validation.selectCooperadoValidation}
+				rules={validate.selectCooperado}
 				render={({ name, value, onChange }) => (
 				<InputContainer name={name} label='Cooperado' error={errors[name]}>
 					<Dropdown

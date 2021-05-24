@@ -1,10 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Button, Dialog, InputText } from '~/primereact'
 import { Controller } from 'react-hook-form'
+
+import { Button, Dialog, InputText } from '~/primereact'
 import { InputContainer } from '~/common/components'
+import * as validate from '~/config/validations'
 import { getInvalidClass } from '~/utils'
-import { nameValidation } from '~/config/validations'
 
 function Modal({ headerName, visible, hideModal, onSubmit, errors, formData, control }) {
 	return (
@@ -30,7 +31,7 @@ function Modal({ headerName, visible, hideModal, onSubmit, errors, formData, con
 				<Controller
 					name='nome'
 					control={control}
-					rules={nameValidation}
+					rules={validate.name}
 					defaultValue={formData?formData.nome:''}
 					render={({ name, value, onChange }) => (
 						<InputContainer name={name} label='Nome' error={errors[name]}>

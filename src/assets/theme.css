@@ -125,6 +125,11 @@ input:-webkit-autofill:active {
 * {
 	box-sizing: border-box;
 }
+
+.p-datatable.p-component.p-datatable-striped {
+	box-shadow: 0 0 2px 1px #0002;
+}
+
 .container {
 	background: var(--surface-b);
 }

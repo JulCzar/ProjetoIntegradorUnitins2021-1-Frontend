@@ -5,11 +5,12 @@ import { Controller } from 'react-hook-form'
 import { InputWrapper } from '~/common/styles'
 import { InputContainer } from '~/common/components'
 import { AutoComplete, Button, Dialog, InputNumber, InputText } from '~/primereact'
-import * as validation from '~/config/validations'
-import { getStringNormalized } from '~/utils'
+import * as validate from '~/config/validations'
+import { getInvalidClass, getStringNormalized } from '~/utils'
 
 function Modal({ headerName, hideModal, visible, onSubmit, formData, control, errors, tecnicos }) {
 	const [suggestions, setSuggestions] = React.useState([])
+	
 	function complete(evt) {
 		const queryNormalized = getStringNormalized(evt.query.toLowerCase())	
 		const filteredTecnicos = tecnicos.filter(t => {
@@ -19,6 +20,7 @@ function Modal({ headerName, hideModal, visible, onSubmit, formData, control, er
 
 			return false
 		})
+
 		setSuggestions(filteredTecnicos)
 	}
 	return (
@@ -31,7 +33,7 @@ function Modal({ headerName, hideModal, visible, onSubmit, formData, control, er
 					<Controller
 						name='nome'
 						control={control}
-						rules={validation.nameValidation}
+						rules={validate.name}
 						defaultValue={formData?formData.nome:''}
 						render={({ name, value, onChange }) => (
 						<InputContainer name={name} error={errors[name]} label='Nome'>
@@ -39,27 +41,32 @@ function Modal({ headerName, hideModal, visible, onSubmit, formData, control, er
 								name={name}
 								value={value}
 								onChange={evt => onChange(evt.target.value)}
+								className={getInvalidClass(errors[name])}
 							/>
 						</InputContainer>
 					)}/>
 					<Controller
 						name='tamanho_area'
 						control={control}
-						rules={validation.propertyAreaValidation}
+						rules={validate.propertyArea}
 						defaultValue={formData?formData.area:null}
 						render={({ name, value, onChange }) => (
 						<InputContainer name={name} error={errors[name]} label='Tamanho'>
 							<InputNumber
 								min={0.01}
 								name={name}
+								step={0.25}
 								showButtons
-								steps={0.01}
 								value={value}
+								mode='decimal'
 								suffix=' hectares'
+								maxFractionDigits={2}
+								minFractionDigits={2}
 								buttonLayout='horizontal'
 								incrementButtonIcon="pi pi-plus"
 								decrementButtonIcon="pi pi-minus"
 								onChange={evt => onChange(evt.value)}
+								className={getInvalidClass(errors[name])}
 							/>
 						</InputContainer>
 					)}/>
@@ -67,7 +74,7 @@ function Modal({ headerName, hideModal, visible, onSubmit, formData, control, er
 				<Controller
 					name='localidade'
 					control={control}
-					rules={validation.propertyLocalValidation}
+					rules={validate.propertyLocal}
 					defaultValue={formData?formData.localidade:''}
 					render={({ name, value, onChange }) => (
 						<InputContainer name={name} error={errors[name]} label='Localidade'>
@@ -75,6 +82,7 @@ function Modal({ headerName, hideModal, visible, onSubmit, formData, control, er
 								name={name}
 								value={value}
 								onChange={evt => onChange(evt.target.value)}
+								className={getInvalidClass(errors[name])}
 							/>
 						</InputContainer>
 					)}
@@ -83,7 +91,7 @@ function Modal({ headerName, hideModal, visible, onSubmit, formData, control, er
 					<Controller
 						name='matricula'
 						control={control}
-						rules={validation.propertyIdValidation}
+						rules={validate.propertyId}
 						defaultValue={formData?formData.registro:''}
 						render={({ name, value, onChange }) => (
 							<InputContainer name={name} error={errors[name]} label='# da Matrícula'>
@@ -91,6 +99,7 @@ function Modal({ headerName, hideModal, visible, onSubmit, formData, control, er
 									name={name}
 									value={value}
 									onChange={evt => onChange(evt.target.value)}
+									className={getInvalidClass(errors[name])}
 								/>
 							</InputContainer>
 						)}
@@ -98,21 +107,20 @@ function Modal({ headerName, hideModal, visible, onSubmit, formData, control, er
 					<Controller
 						name='id_tecnico'
 						control={control}
-						rules={validation.selectTecnicoValidation}
+						rules={validate.selectTecnico}
 						defaultValue={formData?formData.tecnico:''}
 						render={({ name, value, onChange }) => (
 						<InputContainer name={name} error={errors[name]} label='Técnico Responsável'>
 							<AutoComplete
+								dropdown
 								name={name}
 								value={value}
 								forceSelection
 								field='nome_tecnico'
 								suggestions={suggestions}
 								completeMethod={complete}
-								onChange={evt => {
-									onChange(evt.value)
-									console.log(evt)
-								}}
+								onChange={evt => onChange(evt.value)}
+								className={getInvalidClass(errors[name])}
 							/>
 						</InputContainer>
 					)}/>

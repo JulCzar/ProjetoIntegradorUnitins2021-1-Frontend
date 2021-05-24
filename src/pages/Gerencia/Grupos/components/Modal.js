@@ -6,7 +6,7 @@ import { Dialog, InputText } from '~/primereact'
 import { InputContainer } from '~/common/components'
 import { getInvalidClass } from '~/utils'
 import Checklist from './Checklist'
-import { nameValidation } from '~/config/validations'
+import * as validate from '~/config/validations'
 
 function GroupDialog({
 	headerName,
@@ -32,7 +32,7 @@ function GroupDialog({
 				<Controller
 					name='nome'
 					control={control}
-					rules={nameValidation}
+					rules={validate.name}
 					defaultValue={formData?formData.nome:''}
 					render={({ name, value, onChange }) => (
 					<InputContainer name={name} label='Nome' error={errors[name]}>

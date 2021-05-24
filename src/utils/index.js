@@ -71,3 +71,11 @@ export const getStringNormalized = str => str
 	.replace(/[^a-zA-Z1-9s]/g, '')
 
 export const getInvalidClass = condition => classNames({ 'p-invalid': condition})
+
+export function getApiResponseErrors(thrownException) {
+	const apiResponse = thrownException?.data?.errors
+	
+	if (!apiResponse) return ['Houve um erro ao processar a requisição']
+
+	return Object.values(apiResponse)
+}

@@ -8,7 +8,7 @@ import { ContainerWithTemplate } from '~/pages/templates'
 import { Block, InputWrapper } from '~/common/styles'
 
 import propriedadesJSON from './propriedades.json'
-import * as validation from '~/config/validations'
+import * as validate from '~/config/validations'
 import { useLocation } from 'react-router'
 import cooperados from './cooperados.json'
 import motivosJSON from './motivos.json'
@@ -60,7 +60,7 @@ function AgendarVisita() {
 						name='cooperado'
 						control={control}
 						defaultValue={false}
-						rules={validation.selectCooperadoValidation}
+						rules={validate.selectCooperado}
 						render={({ name, value, onChange }) => (
 							<InputContainer name={name} label='Cooperado' error={errors[name]}>
 								<AutoComplete
@@ -77,7 +77,7 @@ function AgendarVisita() {
 						name='propriedade'
 						control={control}
 						defaultValue={false}
-						rules={validation.selectPropertyValidation}
+						rules={validate.selectProperty}
 						render={({ name, value, onChange }) => (
 							<InputContainer name={name} label='Propriedade' error={errors[name]}>
 								<Dropdown
@@ -91,7 +91,7 @@ function AgendarVisita() {
 						<Controller
 							name='data'
 							control={control}
-							rules={validation.dayValidation}
+							rules={validate.day}
 							defaultValue={false}
 							render={({ name, value, onChange }) => (
 								<InputContainer label='Data' name='data' error={errors.data}>
@@ -108,7 +108,7 @@ function AgendarVisita() {
 						<Controller
 							name='horaEstimada'
 							control={control}
-							rules={validation.hourValidation}
+							rules={validate.hour}
 							defaultValue={false}
 							render={({ name, value, onChange }) => (
 								<InputContainer label='Hora Estimada' name={name} error={errors[name]}>
@@ -116,10 +116,7 @@ function AgendarVisita() {
 										timeOnly
 										mask='99:99'
 										value={value}
-										onChange={e => {
-											onChange(e.value)
-											console.log(e)
-										}}
+										onChange={e => onChange(e.value)}
 										className={getInvalidClass(errors[name])}
 									/>
 								</InputContainer>
@@ -129,7 +126,7 @@ function AgendarVisita() {
 						name='motivo'
 						control={control}
 						defaultValue={false}
-						rules={validation.selectReasonValidation}
+						rules={validate.selectReason}
 						render={({ name, value, onChange }) => (
 							<InputContainer label='Motivo da Visita' name={name} error={errors[name]}>
 								<MultiSelect

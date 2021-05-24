@@ -36,9 +36,9 @@ function MotivoVisita() {
 	}
 
 	const cadastrarMotivo = async form => {
-		setLoading(true)
-		console.log(form)
 		try {
+			setLoading(true)
+			
 			await api.post('/motivos', form)
 
 			toast.showSuccess('Motivo cadastrado com sucesso.')

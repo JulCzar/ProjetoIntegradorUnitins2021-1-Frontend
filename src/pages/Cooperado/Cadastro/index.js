@@ -7,8 +7,8 @@ import { ManagementTemplate } from '~/pages/templates'
 import { InputWrapper } from '~/common/styles'
 import { api, getToastInstance } from '~/services'
 
-import * as validation from '~/config/validations'
-import { getInvalidClass, getPhoneObject } from '~/utils'
+import * as validate from '~/config/validations'
+import { getApiResponseErrors, getInvalidClass, getPhoneObject } from '~/utils'
 import Modal from './components/Modal'
 import { useHistory } from 'react-router'
 
@@ -39,8 +39,7 @@ const Cadastro = () => {
 			
 			setTecnicos(data)
 		} catch ({ response }) {
-			const apiResponse = response?.data?.errors 
-			toast.showErrors(apiResponse?apiResponse:['Houve um erro ao processar a requisição'])
+			toast.showErrors(getApiResponseErrors(response))
 		} finally {
 			setLoading(false)	
 		}
@@ -71,8 +70,7 @@ const Cadastro = () => {
 			toast.showInfo('Você será redirecionado em 2 segundos')
 			setTimeout(history.goBack, 2000)
 		} catch ({ response }) {
-			const apiResponse = response?.data?.errors
-			toast.showErrors(apiResponse || ['Houve um erro ao processar a requisição'])
+			toast.showErrors(getApiResponseErrors(response))
 		} finally {
 			setLoading(false)	
 		}
@@ -88,7 +86,7 @@ const Cadastro = () => {
 						name='nome'
 						defaultValue=''
 						control={control}
-						rules={validation.nameValidation}
+						rules={validate.name}
 						render={({ name, value, onChange }) => (
 							<InputContainer name={name} error={errors[name]} label='Nome'>
 								<InputText
@@ -104,7 +102,7 @@ const Cadastro = () => {
 						defaultValue=''
 						name='sobrenome'
 						control={control}
-						rules={validation.lastnameValidation}
+						rules={validate.lastname}
 						render={({ name, value, onChange }) => (
 							<InputContainer name={name} error={errors[name]} label='Sobrenome'>
 								<InputText
@@ -121,7 +119,7 @@ const Cadastro = () => {
 					name='email'
 					defaultValue=''
 					control={control}
-					rules={validation.emailValidation}
+					rules={validate.email}
 					render={({ name, value, onChange }) => (
 						<InputContainer name={name} error={errors[name]} label='Email'>
 							<InputText
@@ -138,7 +136,7 @@ const Cadastro = () => {
 						name='cpf'
 						defaultValue=''
 						control={control}
-						rules={validation.cpfValidation}
+						rules={validate.cpf}
 						render={({ name, value, onChange }) => (
 							<InputContainer name={name} error={errors[name]} label='CPF'>
 								<InputMask
@@ -155,7 +153,7 @@ const Cadastro = () => {
 						name='phone'
 						defaultValue=''
 						control={control}
-						rules={validation.phoneValidation}
+						rules={validate.phone}
 						render={({ name, value, onChange }) => (
 							<InputContainer name={name} error={errors[name]} label='Telefone'>
 								<InputMask

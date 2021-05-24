@@ -6,11 +6,11 @@ import { Link, useHistory } from 'react-router-dom'
 import { Controller, useForm } from 'react-hook-form'
 
 import { CardHeader, InputContainer, passwordFooter, passwordHeader } from '~/common/components'
-import { emailValidation } from '~/config/validations'
+import * as validate from '~/config/validations'
 import { Button, InputText, Password, Toast } from '~/primereact'
 import { ContainerWithCard } from '~/pages/templates'
 import * as action from '~/store/actions/auth'
-import { getInvalidClass } from '~/utils'
+import { getApiResponseErrors, getInvalidClass } from '~/utils'
 import { api, getToastInstance } from '~/services'
 
 const Login = ({ loginSuccess, token }) => {
@@ -39,9 +39,7 @@ const Login = ({ loginSuccess, token }) => {
 		} catch ({ response }) {
 			setLoading(false)
 
-			const apiResponse = response?.data?.errors
-
-			toast.showError(apiResponse || ['Houve um ero ao processar a requisição'])
+			toast.showError(getApiResponseErrors(response))
 		}
 	}
 
@@ -54,7 +52,7 @@ const Login = ({ loginSuccess, token }) => {
 					name='email'
 					defaultValue=''
 					control={control}
-					rules={emailValidation}
+					rules={validate.email}
 					render={({ name, value, onChange }) => (
 						<InputContainer name={name} label='Email' error={errors[name]}>
 							<InputText
@@ -70,7 +68,6 @@ const Login = ({ loginSuccess, token }) => {
 					name='password'
 					defaultValue=''
 					control={control}
-					// rules={passwordValidation}
 					render={({ name, value, onChange }) => (
 						<InputContainer name={name} label='Senha' error={errors[name]}>
 							<Password

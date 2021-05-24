@@ -11,17 +11,19 @@ export function getMenuItems({ permissions = [] } = {}) {
 
 	const allItems = [
 		{label: 'Perfil', destination:'/perfil'},
-		{label: 'Técnicos', destination:'/tecnicos', showIf: hasPermission(4)},
-		{label: 'Cooperados', destination:'/cooperados', showIf: hasPermission(3) || hasPermission(2)},
+		{label: 'Técnicos', destination:'/tecnicos', showIf: hasPermission(3)},
+		{label: 'Cooperados', destination:'/cooperados', showIf: hasPermission(2) || hasPermission(7)},
 		{label: 'Histórico', destination:'/historico', showIf: hasPermission(1)},
 		{label: 'Relatórios', items: [
 			{label: 'Técnico', destination:'/relatorio/tecnico', icon: 'fas fa-grip-lines'},
 			{label: 'Cooperado', destination:'/relatorio/cooperado', icon: 'fas fa-grip-lines'},
 			{label: 'Propriedade', destination:'/relatorio/propriedade', icon: 'fas fa-grip-lines'},
-		], showIf: hasPermission(7)},
-		{label: 'Grupos', destination:'/grupos', showIf: hasPermission(5)},
-		{label: 'Motivos', destination: '/motivos', showIf: hasPermission(6)},
-		{label: 'Administradores', destination:'/admins'},
+		], showIf: hasPermission(6)},
+		{label: 'Grupos', destination:'/grupos', showIf: hasPermission(4)},
+		{label: 'Motivos', destination: '/motivos', showIf: hasPermission(5)},
+		{label: 'Administradores', destination:'/admins', showIf: () => [1,2,3,4,5,6,7].reduce(
+			(acc, i) => (permissions.includes(i)?acc:false), true
+		)},
 	]
 
 	return allItems

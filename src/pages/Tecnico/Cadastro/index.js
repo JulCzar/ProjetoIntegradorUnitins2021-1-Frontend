@@ -6,9 +6,9 @@ import { InputWrapper } from '~/common/styles'
 import { InputContainer, passwordFooter, passwordHeader } from '~/common/components'
 import {  api, getToastInstance } from '~/services'
 import { Button, Dropdown, InputMask, InputText, Password, Toast } from '~/primereact'
-import { verifyPassword, getPhoneObject, getInvalidClass } from '~/utils'
+import { verifyPassword, getPhoneObject, getInvalidClass, getApiResponseErrors } from '~/utils'
 import { ManagementTemplate } from '~/pages/templates'
-import * as validation from '~/config/validations'
+import * as validate from '~/config/validations'
 
 const Cadastro = () => {
 	const { control, errors, handleSubmit, reset } = useForm()
@@ -30,8 +30,7 @@ const Cadastro = () => {
 
 			setGroupOptions(data)
 		} catch ({ response }) {
-			const apiResponse = response?.data?.errors
-			toast.showErrors(apiResponse || ['Houve um problema ao carregar a lista de grupos'])
+			toast.showErrors(getApiResponseErrors(response))
 		} finally {
 			setLoading(false)
 		}
@@ -75,7 +74,7 @@ const Cadastro = () => {
 						name='nome'
 						defaultValue=''
 						control={control}
-						rules={validation.nameValidation}
+						rules={validate.name}
 						render={({ name, value, onChange }) => (
 						<InputContainer name={name} label='Nome' error={errors[name]}>
 							<InputText
@@ -89,7 +88,7 @@ const Cadastro = () => {
 						defaultValue=''
 						name='sobrenome'
 						control={control}
-						rules={validation.lastnameValidation}
+						rules={validate.lastname}
 						render={({ name, value, onChange }) => (
 						<InputContainer name={name} label='Sobrenome' error={errors[name]}>
 							<InputText
@@ -104,7 +103,7 @@ const Cadastro = () => {
 					name='email'
 					control={control}
 					defaultValue=''
-					rules={validation.emailValidation}
+					rules={validate.email}
 					render={({ name, value, onChange }) => (
 					<InputContainer name={name} label='Email' error={errors[name]}>
 						<InputText
@@ -119,7 +118,7 @@ const Cadastro = () => {
 						name='cpf'
 						defaultValue=''
 						control={control}
-						rules={validation.cpfValidation}
+						rules={validate.cpf}
 						render={({ name, value, onChange }) => (
 							<InputContainer name={name} label='CPF' error={errors[name]}>
 								<InputMask
@@ -134,7 +133,7 @@ const Cadastro = () => {
 							name='phone'
 							control={control}
 							defaultValue=''
-							rules={validation.phoneValidation}
+							rules={validate.phone}
 							render={({ name, value, onChange }) => (
 							<InputContainer name={name} label='Telefone' error={errors[name]}>
 								<InputMask
@@ -151,7 +150,7 @@ const Cadastro = () => {
 						defaultValue=''
 						control={control}
 						name='numero_registro'
-						rules={validation.registerValidation}
+						rules={validate.register}
 						render={({ name, value, onChange }) => (
 						<InputContainer name={name} label='Número do Conselho' error={errors[name]}>
 							<InputText
@@ -165,7 +164,7 @@ const Cadastro = () => {
 						name='id_grupo'
 						defaultValue=''
 						control={control}
-						rules={validation.selectGroupValidation}
+						rules={validate.selectGroup}
 						render={({ name, value, onChange }) => (
 						<InputContainer name={name} label='Grupo de Usuário' error={errors[name]}>
 							<Dropdown
@@ -183,7 +182,7 @@ const Cadastro = () => {
 					name='senha'
 					defaultValue=''
 					control={control}
-					rules={validation.passwordValidation}
+					rules={validate.password}
 					render={({ name, value, onChange }) => (
 					<InputContainer name={name} label='Senha' error={errors[name]}>
 						<Password
@@ -200,7 +199,7 @@ const Cadastro = () => {
 					defaultValue=''
 					control={control}
 					name='passwordConfirm'
-					rules={validation.passwordConfirmValidation}
+					rules={validate.passwordConfirm}
 					render={({ name, value, onChange }) => (
 					<InputContainer name={name} label='Confirmação de Senha' error={errors[name]}>
 						<Password
