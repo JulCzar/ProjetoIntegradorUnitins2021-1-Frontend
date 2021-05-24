@@ -1,16 +1,16 @@
-import * as action from '~/store/actions/auth'
 import { bindActionCreators } from 'redux'
-import { useHistory } from 'react-router'
+import { useHistory, useLocation } from 'react-router'
+import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import React from 'react'
 
 import { Container, Header, Content, Footer, ContainerLimiter, HeaderMenu } from '../styles'
-import { Button, ListBox, OverlayPanel, TabMenu } from '~/primereact'
+import { Button, ListBox, OverlayPanel, TabMenu, Toast } from '~/primereact'
 import Loading from '~/pages/templates/components/Loading'
-
-import logo from '~/assets/logo.svg'
-import { connect } from 'react-redux'
+import * as action from '~/store/actions/auth'
+import { getToastInstance } from '~/services'
 import { getMenuItems } from '../menuItems'
+import logo from '~/assets/logo.svg'
 
 function ContainerTemplate({
 	contentContainerClassName ='',
@@ -24,8 +24,18 @@ function ContainerTemplate({
 	user,
 }) {
 	const [menuItems, setMenuItems] = React.useState([])
+	const toastRef = React.useRef(null)
 	const op = React.useRef(null)
+	const location = useLocation()
 	const history = useHistory()
+	
+	const toast = getToastInstance(toastRef)
+
+	React.useEffect(() => {
+		const messages = location?.state?.messages
+		if (messages) toast.showMultiple(messages)
+	}, [location.state])
+	
 	
 	React.useEffect(() => {
 		const items = getMenuItems({
@@ -43,6 +53,7 @@ function ContainerTemplate({
 
 	return (
 		<Container>
+			<Toast ref={toastRef}/>
 			{loading && <Loading/>}
 			<Header>
 				<ContainerLimiter className='p-d-flex p-mx-auto p-jc-between p-ai-center'>
@@ -82,7 +93,6 @@ ContainerTemplate.propTypes = {
 	token: PropTypes.any,
 	user: PropTypes.any,
 }
-
 
 export default connect(
 	props => props.auth,

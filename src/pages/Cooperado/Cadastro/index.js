@@ -45,6 +45,7 @@ const Cadastro = () => {
 			setLoading(false)	
 		}
 	}
+	
 	function addProperty(form) {
 		setProperties([...propriedades, form])
 		hideModal()
@@ -52,27 +53,26 @@ const Cadastro = () => {
 
 	async function cadastrar(form) {
 		if (!propriedades.length) return toast.showWarn('É necessário inserir pelo menos uma propriedade')
-		setLoading(true)
 
 		for (const p of propriedades) p.id_tecnico = p.id_tecnico.id
 
 		const {phone, ...data } = form
 		const telefone = getPhoneObject(phone)
-		if (!telefone) {
-			setLoading(false)
-			return toast.showError('O número de telefone providenciado é inválido')
-		}
+		if (!telefone) return toast.showError('O número de telefone providenciado é inválido')
+
 		try {
-			console.log({...data, telefone, propriedades})
+			setLoading(true)
 			await api.post('/cooperado/store', {...data, telefone, propriedades})
-			toast.showSuccess('Cadastro realizado com sucesso')
-			toast.showInfo('Você será redirecionado em 2 segundos')
+
 			reset()
 			setProperties([])
+
+			toast.showSuccess('Cadastro realizado com sucesso')
+			toast.showInfo('Você será redirecionado em 2 segundos')
 			setTimeout(history.goBack, 2000)
 		} catch ({ response }) {
 			const apiResponse = response?.data?.errors
-			toast.showErrors(apiResponse?apiResponse:['Houve um erro ao processar a requisição'])
+			toast.showErrors(apiResponse || ['Houve um erro ao processar a requisição'])
 		} finally {
 			setLoading(false)	
 		}

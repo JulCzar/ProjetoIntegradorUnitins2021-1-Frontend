@@ -1,10 +1,9 @@
 export const LOGIN_SUCCESS = (state, action) => {
-	const { user: apiUser, access_token: token, } = action.payload.data
-	const { usuario: user, permissoes } = apiUser
+	const { usuario, access_token: token, } = action.payload.data
+	const { data: user, permissoes } = usuario
 	
 	const permissions = Object.values(permissoes)
 
-	console.log(token, user, permissions)
 	return {
 		...state,
 		user,

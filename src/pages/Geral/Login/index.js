@@ -11,9 +11,9 @@ import { Button, InputText, Password, Toast } from '~/primereact'
 import { ContainerWithCard } from '~/pages/templates'
 import * as action from '~/store/actions/auth'
 import { getInvalidClass } from '~/utils'
-import { getToastInstance } from '~/services'
+import { api, getToastInstance } from '~/services'
 
-const Login = ({ login, token }) => {
+const Login = ({ loginSuccess, token }) => {
 	const { control, errors, handleSubmit, reset } = useForm()
 	const [loading, setLoading] = React.useState(false)
 	const history = useHistory()
@@ -25,13 +25,24 @@ const Login = ({ login, token }) => {
 		if (!token) return
 
 		history.push('/')
-	}, [token])
+	}, [])
 
 	async function logar(form) {
 		setLoading(true)
-		await login(form)
-
 		reset()
+		try {
+			const { data } = await api.post('/auth/login', form)
+
+			loginSuccess(data)
+
+			history.push('/')
+		} catch ({ response }) {
+			setLoading(false)
+
+			const apiResponse = response?.data?.errors
+
+			toast.showError(apiResponse || ['Houve um ero ao processar a requisição'])
+		}
 	}
 
 	return (
@@ -83,7 +94,7 @@ const Login = ({ login, token }) => {
 }
 
 Login.propTypes = {
-	login: PropType.func,
+	loginSuccess: PropType.func,
 	token: PropType.oneOfType([
 		PropType.bool,
 		PropType.string

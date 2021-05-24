@@ -1,12 +1,15 @@
-import React from 'react'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
+import React from 'react'
 
 import { ContainerWithTemplate } from '~/pages/templates'
 import { PanelMenu } from '~/primereact'
 
 import { FullWidth, PanelMenuContainer } from './styles'
-import { lateralMenuItems } from './lateralMenuItems'
+import { getMenuItems } from './lateralMenuItems'
 import { CardHeader } from '~/common/components'
+import * as action from '~/store/actions/auth'
 import { useHistory } from 'react-router'
 import { Block} from '~/common/styles'
 
@@ -15,11 +18,18 @@ function ManagementTemplate({
 	contentContainerStyle = {},
 	contentClassName = '',
 	contentStyle = {},
+	permissions,
 	children,
 	loading,
 	title
 }) {
+	const [menuItems, setMenuItems] = React.useState([])
 	const history = useHistory()
+
+	React.useEffect(() => {
+		const items = getMenuItems({permissions})
+		setMenuItems(items)
+	}, [permissions])
 	
 	const handleTabChange = e => {
 		history.push(e.value.destination)
@@ -49,7 +59,7 @@ function ManagementTemplate({
 				<Block className='p-grid'>
 					<PanelMenuContainer className='p-col-4 p-md-3'>
 						<PanelMenu
-							model={lateralMenuItems.map(getNavigableMenu)}
+							model={menuItems.map(getNavigableMenu)}
 							onChange={handleTabChange}/>
 					</PanelMenuContainer>
 					<Block className='p-col-8 p-md-9 p-px-5 p-pb-5'>
@@ -70,8 +80,13 @@ ManagementTemplate.propTypes = {
 	contentContainerClassName: PropTypes.string,
 	contentStyle: PropTypes.any,
 	contentContainerStyle: PropTypes.any,
+	permissions: PropTypes.arrayOf(PropTypes.number),
 	loading: PropTypes.bool,
 	title: PropTypes.string
 }
 
-export default ManagementTemplate
+
+export default connect(
+	props => props.auth,
+	dispatch => bindActionCreators(action, dispatch)
+)(ManagementTemplate)
