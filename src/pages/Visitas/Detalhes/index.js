@@ -18,7 +18,7 @@ import { getInvalidClass } from '~/utils'
 
 function DetalhesVisita() {
 	const [cooperadosFiltrados, setCooperadosFiltrados] = React.useState([])
-	const { control, handleSubmit } = useForm()
+	const { control, handleSubmit, errors } = useForm()
 	const [editing, setEditing] = React.useState(false)
 
 	const toastRef = React.useRef(null)

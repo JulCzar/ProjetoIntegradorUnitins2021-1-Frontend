@@ -219,8 +219,9 @@ function Perfil() {
 	const hideModal = () => {
 		setEditing(false)
 		setEditingProperty(false)
-		setEditingModalVisibility(false)
 		setModalVisibility(false)
+		
+		setEditingModalVisibility(false)
 	}
 
 	const confirmDisable = event => {
@@ -437,18 +438,20 @@ function Perfil() {
 					<Controller
 						defaultValue=''
 						name='cooperado'
-						rules={{required: 'É Necessário selecionar o Cooperado que receberá.'}}
+						rules={{required: 'É Necessário selecionar o Cooperado que receberá a propriedade.'}}
 						control={transferPropriedadeForm.control}
 						render={({name, value, onChange}) => (
-						<InputContainer name={name}>
+						<InputContainer name={name} error={transferPropriedadeForm.errors[name]}>
 							<AutoComplete
 								name={name}
 								value={value}
+								forceSelection
 								placeholder='CPF'
 								field='nome_cooperado'
 								onChange={e => onChange(e.value)}
 								suggestions={cooperadoSuggestions}
 								completeMethod={completeCooperado}
+								className={getInvalidClass(transferPropriedadeForm.errors[name])}
 							/>
 						</InputContainer>
 					)}/>

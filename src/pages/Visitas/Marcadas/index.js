@@ -34,7 +34,7 @@ function VisitasMarcadas() {
 	}
 	const eventClick = evt => {
 		console.log(evt) // eslint-disable-line
-		history.push('/visitas/detalhes')
+		history.push(`/visitas/detalhe/${evt.id}`)
 	}
 	
 	return (
