@@ -44,11 +44,11 @@ function Busca() {
 		setFilteredCooperados(filteredCooperados)
 	}, [query])
 
-	const StatusBody = data => (
-		!data.status
-			?<span className='p-d-flex p-jc-center'>Inativo</span>
-			:<span className='p-d-flex p-jc-center'>Ativo</span>
+	const getCenteredText = text => (
+		<span className='p-d-flex p-jc-center'>{text}</span>
 	)
+
+	const StatusBody = data => getCenteredText(!data.status?'Inativo':'Ativo')
 
 	return (
 		<ManagementTemplate title='Buscar Cooperado' loading={loading}>		
@@ -61,7 +61,7 @@ function Busca() {
 			<DataTable emptyMessage='Nenhum item encontrado' value={filteredCooperados} className="p-datatable-striped">
 				<Column field="nome_cooperado" header="Nome"/>
 				<Column field="cpf_cooperado" header="CPF"/>
-				<Column header={<span className='p-d-flex p-jc-center'>Status</span>} body={StatusBody}/>
+				<Column header={getCenteredText('Status')} body={StatusBody}/>
 				<Column bodyClassName='p-d-flex p-jc-around' headerClassName='p-d-flex p-jc-center' header='Ações' body={rowData => (
 					<Link to={`/cooperados/${rowData.id}`}>Detalhes</Link>
 				)}/>

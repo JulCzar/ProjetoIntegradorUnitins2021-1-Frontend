@@ -2,48 +2,62 @@ import { Controller, useForm } from 'react-hook-form'
 import { useHistory, useParams } from 'react-router'
 import React from 'react'
 
-import { Button, Column, DataTable, Divider, InputMask, InputText, Toast} from '~/primereact'
+import { AutoComplete, Button, Column, confirmPopup, DataTable, Divider, InputMask, InputText, OverlayPanel, Toast} from '~/primereact'
+import { getApiResponseErrors, getInvalidClass, getPhoneObject, getStringNormalized } from '~/utils'
 import { CardHeader, InputContainer, } from '~/common/components'
 import { ManagementTemplate } from '~/pages/templates'
+import { api, getToastInstance } from '~/services'
 import * as validate from '~/config/validations'
 import { InputWrapper } from '~/common/styles'
-import { getApiResponseErrors, getInvalidClass, getPhoneObject } from '~/utils'
 import Modal from './components/Modal'
-import { api, getToastInstance } from '~/services'
 
 function Perfil() {
+	// formulários
 	const { control, errors, handleSubmit, setValue, reset } = useForm()
+	const transferPropriedadeForm = useForm()
 	const editPropriedadeForm = useForm()
 	const novaPropriedadeForm = useForm()
 	
+	// referencias
+	const overlayTransfer = React.useRef(null)
 	const toastRef = React.useRef(null)
 	const toast = getToastInstance(toastRef)
 
-	const { id } = useParams()
-	const history = useHistory()
-  const [loading, setLoading] = React.useState(false)
-  const [editing, setEditing] = React.useState(false)
-  const [tecnicos, setTecnicos] = React.useState([])
+	// listas
+	const [cooperadoSuggestions, setCoopSuggestions] = React.useState([])
   const [propriedades, setPropriedades] = React.useState([])
-  const [dadosCooperado, setDadosCooperado] = React.useState(null)
+	const [cooperados, setCooperados] = React.useState([])
+  const [tecnicos, setTecnicos] = React.useState([])
+
+	// visibilidade de overlay
+	const [editingModalVisibility, setEditingModalVisibility] = React.useState(false)
   const [editingProperty, setEditingProperty] = React.useState(false)
   const [modalVisibility, setModalVisibility] = React.useState(false)
-  const [dadosPropriedade, setDadosPropriedade] = React.useState(null)
-	const [editingModalVisibility, setEditingModalVisibility] = React.useState(false)
+  const [editing, setEditing] = React.useState(false)
+  const [loading, setLoading] = React.useState(false)
+  
+	// Dados
+  const [propriedadeEmEdicao, setDadosPropriedade] = React.useState(null)
+	const [data, setData] = React.useState(null)
+
+
+	const { id } = useParams()
+	const history = useHistory()
 
 	React.useEffect(() => {
-		carregarDados()
+		carregarPerfil()
 		carregarTecnicos()
+		carregarCooperados()
 		carregarPropriedades()
 	}, [])
 
-	async function carregarDados() {
+	async function carregarPerfil() {
 		try {
 			setLoading(true)
 			
 			const { data } = await api.get(`/cooperado/data/${id}`)
 
-			setDadosCooperado(data)
+			setData(data)
 
 			reset()
 
@@ -69,6 +83,17 @@ function Perfil() {
 		} catch (error) {
 			history.push('/error')
 		} finally {
+			setLoading(false)
+		}
+	}
+
+	async function carregarCooperados() {
+		setLoading(true)
+		try {
+			const { data } = await api.get('/cooperado/index')
+			setCooperados(data)
+		} catch (err) {}
+		finally {
 			setLoading(false)
 		}
 	}
@@ -114,7 +139,7 @@ function Perfil() {
 		try {
 			setLoading(true)
 			
-			await api.put(`/propriedade/${dadosPropriedade.id}`, data)
+			await api.put(`/propriedade/${propriedadeEmEdicao.id}`, data)
 
 			toast.showSuccess('Dados Salvos')
 
@@ -152,6 +177,24 @@ function Perfil() {
 		}
 	}
 
+	async function transferProperty(form) {
+		const cooperado = form.cooperado.id
+		console.log(cooperado)
+		try {
+			await api.put(`propriedade/transferir/${propriedadeEmEdicao.id}`, {cooperado})
+
+			toast.showSuccess('Propriedade transferida com sucesso')
+
+			setEditingModalVisibility(false)
+
+			setDadosPropriedade(null)
+
+			carregarPropriedades()
+		} catch ({ response }) {
+			toast.showError(getApiResponseErrors(apiResponse))
+		}
+	}
+
 	const handleEdit = rowData => {
 		setEditingModalVisibility(true)
 		
@@ -180,6 +223,61 @@ function Perfil() {
 		setModalVisibility(false)
 	}
 
+	const confirmDisable = event => {
+    confirmPopup({
+			target: event.currentTarget,
+			message: 'Deseja desativar esse cooperado?',
+			icon: 'pi pi-exclamation-triangle',
+			async accept() {
+				setLoading(true)
+				try {
+					await api.put(`/cooperado/${id}/disable`)
+
+					toast.showSuccess('O Cooperado não será mais listado para visitas.')
+				} catch ({ response }) {
+					const hasApiResponse = response?.data?.errors
+					toast.showWarns(hasApiResponse?response?.data?.errors:['Houve um erro ao processar a requisição.'])
+				} finally {
+					carregarPerfil()
+					setLoading(false)
+				}
+			}
+    })
+	}
+
+	const confirmEnable = event => {
+    confirmPopup({
+			target: event.currentTarget,
+			message: 'Deseja ativar esse cooperado?',
+			icon: 'pi pi-exclamation-triangle',
+			async accept() {
+				try {
+					await api.put(`/cooperado/${id}/enable`)
+
+					toast.showSuccess('O cooperado esta disponível para visitas novamente.')
+				} catch ({ response }) {
+					const hasApiResponse = response?.data?.errors
+					toast.showWarns(hasApiResponse?response?.data?.errors:['Houve um erro ao processar a requisição.'])
+				} finally {
+					carregarPerfil()
+					setLoading(false)
+				}
+			}
+    })
+	}
+
+	const completeCooperado = evt => {
+		const normalizedQuery = getStringNormalized(evt.query.toLowerCase())
+		
+		const filteredCooperados = [...cooperados].filter(c => {
+			const normalizedCPF = getStringNormalized(c.cpf_cooperado.toLowerCase())
+			
+			return normalizedCPF.startsWith(normalizedQuery)
+		})
+
+		setCoopSuggestions(filteredCooperados)
+	}
+
 	return (
 		<ManagementTemplate loading={loading} title='Perfil'>
 			<Toast ref={toastRef}/>
@@ -190,7 +288,7 @@ function Perfil() {
 						name='nome'
 						control={control}
 						rules={validate.name}
-						defaultValue={dadosCooperado?dadosCooperado.nome:''}
+						defaultValue={data?data.nome:''}
 						render={({ name, value, onChange }) => (
 							<InputContainer name={name} error={errors[name]} label='Nome'>
 								<InputText
@@ -207,7 +305,7 @@ function Perfil() {
 						name='sobrenome'
 						control={control}
 						rules={validate.lastname}
-						defaultValue={dadosCooperado?dadosCooperado.sobrenome:''}
+						defaultValue={data?data.sobrenome:''}
 						render={({ name, value, onChange }) => (
 							<InputContainer name={name} error={errors[name]} label='Sobrenome'>
 								<InputText
@@ -225,7 +323,7 @@ function Perfil() {
 					name='email'
 					control={control}
 					rules={validate.email}
-					defaultValue={dadosCooperado?dadosCooperado.email:''}
+					defaultValue={data?data.email:''}
 					render={({ name, value, onChange }) => (
 						<InputContainer name={name} error={errors[name]} label='Email'>
 							<InputText
@@ -243,7 +341,7 @@ function Perfil() {
 						name='phone'
 						control={control}
 						rules={validate.phone}
-						defaultValue={dadosCooperado?dadosCooperado.phone:''}
+						defaultValue={data?data.phone:''}
 						render={({ name, value, onChange }) => (
 							<InputContainer name={name} error={errors[name]} label='Telefone'>
 								<InputMask
@@ -261,7 +359,7 @@ function Perfil() {
 						name='cpf'
 						control={control}
 						rules={validate.cpf}
-						defaultValue={dadosCooperado?dadosCooperado.cpf:''}
+						defaultValue={data?data.cpf:''}
 						render={({ name, value, onChange }) => (
 							<InputContainer name={name} error={errors[name]} label='CPF'>
 								<InputMask
@@ -277,7 +375,8 @@ function Perfil() {
 					/>
 				</InputWrapper>
 				<InputWrapper columns={2} gap='10px'>
-					{!editing && <Button type='button' label='Desativar Perfil'/>}
+					{(!editing && !!data?.status) && <Button type='button' onClick={confirmDisable} label='Desativar Perfil'/>}
+					{(!editing && !data?.status) && <Button type='button' onClick={confirmEnable} label='Ativar Perfil'/>}
 					{!editing && <Button onClick={() => setEditing(true)} label='Editar Perfil'/>}
 					{editing && <Button onClick={cancelEdit} type='button' label='Cancelar'/>}
 					{editing && <Button label='Salvar'/>}
@@ -306,13 +405,13 @@ function Perfil() {
 				errors={editPropriedadeForm.errors}
 				headerName='Dados da Propriedade'
 				visible={editingModalVisibility}
-				formData={dadosPropriedade}
+				formData={propriedadeEmEdicao}
 				editable={editingProperty}
 				hideModal={hideModal}
 				tecnicos={tecnicos}
 				buttons={
 					<InputWrapper columns={2} gap='10px'>
-						{!editingProperty && <Button type='button' label='Transferir Propriedade'/>}
+						{!editingProperty && <Button type='button' onClick={e => overlayTransfer.current.toggle(e)} aria-haspopup aria-controls="overlay_panel" label='Transferir Propriedade'/>}
 						{!editingProperty && <Button onClick={() => setEditingProperty(true)} label='Editar'/>}
 						{editingProperty && <Button type='button' onClick={cancelEdit} label='Cancelar'/>}
 						{editingProperty && <Button label='Salvar'/>}
@@ -320,7 +419,6 @@ function Perfil() {
 					</InputWrapper>
 				}
 			/>
-
 			{/* Modal de Cadastro de Propriedade */}
 			<Modal
 				onSubmit={novaPropriedadeForm.handleSubmit(cadastrarPropriedade)}
@@ -332,6 +430,31 @@ function Perfil() {
 				hideModal={hideModal}
 				tecnicos={tecnicos}
 			/>
+			<OverlayPanel ref={overlayTransfer} showCloseIcon id="overlay_panel" style={{width: '450px'}} className="p-px-3 p-pb-3">
+				<CardHeader title='Transferir Propriedade'/>
+				<p>Informe o CPF do Cooperado que receberá a propriedade</p>
+				<form onSubmit={transferPropriedadeForm.handleSubmit(transferProperty)} className='p-fluid'>
+					<Controller
+						defaultValue=''
+						name='cooperado'
+						rules={{required: 'É Necessário selecionar o Cooperado que receberá.'}}
+						control={transferPropriedadeForm.control}
+						render={({name, value, onChange}) => (
+						<InputContainer name={name}>
+							<AutoComplete
+								name={name}
+								value={value}
+								placeholder='CPF'
+								field='nome_cooperado'
+								onChange={e => onChange(e.value)}
+								suggestions={cooperadoSuggestions}
+								completeMethod={completeCooperado}
+							/>
+						</InputContainer>
+					)}/>
+					<Button >Transferir</Button>
+				</form>
+			</OverlayPanel>
 		</ManagementTemplate>
 	)
 }

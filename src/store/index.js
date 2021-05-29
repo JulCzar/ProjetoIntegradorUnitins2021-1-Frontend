@@ -9,8 +9,9 @@ import reducer from './reducers'
 import rootSaga from './sagas'
 
 const key = 'store_root'
+const timeout = 3600
 
-const persistedReducer = persistReducer({ key, storage }, reducer)
+const persistedReducer = persistReducer({ key, storage, timeout }, reducer)
 
 const sagaMiddleware = createSagaMiddleware()
 

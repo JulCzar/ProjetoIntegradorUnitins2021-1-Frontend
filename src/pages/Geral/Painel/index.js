@@ -1,3 +1,4 @@
+/* eslint-disable react/display-name */
 import React from 'react'
 import { format } from 'date-fns'
 
@@ -7,6 +8,7 @@ import { Button, Calendar, Column, DataTable, InputText } from '~/primereact'
 
 import { ContainerWithTemplate } from '~/pages/templates'
 import { api } from '~/services'
+import { paginatorTemplate } from '~/common/paginatorTemplate'
 
 function Painel() {
 	const blockRef = React.useRef(null)
@@ -84,7 +86,15 @@ function Painel() {
 					<InputText value={motivoVisita} placeholder='Motivo da Visita' onChange={e => setMotivoVisita(e.target.value)}/>
 					<Calendar value={dataVisita} mask='99/99/9999' placeholder='Selecione o Dia' onChange={e => setDataVisita(e.value)}/>
 				</InputWrapper>
-				<DataTable emptyMessage='Nenhum item encontrado' value={visitas} className="p-datatable-striped" paginator rows={7}>
+				<DataTable
+					rows={7}
+					paginator
+					value={visitas}
+					rowsPerPageOptions={[7,15,30]}
+					className='p-datatable-striped'
+					emptyMessage='Nenhum item encontrado'
+					paginatorTemplate={paginatorTemplate}
+				>
 					<Column field="nome_cooperado" header="Cooperado"/>
 					<Column field="nome_propriedade" header="Propriedade"  />
 					<Column field="nome_tecnico" header="Técnico"/>            

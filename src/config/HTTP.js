@@ -1,1 +1,1 @@
-export const BASE_URL = 'https://back-simov.herokuapp.com/api'
+export const BASE_URL = process.env.REACT_APP_BASE_URL
