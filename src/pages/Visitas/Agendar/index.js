@@ -1,50 +1,129 @@
 import { Controller, useForm } from 'react-hook-form'
 import React from 'react'
 
-import { AutoComplete, Button, Calendar, Dropdown, MultiSelect } from '~/primereact'
+import { AutoComplete, Button, Calendar, Dropdown, MultiSelect, Toast } from '~/primereact'
 import { CardHeader, InputContainer } from '~/common/components'
-import { getInvalidClass, getStringNormalized } from '~/utils'
+import { getApiResponseErrors, getInvalidClass, getStringNormalized } from '~/utils'
 import { ContainerWithTemplate } from '~/pages/templates'
 import { Block, InputWrapper } from '~/common/styles'
 
-import propriedadesJSON from './propriedades.json'
 import * as validate from '~/config/validations'
-import { useLocation } from 'react-router'
-import cooperados from './cooperados.json'
-import motivosJSON from './motivos.json'
+import { useHistory, useLocation } from 'react-router'
 import { format } from 'date-fns'
+import { api, getToastInstance } from '~/services'
+import { store } from '~/store'
 
 function AgendarVisita() {
+	const { control, errors, handleSubmit, reset, setValue } = useForm() // eslint-disable-line
+	const [visitDay, setVisitDay] = React.useState(null)
+
+	// cooperado selecionado
+	const [cooperado, setCooperado] = React.useState(null)
+	const [loading, setLoading] = React.useState(false)
+	
+	// listas
 	const [cooperadosFiltrados, setCooperadosFiltrados] = React.useState([])
 	const [propriedades, setPropriedades] = React.useState([])
+	const [cooperados, setCooperados] = React.useState([])
 	const [motivos, setMotivos] = React.useState([])
-	const location = useLocation()
+
+	const toastRef = React.useRef(null)
+	const toast = getToastInstance(toastRef)
 	
-	const { control, errors, handleSubmit, reset, setValue } = useForm()
-	
+	// Parâmetro da URL
+	const { state } = useLocation()
+	const history = useHistory()
+
 	React.useEffect(() => {
-		setPropriedades(propriedadesJSON)
-		setMotivos(motivosJSON)
-		if (location.state) {
-			const dataVisita = new Date(location.state)
-			setValue('data', dataVisita)
-			
-			if (format(dataVisita, 'hh:mm') !== '12:00')
-				setValue('horaEstimada', dataVisita)
-		}
+		loadData()
+
+		if (!state) return
+		const dataVisita = new Date(state)
+		setValue('data', dataVisita)
+		
+		if (format(dataVisita, 'hh:mm') !== '12:00')
+			setValue('horaEstimada', dataVisita)
 	}, [])
 
-	const agendar = form => {
-		console.log(form) // eslint-disable-line no-console
+	React.useEffect(() => {
+		if (!cooperado) return setPropriedades([])
+
+		carregarPropriedades()
+	}, [cooperado])
+
+	React.useEffect(() => {
+		if (!visitDay) return
 		
-		reset()
+		setValue('horaEstimada', visitDay)
+	}, [visitDay])
+	
+	async function loadData() {
+		setLoading(true)
+		const promises = [carregarCooperados(), carregarMotivos()]
+
+		await Promise.all(promises)
+
+		setLoading(false)
+	}
+
+	/**
+	 * @param {string | () => string} endpoint 
+	 * @param {React.Dispatch<React.SetStateAction<any>} dispatch 
+	 * @returns 
+	 */
+	function carregarAlgo(endpoint, dispatch) {
+		return async function () {
+			const rota = typeof endpoint !== 'function'?endpoint:endpoint()
+			
+			try {
+				const { data } = await api.get(rota)
+	
+				dispatch(data)
+			} catch ({ response }) {
+				toast.showErrors(getApiResponseErrors(response))
+			}
+		}
+	}
+
+	const carregarMotivos = carregarAlgo('/motivos', setMotivos)
+	const carregarCooperados = carregarAlgo('/cooperado/index', setCooperados)
+	const carregarPropriedades = async () => {
+		setLoading(true)
+		const getEndpoint = () => `/propriedades/${cooperado.id}`
+		await carregarAlgo(getEndpoint, setPropriedades)()
+		setLoading(false)
+	}
+
+	async function agendar(form) {
+		const { auth } = store.getState()
+		const { propriedade, data: date, horaEstimada, motivos } = form
+		
+		const data = {
+			id_propriedade: propriedade.id,
+			motivo_visita: motivos.map(m => m.nome).join(', '),
+			dia_visita: format(date, 'yyyy-MM-dd'),
+			horaEstimada,
+			id_tecnico: auth.user.id
+		}
+		try {
+			setLoading(true)
+			
+			await api.post('/visitas', data)
+
+			history.goBack()
+		} catch ({ response }) {
+			toast.showErrors(getApiResponseErrors(response))
+		} finally {
+			setLoading(false)
+			reset()
+		}
 	}
 
 	const filtrarCooperado = event => {
-		const cooperadosFiltrados = cooperados
+		const cooperadosFiltrados = [...cooperados]
 			.filter(i => {
 				const pesquisaNormalizada = getStringNormalized(event.query.toLowerCase())
-				const nomeCooperadoNormalizado = getStringNormalized(i.label.toLowerCase())
+				const nomeCooperadoNormalizado = getStringNormalized(i.nome_cooperado.toLowerCase())
 				return nomeCooperadoNormalizado.startsWith(pesquisaNormalizada)
 			})
 
@@ -52,37 +131,43 @@ function AgendarVisita() {
 	}
 
 	return (
-		<ContainerWithTemplate contentClassName='p-mt-5'>
+		<ContainerWithTemplate loading={loading} contentClassName='p-mt-5'>
+			<Toast ref={toastRef}/>
 			<Block className='p-p-3 p-fluid'>
 				<CardHeader title='Agendar Visita'/>
 				<form onSubmit={handleSubmit(agendar)}>
 					<Controller
 						name='cooperado'
 						control={control}
-						defaultValue={false}
+						defaultValue={null}
 						rules={validate.selectCooperado}
 						render={({ name, value, onChange }) => (
 							<InputContainer name={name} label='Cooperado' error={errors[name]}>
 								<AutoComplete
-									field='label'
+									dropdown
 									value={value}
+									field='nome_cooperado'
 									suggestions={cooperadosFiltrados}
 									completeMethod={filtrarCooperado}
-									onChange={e => onChange(e.value)}
-									className={getInvalidClass(errors[name])}/>
+									className={getInvalidClass(errors[name])}
+									onSelect={evt => {
+										setCooperado(evt.value)
+										onChange(evt.value)
+									}}
+								/>
 							</InputContainer>
 						)}
 					/>
 					<Controller
 						name='propriedade'
 						control={control}
-						defaultValue={false}
+						defaultValue={null}
 						rules={validate.selectProperty}
 						render={({ name, value, onChange }) => (
 							<InputContainer name={name} label='Propriedade' error={errors[name]}>
 								<Dropdown
-									options={propriedades}
 									value={value}
+									options={propriedades.map(p => ({label: p.nome, value: p}))}
 									onChange={e => onChange(e.value)}
 									className={getInvalidClass(errors[name])}/>
 							</InputContainer>
@@ -92,27 +177,32 @@ function AgendarVisita() {
 							name='data'
 							control={control}
 							rules={validate.day}
-							defaultValue={false}
+							defaultValue={null}
 							render={({ name, value, onChange }) => (
 								<InputContainer label='Data' name='data' error={errors.data}>
 								<Calendar
 									showIcon
-									mask='99/99/9999'
 									value={value}
+									mask='99/99/9999'
 									minDate={new Date()}
 									dateFormat='dd/mm/yy'
-									onChange={e => onChange(e.value)}
-									className={getInvalidClass(errors[name])}/>
+									className={getInvalidClass(errors[name])}
+									onChange={e => {
+										setVisitDay(e.value)
+										onChange(e.value)
+									}}
+								/>
 							</InputContainer>
 						)}/>
 						<Controller
 							name='horaEstimada'
 							control={control}
 							rules={validate.hour}
-							defaultValue={false}
+							defaultValue={null}
 							render={({ name, value, onChange }) => (
 								<InputContainer label='Hora Estimada' name={name} error={errors[name]}>
 									<Calendar
+										showIcon
 										timeOnly
 										mask='99:99'
 										value={value}
@@ -123,17 +213,19 @@ function AgendarVisita() {
 						)}/>
 					</InputWrapper>
 					<Controller
-						name='motivo'
+						name='motivos'
 						control={control}
-						defaultValue={false}
+						defaultValue={null}
 						rules={validate.selectReason}
 						render={({ name, value, onChange }) => (
 							<InputContainer label='Motivo da Visita' name={name} error={errors[name]}>
 								<MultiSelect
+									filter
 									value={value}
-									options={motivos}
+									onChange={e => onChange(e.value)}
 									className={getInvalidClass(errors[name])}
-									onChange={e => onChange(e.value)}/>
+									options={motivos.map(m => ({label: m.nome, value: m}))}
+								/>
 							</InputContainer>
 						)}/>
 					<Button label='Agendar Visita' />
