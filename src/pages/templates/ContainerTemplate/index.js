@@ -1,27 +1,22 @@
-import { bindActionCreators } from 'redux'
 import { useHistory, useLocation } from 'react-router'
-import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import React from 'react'
 
 import { Container, Header, Content, Footer, ContainerLimiter, HeaderMenu } from '../styles'
 import { Button, ListBox, OverlayPanel, TabMenu, Toast } from '~/primereact'
 import Loading from '~/pages/templates/components/Loading'
-import * as action from '~/store/actions/auth'
 import { getToastInstance } from '~/services'
 import { getMenuItems } from '../menuItems'
 import logo from '~/assets/logo.svg'
+import { store } from '~/store'
 
 function ContainerTemplate({
 	contentContainerClassName ='',
 	contentContainerStyle = {},
 	contentClassName = '',
 	contentStyle = {},
-	permissions,
 	children,
 	loading,
-	token,
-	user,
 }) {
 	const [menuItems, setMenuItems] = React.useState([])
 	const toastRef = React.useRef(null)
@@ -38,14 +33,17 @@ function ContainerTemplate({
 	
 	
 	React.useEffect(() => {
-		const items = getMenuItems({
-			permissions,
-			token,
-			user
-		})
+		updateMenuItems()
+		store.subscribe(updateMenuItems)
+	}, [])
+
+	function updateMenuItems() {
+		const { auth } = store.getState()
+		
+		const items = getMenuItems(auth)
 
 		setMenuItems(items)
-	}, [])
+	}
 
 	const handleTabChange = e => {
 		history.push(e.value.destination)
@@ -87,14 +85,8 @@ ContainerTemplate.propTypes = {
 	contentContainerStyle: PropTypes.any,
 	contentClassName: PropTypes.string,
 	contentStyle: PropTypes.any,
-	permissions: PropTypes.any,
 	children: PropTypes.any,
 	loading: PropTypes.bool,
-	token: PropTypes.any,
-	user: PropTypes.any,
 }
 
-export default connect(
-	props => props.auth,
-	dispatch => bindActionCreators(action, dispatch)
-)(ContainerTemplate)
+export default ContainerTemplate

@@ -1,8 +1,35 @@
 import { Switch, Route, BrowserRouter } from 'react-router-dom'
-import * as ROUTES from '~/pages'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
 import React from 'react'
 
-const Routes = function _Routes() {
+import * as actions from '~/store/actions/auth'
+import * as ROUTES from '~/pages'
+import { api } from '~/services'
+import { store } from '~/store'
+
+const Routes = function ({ logout }) {
+	const { auth } = store.getState()
+
+	React.useEffect(() => {
+		validateToken()
+	},[])
+
+	async function validateToken() {
+		const { token } = auth
+		if (!token) return
+
+		try {
+			const { data } = await api.post('/auth/validate')
+			
+			if (data.isValid) return
+			
+			logout()
+		} catch ({ res }) { 
+			logout()
+		}
+	}
 	return (
 		<BrowserRouter>
 			<Switch>
@@ -53,4 +80,11 @@ const Routes = function _Routes() {
 	)
 }
 
-export default Routes
+Routes.propTypes = {
+	logout: PropTypes.func
+}
+
+export default connect(
+	props => props.auth,
+	dispatch => bindActionCreators(actions, dispatch)
+)(Routes)

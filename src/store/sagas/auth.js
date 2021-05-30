@@ -16,7 +16,7 @@ const login = function* _login(action) {
 const logout = function* _logout() {
 	yield put(actions.logout())
 
-	yield put(push('/logged_out'))
+	yield put(push('/'))
 }
 
 const AUTH_SAGA = [

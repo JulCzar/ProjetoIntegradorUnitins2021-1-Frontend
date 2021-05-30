@@ -2,7 +2,7 @@ import React from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { CardHeader, InputContainer } from '~/common/components'
 import { Block, InputWrapper } from '~/common/styles'
-import { AutoComplete, Button, Calendar, InputText, InputTextarea, MultiSelect, Toast } from '~/primereact'
+import { Button, Calendar, InputText, InputTextarea, MultiSelect, Toast } from '~/primereact'
 import { api, getToastInstance } from '~/services'
 import { ContainerWithTemplate } from '~/pages/templates'
 import { getApiResponseErrors, getInvalidClass } from '~/utils'
@@ -27,9 +27,10 @@ function DetalhesVisita() {
 	React.useEffect(() => {
 		(async function() {
 			setLoading(true)
-			const promises = [carregarMotivosVisita(), carregarDadosVisita()]
 
+			const promises = [carregarMotivosVisita(), carregarDadosVisita()]
 			await Promise.all(promises)
+
 			setLoading(false)
 		})()
 	}, [])
@@ -69,23 +70,19 @@ function DetalhesVisita() {
 		}
 	}
 
-	const validateForm = form => {
-		const { cooperado, propriedade, motivo } = form
-		const { value } = cooperado || { value: null }
-		
-		if (![propriedade, motivo, value].includes(null))
-			return true
+	async function salvar(form) {				
+		console.log(form)
 
-		return false
-	}
+		try {
+			setLoading(true)
 
-	const salvar = form => {
-		const isValid = validateForm(form)
-		
-		if (!isValid) return toast.showWarn('Você está deixando campos requeridos vazios!')
-		
-		setEditing(false)
-		console.log(form) // eslint-disable-line no-console
+			await api.put('/ROTA_AQUI', {})
+		} catch ({ response }) {
+			toast.showErrors(getApiResponseErrors(response))
+		} finally {
+			setEditing(false)
+			setLoading(false)
+		}	
 	}
 
 	const cancelEdit = () => {
@@ -117,14 +114,12 @@ function DetalhesVisita() {
 						defaultValue={data?data.cooperado:''}
 						render={({ name, value }) => (
 							<InputContainer name={name} label='Cooperado' error={errors[name]}>
-								<AutoComplete
+								<InputText
 									disabled
 									field='label'
 									value={value}
 									suggestions={cooperadosFiltrados}
-									completeMethod={filtrarCooperado}
-									onChange={e => onChange(e.value)}
-									className={getInvalidClass(errors[name])}/>
+									completeMethod={filtrarCooperado}/>
 							</InputContainer>
 						)}
 					/>

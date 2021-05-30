@@ -1,5 +1,3 @@
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import React from 'react'
 
@@ -9,16 +7,15 @@ import { PanelMenu } from '~/primereact'
 import { FullWidth, PanelMenuContainer } from './styles'
 import { getMenuItems } from './lateralMenuItems'
 import { CardHeader } from '~/common/components'
-import * as action from '~/store/actions/auth'
 import { useHistory } from 'react-router'
 import { Block} from '~/common/styles'
+import { store } from '~/store'
 
 function ManagementTemplate({
 	contentContainerClassName ='',
 	contentContainerStyle = {},
 	contentClassName = '',
 	contentStyle = {},
-	permissions,
 	children,
 	loading,
 	title
@@ -27,9 +24,18 @@ function ManagementTemplate({
 	const history = useHistory()
 
 	React.useEffect(() => {
-		const items = getMenuItems({permissions})
+		updateMenuItems()
+		
+		store.subscribe(updateMenuItems)
+	}, [])
+
+	function updateMenuItems() {
+		const { auth } = store.getState()
+
+		const items = getMenuItems(auth)
+
 		setMenuItems(items)
-	}, [permissions])
+	}
 	
 	const handleTabChange = e => {
 		history.push(e.value.destination)
@@ -80,13 +86,9 @@ ManagementTemplate.propTypes = {
 	contentContainerClassName: PropTypes.string,
 	contentStyle: PropTypes.any,
 	contentContainerStyle: PropTypes.any,
-	permissions: PropTypes.arrayOf(PropTypes.number),
 	loading: PropTypes.bool,
 	title: PropTypes.string
 }
 
 
-export default connect(
-	props => props.auth,
-	dispatch => bindActionCreators(action, dispatch)
-)(ManagementTemplate)
+export default ManagementTemplate
