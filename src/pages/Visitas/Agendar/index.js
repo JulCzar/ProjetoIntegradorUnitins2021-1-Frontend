@@ -103,7 +103,7 @@ function AgendarVisita() {
 			motivo_visita: motivos.map(m => m.nome).join(', '),
 			dia_visita: format(date, 'yyyy-MM-dd'),
 			horaEstimada,
-			id_tecnico: auth.user.id
+			id_user: auth.user.id
 		}
 		try {
 			setLoading(true)

@@ -5,10 +5,10 @@
  * }} param1
  * @returns 
  */
-export function getMenuItems({ permissions = [], token } = {}) {
+export function getMenuItems({ permissions = [], token, user } = {}) {
 	const allItems = [
 		{label: 'Home', destination:'/'},
-		{label: 'Visitas', destination: '/visitas', showIf: token},
+		{label: 'Visitas', destination: '/visitas', showIf: (token && user?.id !== 1)},
 		{label: 'Gestão', destination:'/perfil', showIf() {
 			if (!token) return false
 

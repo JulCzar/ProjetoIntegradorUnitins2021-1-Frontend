@@ -4,58 +4,71 @@ import { format } from 'date-fns'
 
 import { CardHeader } from '~/common/components'
 import { Block, InputWrapper } from '~/common/styles'
-import { Button, Calendar, Column, DataTable, InputText } from '~/primereact'
+import { Button, Calendar, Column, DataTable, InputText, Toast } from '~/primereact'
 
 import { ContainerWithTemplate } from '~/pages/templates'
-import { api } from '~/services'
+import { api, getToastInstance } from '~/services'
 import { paginatorTemplate } from '~/common/paginatorTemplate'
+import { getApiResponseErrors } from '~/utils'
 
 function Painel() {
+	// Estados
 	const blockRef = React.useRef(null)
+	const toastRef = React.useRef(null)
+
+	// Controles
 	const [lastTimeoutId, setTimeoutId] = React.useState(0)
 	const [loading, setLoading] = React.useState(false)
 	const [visitas, setVisitas] = React.useState([])
+
+	// Estados dos inputs
 	const [nomePropriedade, setNomePropriedade] = React.useState('')
 	const [nomeCooperado, setNomeCooperado] = React.useState('')
 	const [motivoVisita, setMotivoVisita] = React.useState('')
 	const [nomeTecnico, setNomeTecnico] = React.useState('')
 	const [dataVisita, setDataVisita] = React.useState('')
 
+	const toast = getToastInstance(toastRef)
+
 	React.useEffect(() => {
 		clearTimeout(lastTimeoutId)
 
-		const getParams = () => {
-			const params = {}
+		const timeoutId = setTimeout(getVisitas, 500)
 
-			if (nomeCooperado)
-				params.nome_cooperado = nomeCooperado
-			if (nomePropriedade)
-				params.nome_propriedade = nomePropriedade
-			if (nomeTecnico)
-				params.nome_tecnico = nomeTecnico
-			if (dataVisita)
-				params.dia_visita = format(dataVisita, 'yyyy-MM-dd')
-			if (motivoVisita)
-				params.motivo_visita = motivoVisita
-
-			return params
-		}
-	
-		const getVisitas = async () => {
-			setLoading(true)
-			
-			try {
-				const { data: result } = await api.get('/painel', { params: getParams() })
-
-				setVisitas(result)
-			} catch (err) {}
-			finally {
-				setLoading(false)
-			}
-		}
-
-		setTimeoutId(setTimeout(getVisitas, 500))
+		setTimeoutId(timeoutId)
 	},[nomeCooperado, nomePropriedade, nomeTecnico, dataVisita, motivoVisita])
+
+	async function getVisitas() {
+		
+		try {
+			setLoading(true)
+
+			const { data: result } = await api.get('/painel', { params: getParams() })
+
+			setVisitas(result)
+		} catch ({ response }) {
+			toast.showErrors(getApiResponseErrors(response))
+		} finally {
+			setLoading(false)
+		}
+	}
+
+	function getParams() {
+		const params = {}
+
+		if (nomeCooperado)
+			params.nome_cooperado = nomeCooperado
+		if (nomePropriedade)
+			params.nome_propriedade = nomePropriedade
+		if (nomeTecnico)
+			params.nome_tecnico = nomeTecnico
+		if (dataVisita)
+			params.dia_visita = format(dataVisita, 'yyyy-MM-dd')
+		if (motivoVisita)
+			params.motivo_visita = motivoVisita
+
+		return params
+	}
 
 	const enterFullscreen = () => {
 		const isNotFullscreen = !document.fullscreenElement
@@ -68,6 +81,7 @@ function Painel() {
 
 	return (
 		<ContainerWithTemplate loading={loading} contentClassName='p-fluid p-mt-5'>
+			<Toast ref={toastRef}/>
 			<Block ref={blockRef} className='p-p-3'>
 				<div className="p-d-flex p-ai-center">
 					<CardHeader title='Painel de Exibição'/>
