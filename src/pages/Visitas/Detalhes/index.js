@@ -1,20 +1,23 @@
 import React from 'react'
+import { useHistory, useParams } from 'react-router'
 import { Controller, useForm } from 'react-hook-form'
-import { CardHeader, InputContainer } from '~/common/components'
-import { Block, InputWrapper } from '~/common/styles'
+
 import { Button, Calendar, InputText, InputTextarea, MultiSelect, Toast } from '~/primereact'
-import { api, getToastInstance } from '~/services'
-import { ContainerWithTemplate } from '~/pages/templates'
+import { CardHeader, InputContainer } from '~/common/components'
 import { getApiResponseErrors, getInvalidClass } from '~/utils'
-import { useParams } from 'react-router'
+import { ContainerWithTemplate } from '~/pages/templates'
+import { Block, InputWrapper } from '~/common/styles'
+import { api, getToastInstance } from '~/services'
 import * as validate from '~/config/validations'
 
 function DetalhesVisita() {
-	const [cooperadosFiltrados, setCooperadosFiltrados] = React.useState([])
+	const history = useHistory()
+	const [motivosSelecionados, setMotivosSelecionados] = React.useState([])
 	const [motivos, setMotivos] = React.useState([])
 	
-	const [loading, setLoading] = React.useState(false)
 	const [visitDay, setVisitDay] = React.useState(null)
+	const [visitHour, setVisitHour] = React.useState(null)
+	const [loading, setLoading] = React.useState(false)
 	const [data, setData] = React.useState(null)
 
 	const { control, handleSubmit, errors, setValue, reset } = useForm()
@@ -42,18 +45,19 @@ function DetalhesVisita() {
 	async function carregarDadosVisita() {
 		try {
 			const { data: resp } = await api.get(`/visita/${id}`)
-			const {
-				dia_visita: date,
-				horario_estimado_visita: time
-			} = resp
-			resp.data = new Date(`${date}T${time}.000Z`)
-			resp.horaEstimada = resp.data
+			const { dia_visita: date, horario_estimado_visita: time } = resp
+
 			resp.motivos = resp.motivo_visita.split(',').map(i => i.trim())
+			resp.data = new Date(`${date}T${time}.000Z`)
 			
+			resp.horaEstimada = resp.data
+			setVisitDay(resp.data)
+			setMotivosSelecionados(resp.motivos)
+
 			setData(resp)
-			
+
 			reset()
-			
+
 			Object.entries(resp).forEach(([key, value]) => setValue(key, value))
 		} catch ({ response }) {
 			toast.showErrors(getApiResponseErrors(response))
@@ -70,13 +74,22 @@ function DetalhesVisita() {
 		}
 	}
 
-	async function salvar(form) {				
-		console.log(form)
+	async function salvar(form) {
+		const { motivos, observacoes } = form
+
+		const data = {
+			motivo_visita: motivos.join(', '),
+			horaEstimada: visitHour,
+			dia_visita: visitDay,
+			observacoes
+		}
 
 		try {
 			setLoading(true)
+			
+			await api.put(`/visitas/${id}`, data)
 
-			await api.put('/ROTA_AQUI', {})
+			history.goBack()
 		} catch ({ response }) {
 			toast.showErrors(getApiResponseErrors(response))
 		} finally {
@@ -91,53 +104,23 @@ function DetalhesVisita() {
 		Object.entries(data).forEach(([key, value]) => setValue(key, value))
 	}
 
-	const filtrarCooperado = event => {
-		const cooperadosFiltrados = cooperados
-			.filter(i => {
-				const pesquisaNormalizada = getStringNormalized(event.query.toLowerCase())
-				const nomeCooperadoNormalizado = getStringNormalized(i.label.toLowerCase())
-				return nomeCooperadoNormalizado.startsWith(pesquisaNormalizada)
-			})
-
-		setCooperadosFiltrados(cooperadosFiltrados)
-	}
-
 	return (
 		<ContainerWithTemplate contentClassName='p-mt-5' loading={loading}>
 			<Block className='p-p-3 p-fluid'>
 				<Toast ref={toastRef} />
 				<CardHeader title='Detalhes da Visita'/>
 				<form onSubmit={handleSubmit(salvar)}>
-					<Controller
-						name='cooperado'
-						control={control}
-						defaultValue={data?data.cooperado:''}
-						render={({ name, value }) => (
-							<InputContainer name={name} label='Cooperado' error={errors[name]}>
-								<InputText
-									disabled
-									field='label'
-									value={value}
-									suggestions={cooperadosFiltrados}
-									completeMethod={filtrarCooperado}/>
-							</InputContainer>
-						)}
-					/>
-					<Controller
-						name='propriedade'
-						control={control}
-						defaultValue={data?data.propriedade:''}
-						render={({ name, value }) => (
-							<InputContainer name={name} label='Propriedade'>
-								<InputText
-									disabled
-									id={name}
-									name={name}
-									value={value}
-								/>
-							</InputContainer>
-						)}
-					/>
+					<InputContainer name='cooperado' label='Cooperado'>
+						<InputText
+							disabled
+							value={data?.cooperado || ''}/>
+					</InputContainer>
+					<InputContainer name='propriedade' label='Propriedade'>
+						<InputText
+							disabled
+							value={data?.propriedade||''}
+						/>
+					</InputContainer>
 					<InputWrapper columns={2} gap='10px'>
 						<Controller
 							name='data'
@@ -157,7 +140,6 @@ function DetalhesVisita() {
 											setVisitDay(evt.value)
 											onChange(evt.value)
 										}}
-										dateFormat='dd/mm/yy'
 									/>
 								</InputContainer>
 							)}
@@ -175,7 +157,10 @@ function DetalhesVisita() {
 										mask='99:99'
 										value={value}
 										showIcon={editing}
-										onChange={evt => onChange(evt.value)}
+										onChange={evt => {
+											setVisitHour(evt.value)
+											onChange(evt.value)
+										}}
 										disabled={!editing}
 									/>
 								</InputContainer>
@@ -187,18 +172,21 @@ function DetalhesVisita() {
 						control={control}
 						rules={validate.selectReason}
 						defaultValue={data?data.motivos:[]}
-						render={({ name, value, onChange }) => (
+						render={({ name, onChange }) => (
 							<InputContainer name={name} label='Motivo da Visita' error={errors[name]}>
 								<MultiSelect
 									filter
 									id={name}
 									name={name}
-									value={value}
+									value={motivosSelecionados}
 									options={motivos}
 									optionValue='nome'
 									optionLabel='nome'
 									disabled={!editing}
-									onChange={evt => onChange(evt.value)}
+									onChange={evt => {
+										onChange(evt.value)
+										setMotivosSelecionados(evt.value)
+									}}
 									className={getInvalidClass(errors[name])}
 								/>
 							</InputContainer>
@@ -207,7 +195,7 @@ function DetalhesVisita() {
 					<Controller
 						name='observacoes'
 						control={control}
-						defaultValue={data?data.observacoes:''}
+						defaultValue={data?(data.observacao || ''):''}
 						render={({ name, value, onChange }) => (
 							<InputContainer name={name} label='Observações'>
 								<InputTextarea
@@ -215,7 +203,6 @@ function DetalhesVisita() {
 									autoResize
 									name={name}
 									value={value}
-									options={motivos}
 									disabled={!editing}
 									onChange={evt => onChange(evt.target.value)}
 								/>

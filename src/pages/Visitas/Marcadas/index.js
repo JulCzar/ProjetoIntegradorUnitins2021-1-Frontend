@@ -62,6 +62,7 @@ function VisitasMarcadas() {
 			const { data } = await api.get(`/visitas/${auth.user.id}`)
 			
 			const visitEvents = data.map(formatEvent)
+			console.log(visitEvents)
 
 			setEvents(visitEvents)
 		} catch ({ response }) {

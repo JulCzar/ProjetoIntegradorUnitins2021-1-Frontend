@@ -14,8 +14,9 @@ import { api, getToastInstance } from '~/services'
 import { store } from '~/store'
 
 function AgendarVisita() {
-	const { control, errors, handleSubmit, reset, setValue } = useForm() // eslint-disable-line
+	const { control, errors, handleSubmit, reset, setValue } = useForm()
 	const [visitDay, setVisitDay] = React.useState(null)
+	const [visitHour, setVisitHour] = React.useState(null)
 
 	// cooperado selecionado
 	const [cooperado, setCooperado] = React.useState(null)
@@ -40,7 +41,8 @@ function AgendarVisita() {
 		if (!state) return
 		const dataVisita = new Date(state)
 		setValue('data', dataVisita)
-		
+		setVisitDay(dataVisita)
+		console.log(format(dataVisita, 'hh:mm') !== '12:00')
 		if (format(dataVisita, 'hh:mm') !== '12:00')
 			setValue('horaEstimada', dataVisita)
 	}, [])
@@ -96,14 +98,14 @@ function AgendarVisita() {
 
 	async function agendar(form) {
 		const { auth } = store.getState()
-		const { propriedade, data: date, horaEstimada, motivos } = form
+		const { propriedade, motivos } = form
 		
 		const data = {
-			id_propriedade: propriedade.id,
 			motivo_visita: motivos.map(m => m.nome).join(', '),
-			dia_visita: format(date, 'yyyy-MM-dd'),
-			horaEstimada,
-			id_user: auth.user.id
+			id_propriedade: propriedade.id,
+			horaEstimada: visitHour,
+			id_user: auth.user.id,
+			dia_visita: visitDay
 		}
 		try {
 			setLoading(true)
@@ -185,7 +187,6 @@ function AgendarVisita() {
 									value={value}
 									mask='99/99/9999'
 									minDate={new Date()}
-									dateFormat='dd/mm/yy'
 									className={getInvalidClass(errors[name])}
 									onChange={e => {
 										setVisitDay(e.value)
@@ -206,7 +207,10 @@ function AgendarVisita() {
 										timeOnly
 										mask='99:99'
 										value={value}
-										onChange={e => onChange(e.value)}
+										onChange={e => {
+											setVisitHour(e.value)
+											onChange(e.value)
+										}}
 										className={getInvalidClass(errors[name])}
 									/>
 								</InputContainer>
