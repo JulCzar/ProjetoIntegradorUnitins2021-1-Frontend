@@ -39,11 +39,17 @@ function Painel() {
 	},[nomeCooperado, nomePropriedade, nomeTecnico, dataVisita, motivoVisita])
 
 	async function getVisitas() {
-		
 		try {
 			setLoading(true)
 
 			const { data: result } = await api.get('/painel', { params: getParams() })
+			for (const row of result) {
+				const { dia_visita, horario_estimado_visita } = row
+				const data = new Date(`${dia_visita}T${horario_estimado_visita}.000Z`)
+
+				row.dia_visita = format(data, 'dd/MM/yyyy')
+				row.horario_estimado_visita = format(data, 'hh:mm')
+			}
 
 			setVisitas(result)
 		} catch ({ response }) {
