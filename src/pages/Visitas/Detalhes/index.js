@@ -2,7 +2,7 @@ import React from 'react'
 import { useHistory, useParams } from 'react-router'
 import { Controller, useForm } from 'react-hook-form'
 
-import { Button, Calendar, InputText, InputTextarea, MultiSelect, Toast } from '~/primereact'
+import { Button, Calendar, Dialog, FileUpload, InputText, InputTextarea, ListBox, MultiSelect, Toast } from '~/primereact'
 import { CardHeader, InputContainer } from '~/common/components'
 import { getApiResponseErrors, getInvalidClass } from '~/utils'
 import { ContainerWithTemplate } from '~/pages/templates'
@@ -13,14 +13,18 @@ import * as validate from '~/config/validations'
 function DetalhesVisita() {
 	const history = useHistory()
 	const [motivosSelecionados, setMotivosSelecionados] = React.useState([])
+	const [modalVisibility, setModalVisibility] = React.useState(false)
 	const [motivos, setMotivos] = React.useState([])
+	const [talhoes, setTalhoes] = React.useState([])
 	
 	const [visitDay, setVisitDay] = React.useState(null)
 	const [visitHour, setVisitHour] = React.useState(null)
 	const [loading, setLoading] = React.useState(false)
-	const [data, setData] = React.useState(null)
+	const [data, setData] = React.useState({observacao: ''})
 
 	const { control, handleSubmit, errors, setValue, reset } = useForm()
+	const talhaoForm = useForm()
+
 	const [editing, setEditing] = React.useState(false)
 	const { id } = useParams()
 
@@ -59,7 +63,9 @@ function DetalhesVisita() {
 
 			reset()
 
-			Object.entries(resp).forEach(([key, value]) => setValue(key, value))
+			Object.entries(resp).forEach(([key, value]) => {
+				if (value) setValue(key, value)
+			})
 		} catch ({ response }) {
 			toast.showErrors(getApiResponseErrors(response))
 		} 
@@ -78,17 +84,17 @@ function DetalhesVisita() {
 	async function salvar(form) {
 		const { motivos, observacao } = form
 
-		const data = {
-			motivo_visita: motivos.join(', '),
-			horaEstimada: visitHour,
-			dia_visita: visitDay,
-			observacao
-		}
+		const data = new FormData()
+		data.append('motivo_visita', motivos.join(', '))
+		data.append('horaEstimada', visitHour.toJSON())
+		data.append('dia_visita', visitDay.toJSON())
+		data.append('observacao', observacao)
+		data.append('talhoes[]', talhoes)
 
 		try {
 			setLoading(true)
 			
-			await api.put(`/visitas/${id}`, data)
+			await api.post(`/visitas/${id}`, data)
 
 			history.goBack()
 		} catch ({ response }) {
@@ -99,6 +105,11 @@ function DetalhesVisita() {
 		}	
 	}
 
+	function addTalhao(form) {
+		setTalhoes([...talhoes, form])
+		setModalVisibility(false)
+	}
+
 	const cancelEdit = () => {
 		setEditing(false)
 		reset()
@@ -106,8 +117,8 @@ function DetalhesVisita() {
 	}
 
 	return (
-		<ContainerWithTemplate contentClassName='p-mt-5' loading={loading}>
-			<Block className='p-p-3 p-fluid'>
+		<ContainerWithTemplate contentContainerClassName='p-d-flex p-ai-start p-flex-wrap' contentClassName='p-mt-5' loading={loading}>
+			<Block className='p-p-3 p-ml-3 p-mt-3 p-fluid'>
 				<Toast ref={toastRef} />
 				<CardHeader title='Detalhes da Visita'/>
 				<form onSubmit={handleSubmit(salvar)}>
@@ -196,7 +207,7 @@ function DetalhesVisita() {
 					<Controller
 						name='observacao'
 						control={control}
-						defaultValue={data?(data.observacao || ''):''}
+						defaultValue={data?data.observacao:''}
 						render={({ name, value, onChange }) => (
 							<InputContainer name={name} label='Observações'>
 								<InputTextarea
@@ -219,6 +230,70 @@ function DetalhesVisita() {
 					</InputWrapper>
 				</form>
 			</Block>
+
+			<Block className='p-p-3 p-ml-3 p-mt-3 p-fluid'>
+				<CardHeader title='Talhões'/>
+				<ListBox
+					className='p-mb-5'
+					options={talhoes}
+					optionLabel='cultura'/>
+				<Button
+					type='button'
+					className='p-mb-3'
+					onClick={() => setModalVisibility(true)}
+				>Inserir detalhes de um talhão</Button>
+			</Block>
+
+			<Dialog
+				draggable={false}
+				visible={modalVisibility}
+				style={{ width: '50vw' }}
+				header='Detalhes do Talhão'
+				onHide={() => setModalVisibility(false)}
+				breakpoints={{'960px': '75vw', '640px': '100vw'}}
+			>
+				<form className='p-fluid' onSubmit={talhaoForm.handleSubmit(addTalhao)}>
+					<Controller
+						name='cultura'
+						defaultValue=''
+						control={talhaoForm.control}
+						render={({ name, value, onChange }) => (
+							<InputContainer name={name} label='Cultura Cultivada'>
+								<InputText name={name} value={value} onChange={evt => onChange(evt.target.value)}/>
+							</InputContainer>
+						)}
+					/>
+					<Controller
+						name='relatorio'
+						defaultValue=''
+						control={talhaoForm.control}
+						render={({ name, value, onChange }) => (
+							<InputContainer name={name} label='Relatório'>
+								<InputTextarea autoResize value={value} onChange={evt => onChange(evt.target.value)}/>
+							</InputContainer>
+						)}
+					/>
+					<Controller 
+						name='imagens'
+						defaultValue={[]}
+						control={talhaoForm.control}
+						render={({ name, onChange }) => (
+							<InputContainer name={name} label='Imagens da Visita'>
+								<FileUpload
+									auto
+									multiple
+									name={name}
+									customUpload
+									accept="image/*"
+									maxFileSize={Infinity}
+									uploadHandler={evt => onChange(evt.files)}
+								/>
+							</InputContainer>
+						)}
+					/>
+					<Button className='p-flex p-jc-center'>Adicionar</Button>
+				</form>
+			</Dialog>
 		</ContainerWithTemplate>
 	)
 }

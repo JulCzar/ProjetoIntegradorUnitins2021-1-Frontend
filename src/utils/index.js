@@ -77,5 +77,5 @@ export function getApiResponseErrors(thrownException) {
 	
 	if (!apiResponse) return ['Houve um erro ao processar a requisição']
 
-	return Object.values(apiResponse)
+	return Object.values(apiResponse).flat()
 }
