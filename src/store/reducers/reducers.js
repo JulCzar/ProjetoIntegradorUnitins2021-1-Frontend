@@ -19,12 +19,9 @@ export const LOGIN_FAILURE = state => ({
 	permissions: []
 })
 
-export const LOGOUT = state => {
-	console.log('logout realizado')
-	return ({
-		...state,
-		user: {},
-		token: null,
-		permissions: []
-	})
-}
+export const LOGOUT = state => ({
+	...state,
+	user: {},
+	token: null,
+	permissions: []
+})

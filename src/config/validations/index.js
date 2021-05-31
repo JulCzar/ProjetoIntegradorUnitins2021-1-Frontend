@@ -87,10 +87,7 @@ export const selectProperty = {
 export const selectReason = {
 	required: 'Você precisa selecionar pelo menos um motivo.',
 	validate: {
-		notEmptyArray: v => {
-			console.log(v)
-			return !!v.length || 'Você precisa selecionar pelo menos um motivo.'
-		}
+		notEmptyArray: v => !!v.length || 'Você precisa selecionar pelo menos um motivo.'
 	}
 }
 

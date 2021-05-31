@@ -42,7 +42,7 @@ function AgendarVisita() {
 		const dataVisita = new Date(state)
 		setValue('data', dataVisita)
 		setVisitDay(dataVisita)
-		console.log(format(dataVisita, 'hh:mm') !== '12:00')
+		
 		if (format(dataVisita, 'hh:mm') !== '12:00')
 			setValue('horaEstimada', dataVisita)
 	}, [])

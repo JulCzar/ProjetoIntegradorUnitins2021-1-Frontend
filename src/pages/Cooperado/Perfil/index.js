@@ -179,7 +179,7 @@ function Perfil() {
 
 	async function transferProperty(form) {
 		const cooperado = form.cooperado.id
-		console.log(cooperado)
+		
 		try {
 			await api.put(`propriedade/transferir/${propriedadeEmEdicao.id}`, {cooperado})
 

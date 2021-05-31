@@ -103,7 +103,7 @@ function DadosVisita() {
 					)}
 				/>
 				<Controller
-					name='observacoes'
+					name='observacao'
 					control={control}
 					defaultValue='A visita foi realizada sem problemas'
 					render={({ name, value }) => (

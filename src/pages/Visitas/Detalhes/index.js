@@ -52,6 +52,7 @@ function DetalhesVisita() {
 			
 			resp.horaEstimada = resp.data
 			setVisitDay(resp.data)
+			setVisitHour(resp.data)
 			setMotivosSelecionados(resp.motivos)
 
 			setData(resp)
@@ -75,13 +76,13 @@ function DetalhesVisita() {
 	}
 
 	async function salvar(form) {
-		const { motivos, observacoes } = form
+		const { motivos, observacao } = form
 
 		const data = {
 			motivo_visita: motivos.join(', '),
 			horaEstimada: visitHour,
 			dia_visita: visitDay,
-			observacoes
+			observacao
 		}
 
 		try {
@@ -193,7 +194,7 @@ function DetalhesVisita() {
 						)}
 					/>
 					<Controller
-						name='observacoes'
+						name='observacao'
 						control={control}
 						defaultValue={data?(data.observacao || ''):''}
 						render={({ name, value, onChange }) => (
