@@ -5,11 +5,10 @@
  * }} param1
  * @returns 
  */
-export function getMenuItems({ permissions = [], token, user } = {}) {
+export function getMenuItems({ permissions = [], token } = {}) {
 	const allItems = [
 		{label: 'Home', destination:'/'},
-		{label: 'Visitas', destination: '/visitas', showIf: (token && user?.id !== 1)},
-		{label: 'Gestão', destination:'/perfil', showIf() {
+		{label: 'Gestão', destination:'/gerir', showIf() {
 			if (!token) return false
 
 			for (const n of [1,2,3,4,5,6,7])
@@ -18,8 +17,7 @@ export function getMenuItems({ permissions = [], token, user } = {}) {
 
 			return false
 		}},
-		{label: 'login', destination:'/login', icon:'pi pi-fw pi-sign-in', showIf: !token},
-		{label: 'Sair', destination: '/logout', icon: 'pi pi-fw pi-sign-out', showIf: token}
+		{label: 'login', destination:'/login', icon:'pi pi-fw pi-sign-in', showIf: !token}
 	]
 
 	return allItems

@@ -1,31 +1,25 @@
+import { Link, useHistory } from 'react-router-dom'
 import React from 'react'
 
 import { Button, Column, DataTable, InputText } from '~/primereact'
-
-import { Link, useHistory } from 'react-router-dom'
 import { ManagementTemplate } from '~/pages/templates'
-import { api } from '~/services'
 import { getStringNormalized } from '~/utils'
+import { PageNotFound } from '~/pages'
+import { api } from '~/services'
+import { store } from '~/store'
 
 function Busca() {
 	const [filteredTecnicos, setFilteredTecnicos] = React.useState([])
+	const [permissions, setPermissions] = React.useState([])
 	const [tecnicos, setTecnicos] = React.useState([])
 	const [loading, setLoading] = React.useState(false)
 	const [query, setQuery] = React.useState('')
 	const history = useHistory()
 
 	React.useEffect(() => {
-		(async () => {
-			setLoading(true)
-			try {
-				const { data } = await api.get('/tecnico/index')
-				setTecnicos(data)
-				setFilteredTecnicos(data)
-			} catch (err) {}
-			finally {
-				setLoading(false)
-			}
-		})()
+		loadList()
+		updatePermissions()
+		store.subscribe(updatePermissions)
 	}, [])
 
 	React.useEffect(() => {
@@ -45,11 +39,31 @@ function Busca() {
 		setFilteredTecnicos(filteredTecnicos)
 	}, [query])
 
+	function updatePermissions() {
+		const { auth } = store.getState()
+		const { permissions } = auth
+
+		setPermissions(permissions ?? [])
+	}
+	async function loadList() {
+		setLoading(true)
+		try {
+			const { data } = await api.get('/tecnico/index')
+			setTecnicos(data)
+			setFilteredTecnicos(data)
+		} catch (err) {}
+		finally {
+			setLoading(false)
+		}
+	}
+
 	const getCenteredText = text => (
 		<span className='p-d-flex p-jc-center'>{text}</span>
 	)
 
 	const StatusBody = data => getCenteredText(!data.status?'Inativo':'Ativo')
+
+	if (!permissions.includes(3)) return <PageNotFound/>
 
 	return (
 		<ManagementTemplate title='Buscar Técnico' loading={loading} contentClassName='p-fluid'>

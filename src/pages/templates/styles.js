@@ -29,6 +29,10 @@ export const Header = styled('div')`
 	a:hover {
 		text-decoration: none;
 	}
+
+	@media (max-width: 750px) {
+		padding: 1rem 0.5rem;
+	}
 `
 
 export const HeaderMenu = styled('div')`

@@ -1,7 +1,15 @@
+import { getRandomColor } from '~/utils'
+
 export const LOGIN_SUCCESS = (state, action) => {
 	const { usuario, access_token: token, } = action.payload.data
-	const { data: user, permissoes } = usuario
+	const { data, permissoes } = usuario
 	
+	const user = {
+		...data,
+		color: getRandomColor().getHex().replace('#', '')
+	}
+	console.log(user)
+
 	const permissions = Object.values(permissoes)
 
 	return {

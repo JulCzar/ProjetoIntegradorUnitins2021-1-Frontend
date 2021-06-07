@@ -1,18 +1,21 @@
-import React from 'react'
-import { useHistory } from 'react-router'
 import { Controller, useForm } from 'react-hook-form'
+import { useHistory } from 'react-router'
+import React from 'react'
 
-import { InputWrapper } from '~/common/styles'
-import { InputContainer, passwordFooter, passwordHeader } from '~/common/components'
-import {  api, getToastInstance } from '~/services'
-import { Button, Dropdown, InputMask, InputText, Password, Toast } from '~/primereact'
 import { verifyPassword, getPhoneObject, getInvalidClass, getApiResponseErrors } from '~/utils'
+import { Button, Dropdown, InputMask, InputText, Password, Toast } from '~/primereact'
+import { InputContainer, passwordFooter, passwordHeader } from '~/common/components'
 import { ManagementTemplate } from '~/pages/templates'
+import {  api, getToastInstance } from '~/services'
 import * as validate from '~/config/validations'
+import { InputWrapper } from '~/common/styles'
+import { PageNotFound } from '~/pages'
+import { store } from '~/store'
 
-const Cadastro = () => {
+function Cadastro() {
 	const { control, errors, handleSubmit, reset } = useForm()
 	const [groupOptions, setGroupOptions] = React.useState([])
+	const [permissions, setPermissions] = React.useState([])
 	const [loading, setLoading] = React.useState(false)
 	const history = useHistory()
 	
@@ -21,7 +24,16 @@ const Cadastro = () => {
 
 	React.useEffect(() => {
 		loadGroups()
+		updatePermissions()
+		store.subscribe(updatePermissions)
 	}, [])
+
+	function updatePermissions() {
+		const { auth } = store.getState()
+		const { permissions } = auth
+
+		setPermissions(permissions ?? [])
+	}
 	
 	async function loadGroups() {
 		try {
@@ -64,6 +76,8 @@ const Cadastro = () => {
 			setLoading(false)
 		}
 	}
+
+	if (!permissions.includes(3)) return <PageNotFound/>
 
 	return (
 		<ManagementTemplate loading={loading} title='Cadastro de Técnico'>

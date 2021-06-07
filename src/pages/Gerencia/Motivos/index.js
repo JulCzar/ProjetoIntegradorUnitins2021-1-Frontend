@@ -109,7 +109,7 @@ function MotivoVisita() {
 	return (
 		<ManagementTemplate loading={loading} title='Motivos de Visita'>
 			<Toast ref={toastRef}/>
-			<DataTable emptyMessage='Nenhum item encontrado' value={motivos}>
+			<DataTable emptyMessage='Nenhum item encontrado' value={motivos} paginator rows={7}>
 				<Column field="nome" header="Name"/>
 				<Column
 					bodyClassName='p-d-flex p-jc-around'

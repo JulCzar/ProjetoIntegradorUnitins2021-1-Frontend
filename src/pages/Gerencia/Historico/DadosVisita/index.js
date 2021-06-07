@@ -2,31 +2,57 @@ import React from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { InputContainer } from '~/common/components'
 import { InputWrapper } from '~/common/styles'
-import { Button, Calendar, Dropdown, InputText, InputTextarea } from '~/primereact'
+import { Button, InputText, InputTextarea, Toast } from '~/primereact'
 import { ManagementTemplate } from '~/pages/templates'
-
-const groupOptions = [
-	{value: 1, label: 'Motivo 1'},
-	{value: 2, label: 'Motivo 2'},
-	{value: 3, label: 'Motivo 3'},
-	{value: 4, label: 'Motivo 4'},
-	{value: 5, label: 'Motivo 5'},
-	{value: 6, label: 'Motivo 6'},
-]
+import { api, getToastInstance } from '~/services'
+import { useParams } from 'react-router'
+import { getApiResponseErrors } from '~/utils'
+import { format } from 'date-fns'
 
 function DadosVisita() {
-	const { control } = useForm()
+	const [data, setData] = React.useState(null)
+	const [loading, setLoading] = React.useState(false)
+	const { control, reset, setValue } = useForm()
+
+	const toastRef = React.useRef(null)
+	const toast = getToastInstance(toastRef)
 	
-	const cooperado = 'Miguel Teixeira'
-	const terreno = 'Recanto'
+	const { id } = useParams()
+	
+	React.useEffect(() => {
+		loadData()
+	}, [])
+
+	async function loadData() {
+		try {
+			setLoading(true)
+			const { data } = await api.get(`/historico/visita/${id}`)
+			
+			const modifiedData = {
+				...data,
+				dia_visita: format(new Date(data.dia_visita), 'dd/MM/yyyy'),
+				horaEstimada: format(new Date(`${data.dia_visita}T${data.horario_estimado_visita}.000Z`), 'hh:mm')
+			}
+			setData(modifiedData)
+
+			reset()
+
+			Object.entries(modifiedData).forEach(([k,v]) => setValue(k, v))
+		} catch ({ response }) {
+			toast.showErrors(getApiResponseErrors(response))
+		} finally {
+			setLoading(false)
+		}
+	}
 
 	return (
-		<ManagementTemplate title='Detalhes da Visita'>
+		<ManagementTemplate title='Detalhes da Visita' loading={loading}>
+			<Toast ref={toastRef}/>
 			<form>
 				<Controller
 					name='cooperado'
 					control={control}
-					defaultValue={cooperado}
+					defaultValue={data?data.cooperado:''}
 					render={({ name, value }) => (
 					<InputContainer name={name} label='Cooperado'>
 						<InputText
@@ -40,7 +66,7 @@ function DadosVisita() {
 				<Controller
 					name='propriedade'
 					control={control}
-					defaultValue={terreno}
+					defaultValue={data?data.propriedade:''}
 					render={({ name, value }) => (
 					<InputContainer name={name} label='Propriedade'>
 						<InputText
@@ -53,33 +79,29 @@ function DadosVisita() {
 				)}/>
 				<InputWrapper columns={2} gap='10px'>
 					<Controller
-						name='data'
+						name='dia_visita'
 						control={control}
-						defaultValue={new Date()}
+						defaultValue={data?data.dia_visita:''}
 						render={({ name, value }) => (
 						<InputContainer name={name} label='Data'>
-							<Calendar
+							<InputText
 								disabled
 								id={name}
 								name={name}
 								value={value}
-								mask='99/99/9999'
-								dateFormat='dd/mm/yy'
 							/>
 						</InputContainer>
 					)}/>
 					<Controller
 						name='horaEstimada'
 						control={control}
-						defaultValue={new Date()}
+						defaultValue={data?data.horaEstimada:''}
 						render={({ name, value }) => (
 							<InputContainer name={name} label='Hora Estimada'>
-								<Calendar
+								<InputText
 									disabled
-									timeOnly
 									id={name}
 									name={name}
-									mask='99:99'
 									value={value}
 								/>
 							</InputContainer>
@@ -87,17 +109,16 @@ function DadosVisita() {
 					/>
 				</InputWrapper>
 				<Controller
-					name='motivo'
+					name='motivo_visita'
+					defaultValue=''
 					control={control}
-					defaultValue={1}
 					render={({ name, value }) => (
 						<InputContainer name={name} label='Motivo da Visita'>
-							<Dropdown
+							<InputText
 								disabled
 								id={name}
 								name={name}
 								value={value}
-								options={groupOptions}
 							/>
 						</InputContainer>
 					)}
@@ -105,7 +126,7 @@ function DadosVisita() {
 				<Controller
 					name='observacao'
 					control={control}
-					defaultValue='A visita foi realizada sem problemas'
+					defaultValue={data?data.observacao:''}
 					render={({ name, value }) => (
 						<InputContainer name={name} label='Observações'>
 							<InputTextarea
@@ -114,7 +135,6 @@ function DadosVisita() {
 								autoResize
 								name={name}
 								value={value}
-								options={groupOptions}
 							/>
 						</InputContainer>
 					)}
