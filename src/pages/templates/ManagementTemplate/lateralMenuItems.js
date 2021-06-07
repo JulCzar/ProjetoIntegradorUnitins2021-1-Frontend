@@ -20,10 +20,7 @@ export function getMenuItems({ permissions = [] } = {}) {
 			{label: 'Propriedade', destination:'/relatorio/propriedade', icon: 'fas fa-grip-lines'},
 		], showIf: hasPermission(6)},
 		{label: 'Grupos', destination:'/grupos', showIf: hasPermission(4)},
-		{label: 'Motivos', destination: '/motivos', showIf: hasPermission(5)},
-		{label: 'Administradores', destination:'/admins', showIf: () => [1,2,3,4,5,6,7].reduce(
-			(acc, i) => (permissions.includes(i)?acc:false), true
-		)},
+		{label: 'Motivos', destination: '/motivos', showIf: hasPermission(5)}
 	]
 
 	return allItems

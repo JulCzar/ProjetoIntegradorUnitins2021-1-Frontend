@@ -15,6 +15,7 @@ function DetalhesVisita() {
 	const [motivosSelecionados, setMotivosSelecionados] = React.useState([])
 	const [modalVisibility, setModalVisibility] = React.useState(false)
 	const [motivos, setMotivos] = React.useState([])
+	/** @type {{cultura:string,relatorio:string,imagens:File[]}[]} */
 	const [talhoes, setTalhoes] = React.useState([])
 	
 	const [visitDay, setVisitDay] = React.useState(null)
@@ -82,14 +83,27 @@ function DetalhesVisita() {
 	}
 
 	async function salvar(form) {
-		const { motivos, observacao } = form
+		const { motivos } = form
 
 		const data = new FormData()
 		data.append('motivo_visita', motivos.join(', '))
 		data.append('horaEstimada', visitHour.toJSON())
 		data.append('dia_visita', visitDay.toJSON())
-		data.append('observacao', observacao)
-		data.append('talhoes[]', talhoes)
+		
+		data.append('talhoes.length', talhoes.length)
+		data.append('talhoes[0]', '')
+		for (const [i, talhao] of Object.entries(talhoes)) {
+			const item = `talhoes[${i}]`
+			const { imagens, relatorio, cultura } = talhao
+			data.append(`${item}[cultura]`, cultura)
+			data.append(`${item}[relatorio]`, relatorio)
+
+			const imageEntry = `${item}.imagens`
+			data.append(`${imageEntry}.length`, imagens.length)
+
+			for (const [j, img] of Object.entries(imagens))
+				data.append(`imagem[${i}][${j}]`, img)
+		}
 
 		try {
 			setLoading(true)

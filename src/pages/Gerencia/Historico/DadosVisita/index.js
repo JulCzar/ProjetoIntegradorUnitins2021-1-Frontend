@@ -33,8 +33,8 @@ function DadosVisita() {
 				dia_visita: format(new Date(data.dia_visita), 'dd/MM/yyyy'),
 				horaEstimada: format(new Date(`${data.dia_visita}T${data.horario_estimado_visita}.000Z`), 'hh:mm')
 			}
+			
 			setData(modifiedData)
-
 			reset()
 
 			Object.entries(modifiedData).forEach(([k,v]) => setValue(k, v))

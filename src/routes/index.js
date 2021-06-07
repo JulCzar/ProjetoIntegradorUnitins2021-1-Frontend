@@ -48,7 +48,6 @@ const Routes = function ({ logout }) {
 
 				{/* Gerencia */}
 				<Route path='/gerir' component={ROUTES.Gestao} exact/>
-				<Route path='/admins' component={ROUTES.BuscaAdministrador} exact/>
 				<Route path='/perfil' component={ROUTES.PerfilAdmin} exact/>
 				<Route path='/grupos' component={ROUTES.ListarGrupos} exact/>
 				<Route path='/motivos' component={ROUTES.MotivoVisita}/>

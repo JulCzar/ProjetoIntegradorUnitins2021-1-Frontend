@@ -8,7 +8,6 @@ export const LOGIN_SUCCESS = (state, action) => {
 		...data,
 		color: getRandomColor().getHex().replace('#', '')
 	}
-	console.log(user)
 
 	const permissions = Object.values(permissoes)
 

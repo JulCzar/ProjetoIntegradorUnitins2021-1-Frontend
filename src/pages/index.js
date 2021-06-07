@@ -1,7 +1,6 @@
 // Gerencias
 export { default as HistoricoVisitas } from './Gerencia/Historico/Visitas'
 export { default as DadosVisita } from './Gerencia/Historico/DadosVisita'
-export { default as BuscaAdministrador } from './Gerencia/Lista'
 export { default as MotivoVisita } from './Gerencia/Motivos'
 export { default as ListarGrupos } from './Gerencia/Grupos'
 export { default as PerfilAdmin } from './Gerencia/Perfil'
