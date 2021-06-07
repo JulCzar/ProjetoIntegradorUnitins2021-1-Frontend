@@ -7,7 +7,7 @@ import { InputContainer, passwordFooter, passwordHeader } from '~/common/compone
 import * as validate from '~/config/validations'
 import { InputWrapper } from '~/common/styles'
 import { api, getToastInstance } from '~/services'
-import { getApiResponseErrors, getInvalidClass, verifyPassword } from '~/utils'
+import { getApiResponseErrors, getInvalidClass, getPhoneObject, verifyPassword } from '~/utils'
 
 function Perfil() {
 	const [data, setData] = React.useState(null)
@@ -58,6 +58,7 @@ function Perfil() {
 			toast.showSuccess('Senha foi Alterada')
 
 			setEditPassModal(false)
+
 			editPassForm.reset()
 		} catch ({ response }) {
 			toast.showErrors(getApiResponseErrors(response))
@@ -66,26 +67,31 @@ function Perfil() {
 	
 	const cancel = () => {
 		setEditing(false)
+		
 		reset()
+
+		Object.entries(data).forEach(([k, v]) => setValue(k, v))
 	}
 
 	async function editProfile(form) {
+		const {phone, ...data } = form
+		const telefone = getPhoneObject(phone)
+		if (!telefone) return toast.showError('O número de telefone providenciado é inválido')
+
 		try {
 			setLoading(true)
-			await api.put('/profile', form)
+			await api.put('/profile', {...data, telefone})
 
 			toast.showSuccess('Perfil Editado com Sucesso')
 
 			loadData()
+
+			setEditing(false)
 		} catch ({ response }) {
 			toast.showErrors(getApiResponseErrors(response))
 		} finally {
 			setLoading(false)
 		}
-		setEditing(false)
-		reset()
-
-		Object.entries(data).forEach(([k, v]) => setValue(k, v))
 	}
 
 	return (

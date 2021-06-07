@@ -2,7 +2,7 @@ import * as reducers from './reducers'
 
 const INITIAL_STATE = {
 	token: null,
-	user: {},
+	user: null,
 	permissions: []
 }
 

@@ -21,14 +21,14 @@ export const LOGIN_SUCCESS = (state, action) => {
 
 export const LOGIN_FAILURE = state => ({
 	...state,
-	user: {},
+	user: null,
 	token: null,
 	permissions: []
 })
 
 export const LOGOUT = state => ({
 	...state,
-	user: {},
+	user: null,
 	token: null,
 	permissions: []
 })

@@ -38,14 +38,14 @@ function Visita() {
 			<Toast ref={toastRef}/>
 			<DataTable emptyMessage='Nenhum item encontrado' value={visitas} className="p-datatable-striped" paginator rows={7}>
 				<Column field="dia_visita" header="Data da Visita"></Column>
-				<Column headerStyle={{textAlign: 'center'}} bodyStyle={{textAlign: 'center'}} field="nome_cooperado" header="Cooperado"/>
-				<Column headerStyle={{textAlign: 'center'}} bodyStyle={{textAlign: 'center'}} field="nome_tecnico" header="Técnico"/>
-				<Column headerStyle={{textAlign: 'center'}} bodyStyle={{textAlign: 'center'}} header="Ações" body={rowData => (
-					<div className='p-d-flex p-jc-around'>
-						<Link to={`/historico/visita/${rowData.id}`}>detalhes</Link>
-						<i className='fas fa-print'/>
-					</div>
-				)}/>
+				<Column field="nome_cooperado" header="Cooperado"/>
+				<Column field="nome_tecnico" header="Técnico"/>
+				<Column
+					header="Ações"
+					bodyStyle={{textAlign: 'center'}}
+					headerStyle={{textAlign: 'center'}}
+					body={rowData => <Link to={`/historico/visita/${rowData.id}`}>detalhes</Link>}
+				/>
 			</DataTable>
 		</ManagementTemplate>
 	)

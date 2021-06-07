@@ -5,6 +5,7 @@ import { Button, Column, confirmPopup, DataTable, Toast } from '~/primereact'
 import Modal from './components/Modal'
 import { api, getToastInstance } from '~/services'
 import { ManagementTemplate } from '~/pages/templates'
+import { paginatorTemplate } from '~/common/paginatorTemplate'
 
 function MotivoVisita() {
 	const toastRef = React.useRef(null)
@@ -109,7 +110,7 @@ function MotivoVisita() {
 	return (
 		<ManagementTemplate loading={loading} title='Motivos de Visita'>
 			<Toast ref={toastRef}/>
-			<DataTable emptyMessage='Nenhum item encontrado' value={motivos} paginator rows={7}>
+			<DataTable emptyMessage='Nenhum item encontrado' value={motivos} paginator rows={7} rowsPerPageOptions={[7,15,30]} paginatorTemplate={paginatorTemplate}>
 				<Column field="nome" header="Name"/>
 				<Column
 					bodyClassName='p-d-flex p-jc-around'

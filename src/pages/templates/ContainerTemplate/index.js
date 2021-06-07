@@ -27,12 +27,6 @@ function ContainerTemplate({
 	const history = useHistory()
 	
 	const toast = getToastInstance(toastRef)
-
-	React.useEffect(() => {
-		const messages = location?.state?.messages
-		if (messages) toast.showMultiple(messages)
-	}, [location.state])
-	
 	
 	React.useEffect(() => {
 		updateMenuItems()
@@ -40,6 +34,11 @@ function ContainerTemplate({
 		store.subscribe(updateMenuItems)
 		store.subscribe(updateUser)
 	}, [])
+
+	React.useEffect(() => {
+		const messages = location?.state?.messages
+		if (messages) toast.showMultiple(messages)
+	}, [location.state])
 
 	function updateMenuItems() {
 		const { auth } = store.getState()
@@ -53,8 +52,8 @@ function ContainerTemplate({
 		const { auth } = store.getState()
 
 		const { user } = auth
-
-		if (Object.entries(user).length) setUser(user)
+		
+		setUser(user)
 	}
 
 	const handleTabChange = e => {

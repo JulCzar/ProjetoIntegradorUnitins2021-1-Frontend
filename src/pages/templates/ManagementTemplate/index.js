@@ -69,7 +69,7 @@ function ManagementTemplate({
 							onChange={handleTabChange}/>
 					</PanelMenuContainer>
 					<Block className='p-col-8 p-md-9 p-px-5 p-pb-5'>
-						<CardHeader title={title} className='p-mb-5'/>
+						{title && <CardHeader title={title} className='p-mb-5'/>}
 						<Block className='p-fluid'>
 							{children}
 						</Block>
