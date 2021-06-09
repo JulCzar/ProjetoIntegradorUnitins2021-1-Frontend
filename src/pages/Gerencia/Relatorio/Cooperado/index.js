@@ -1,11 +1,11 @@
+import { useHistory, useLocation, useParams } from 'react-router'
+import ptBr from 'date-fns/locale/pt-BR'
+import { format } from 'date-fns'
 import React from 'react'
 import { Chart, Column, DataTable } from '~/primereact'
 import { Block, Container, Content } from '~/common/styles'
-import { lineOptions, lineData, pieData, pieOptions, tableData } from './data'
+import { lineOptions, pieData, pieOptions, tableData } from './data'
 import { ReportTitle, TableTitle } from './styles'
-import { format } from 'date-fns'
-import { useHistory, useParams } from 'react-router'
-import ptBr from 'date-fns/locale/pt-BR'
 
 const DATE_PATTERN = 'dd \'de\' MMMM \'de\' yyyy'
 
@@ -13,6 +13,7 @@ const Relatorio = () => {
 	const [start, setStart] = React.useState(null)
 	const [end, setEnd] = React.useState(null)
 	const history = useHistory()
+	const { state } = useLocation()
 	const { data } = useParams()
 
 	React.useEffect(() => {
@@ -35,7 +36,7 @@ const Relatorio = () => {
 			</ReportTitle>
 			<Content className='p-grid p-d-flex p-jc-center p-p-3'>
 				<Block className="p-grid p-col-12 p-mb-3 p-p-3">
-					<Chart className='p-col-6 p-print-4' type='line' data={lineData} options={lineOptions} />
+					<Chart className='p-col-6 p-print-4' type='line' data={state.lineChartData} options={lineOptions} />
 					<Chart className='p-col-6 p-print-4' type='pie' data={pieData} options={pieOptions} />
 				</Block>
 				<Block className='p-mb-3 p-p-3'>

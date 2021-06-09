@@ -5,6 +5,7 @@ import { ManagementTemplate } from '~/pages/templates'
 import { api, getToastInstance } from '~/services'
 import { getApiResponseErrors } from '~/utils'
 import { format } from 'date-fns'
+import { paginatorTemplate } from '~/common/paginatorTemplate'
 
 function Visita() {
 	const [visitas, setVisitas] = React.useState([])
@@ -36,7 +37,15 @@ function Visita() {
 	return (
 		<ManagementTemplate title='Histórico de Visitas' loading={loading}>
 			<Toast ref={toastRef}/>
-			<DataTable emptyMessage='Nenhum item encontrado' value={visitas} className="p-datatable-striped" paginator rows={7}>
+			<DataTable
+				rows={7}
+				paginator
+				value={visitas}
+				rowsPerPageOptions={[7,15,30]}
+				className="p-datatable-striped"
+				emptyMessage='Nenhum item encontrado'
+				paginatorTemplate={paginatorTemplate}
+			>
 				<Column field="dia_visita" header="Data da Visita"></Column>
 				<Column field="nome_cooperado" header="Cooperado"/>
 				<Column field="nome_tecnico" header="Técnico"/>

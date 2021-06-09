@@ -31,7 +31,7 @@ function Perfil() {
 		try {
 			setLoading(true)
 
-			const { data } = await api.get('profile')
+			const { data } = await api.get('/profile')
 
 			setData(data)
 

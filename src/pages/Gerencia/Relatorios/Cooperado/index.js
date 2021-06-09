@@ -1,32 +1,68 @@
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useHistory } from 'react-router'
-import { InputContainer } from '~/common/components'
-import { InputWrapper } from '~/common/styles'
-import * as validate from '~/config/validations'
-import { Button, Calendar, Dropdown} from '~/primereact'
+
+import { getApiResponseErrors, getInvalidClass } from '~/utils'
+import { Button, Calendar, Dropdown, Toast} from '~/primereact'
+import parseResponseToCharts from './parseResponseToCharts'
 import { ManagementTemplate } from '~/pages/templates'
-import { getInvalidClass } from '~/utils'
+import { InputContainer } from '~/common/components'
+import { api, getToastInstance } from '~/services'
+import * as validate from '~/config/validations'
+import { InputWrapper } from '~/common/styles'
+import { viewTypes } from '../viewTypes'
 
 function RelatorioCooperado() {
 	const { control, errors, handleSubmit, reset } = useForm()
+	
+  const [cooperados, setCooperados] = useState([])
+	const [startDate, setStartDate] = useState(null)
+	const [endDate, setEndDate] = useState(null)
 
-	const [startDate, setStartDate] = React.useState(null)
-	const [endDate, setEndDate] = React.useState(null)
+	const [loading, setLoading] = useState(false)
+
+	const toastRef = useRef(null)
+	const toast = getToastInstance(toastRef)
+
 	const history = useHistory()
 
-  const [groupOptions] = React.useState([
-		{label: 'Recanto', value: 1},
-		{label: 'Cargueiros', value: 2},
-		{label: 'Brejão', value: 3},
-		{label: 'Veredas', value: 4},
-		{label: 'Itabinhas', value: 5}
-	])
-  const gerarRelatorio = form => {
-    const data = JSON.stringify(form)
+	useEffect(() => {
+		loadCooperados()
+	}, [])
 
+	async function loadCooperados() {
+		try {
+			setLoading(true)
+			const { data } = await api.get('/cooperado/index')
+
+			setCooperados(data)
+		} catch ({ response }) {
+			toast.showErrors(getApiResponseErrors(response))
+		} finally {
+			setLoading(false)
+		}
+	}
+
+  async function gerarRelatorio(form) {
+    const { view, ...params } = form
+		const dataJSON = JSON.stringify(form)
+
+		try {
+			setLoading(true)
+			
+			const { data } = await api.get('/relatorio/cooperado', { params })
+
+			const chartData = parseResponseToCharts(data, view)
+
+			history.push(`/cooperados/relatorio/${btoa(dataJSON)}`, chartData)
+		} catch ({ response }) {
+			
+		} finally {
+			setLoading(false)
+		}
+		return 
 		reset()
-		history.push(`/cooperados/relatorio/${btoa(data)}`)
+		history.push()
   }
 
 	/** @param {'start' | 'end'} key */
@@ -43,7 +79,8 @@ function RelatorioCooperado() {
 	}
 
   return (
-  <ManagementTemplate title='Relatório de Cooperado'>
+  <ManagementTemplate title='Relatório de Cooperado' loading={loading}>
+		<Toast ref={toastRef}/>
 		<form onSubmit={handleSubmit(gerarRelatorio)}>
 			<InputWrapper columns={2} gap='10px'>
 				<Controller
@@ -92,7 +129,25 @@ function RelatorioCooperado() {
 						showIcon
 						name={name}
 						value={value}
-						options={groupOptions}
+						optionValue='id'
+						options={cooperados}
+						optionLabel='nome_cooperado'
+						className={getInvalidClass(errors[name])}
+						onChange={evt => onChange(evt.value)}/>
+				</InputContainer>
+			)}/>
+			<Controller
+				name='view'
+				control={control}
+				defaultValue={null}
+				rules={validate.dropdownGeneric}
+				render={({ name, value, onChange }) => (
+				<InputContainer name={name} label='Visualização' error={errors[name]}>
+					<Dropdown
+						showIcon
+						name={name}
+						value={value}
+						options={viewTypes}
 						className={getInvalidClass(errors[name])}
 						onChange={evt => onChange(evt.value)}/>
 				</InputContainer>

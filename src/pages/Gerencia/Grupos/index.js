@@ -7,6 +7,7 @@ import { ManagementTemplate } from '~/pages/templates'
 
 import Modal from './components/Modal'
 import { api, getToastInstance } from '~/services'
+import { paginatorTemplate } from '~/common/paginatorTemplate'
 
 function ListarGrupos() {
 	const [grupos, setGrupos] = React.useState([])
@@ -115,7 +116,14 @@ function ListarGrupos() {
 			<Toast ref={toastRef}/>
 
 			{/* Tabela com listagem de grupos */}
-			<DataTable emptyMessage='Nenhum item encontrado' value={grupos}>
+			<DataTable
+				rows={7}
+				paginator
+				value={grupos}
+				rowsPerPageOptions={[7,15,30]}
+				emptyMessage='Nenhum item encontrado'
+				paginatorTemplate={paginatorTemplate}
+			>
 				<Column field="nome" header="Nome"/>
 				<Column bodyClassName='p-d-flex p-jc-around' headerStyle={{textAlign: 'center'}} header="Ações" body={rowData => (
 					<React.Fragment>

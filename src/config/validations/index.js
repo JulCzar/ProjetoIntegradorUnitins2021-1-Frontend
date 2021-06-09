@@ -95,6 +95,10 @@ export const selectGroup = {
 	required: 'Você precisa selecionar um grupo.'
 }
 
+export const dropdownGeneric = {
+	required: 'Você precisa selecionar uma opção.'
+}
+
 export const startRelatorio = getDateValidation('Você precisa informar o inicio do relatório.')
 export const endRelatorio = getDateValidation('Você precisa informar o final do relatório.')
 export const day = getDateValidation('Você precisa informar a data.')

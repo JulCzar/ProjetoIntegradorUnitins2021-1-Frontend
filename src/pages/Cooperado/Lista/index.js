@@ -5,6 +5,7 @@ import { Button, Column, DataTable, InputText } from '~/primereact'
 import { api } from '~/services'
 import { ManagementTemplate} from '~/pages/templates'
 import { getStringNormalized } from '~/utils'
+import { paginatorTemplate } from '~/common/paginatorTemplate'
 
 function Busca() {
 	const [filteredCooperados, setFilteredCooperados] = React.useState([])
@@ -58,7 +59,15 @@ function Busca() {
 				placeholder='Pesquisar por nome ou cpf'
 				onChange={e => setQuery(e.target.value)}
 			/>
-			<DataTable emptyMessage='Nenhum item encontrado' value={filteredCooperados} className="p-datatable-striped">
+			<DataTable
+				rows={7}
+				paginator
+				value={filteredCooperados}
+				rowsPerPageOptions={[7,15,30]}
+				className="p-datatable-striped"
+				emptyMessage='Nenhum item encontrado'
+				paginatorTemplate={paginatorTemplate}
+			>
 				<Column field="nome_cooperado" header="Nome"/>
 				<Column field="cpf_cooperado" header="CPF"/>
 				<Column header={getCenteredText('Status')} body={StatusBody}/>
