@@ -8,3 +8,5 @@ export const TableTitle = styled('h2')`
 export const ReportTitle = styled(Title)`
 	font-size: 2.5rem;
 `
+
+export const ChartContainer = styled('div')``

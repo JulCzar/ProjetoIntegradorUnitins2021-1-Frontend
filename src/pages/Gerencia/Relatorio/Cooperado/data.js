@@ -1,5 +1,6 @@
-const color = { fontColor: '#1c1c1c'}
 export {default as tableData} from './data.json'
+
+const color = { fontColor: '#1c1c1c'}
 
 export const lineData = {
 	labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],

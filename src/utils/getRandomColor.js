@@ -48,6 +48,15 @@ export class Color {
 		
 		return `#${newR}${newG}${newB}${newA}`
 	}
+
+	/** @param {number} percentage must be an number between 0 and 1 represents how much you want to increase the brightness */
+	getHigherBrightness(percentage) {
+		const newR = Math.floor(Math.min(255, this.r * (1 + percentage * 0.299)))
+		const newG = Math.floor(Math.min(255, this.g * (1 + percentage * 0.587)))
+		const newB = Math.floor(Math.min(255, this.b * (1 + percentage * 0.114)))
+
+		return new Color(newR,newG,newB,this.a)
+	}
 }
 
 function getRandomColor() {
