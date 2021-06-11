@@ -50,6 +50,7 @@ const Relatorio = () => {
 					<DataTable emptyMessage='Nenhum item encontrado' value={state.tecnicoTableData} className='p-rol-12' rows={5}>
 						<Column field='propriedade' header='Propriedade'/>
 						<Column field='cooperado' header='Cooperado'/>
+						<Column field='opened' header='Em aberto'/>
 						<Column field='completed' header='Concluídas'/>
 						<Column field='canceled' header='Canceladas'/>
 						<Column field='total' header='Total'/>
@@ -59,6 +60,7 @@ const Relatorio = () => {
 					<TableTitle className='p-col-12'>Visitas por Tipo</TableTitle>
 					<DataTable emptyMessage='Nenhum item encontrado' value={state.motivoTableData} className='p-rol-12' rows={5}>
 						<Column field='motivo' header='Motivo'/>
+						<Column field='opened' header='Em aberto'/>
 						<Column field='completed' header='Concluídas'/>
 						<Column field='canceled' header='Canceladas'/>
 						<Column field='total' header='Total'/>

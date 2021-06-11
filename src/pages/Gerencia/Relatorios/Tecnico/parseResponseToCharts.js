@@ -60,6 +60,7 @@ function parseResponseToCharts(apiResponse, viewType) {
 		const propriedadesData = propriedades.reduce((acc, propriedade) => ({...acc,[propriedade]: {
 			propriedade,
 			cooperado: '',
+			opened: 0,
 			completed: 0,
 			canceled: 0,
 			total: 0
@@ -70,6 +71,7 @@ function parseResponseToCharts(apiResponse, viewType) {
 
 			const data = propriedadesData[propriedade]
 
+			if (status === 'aberto') data.opened++
 			if (status === 'cancelado') data.canceled++
 			if (status === 'concluido') data.completed++
 
@@ -84,6 +86,7 @@ function parseResponseToCharts(apiResponse, viewType) {
 	function getMotivoTableData(parsedVisitas, motivos) {
 		const motivosData = motivos.reduce((acc, m) => ({...acc, [m]: {
 			motivo: m,
+			opened: 0,
 			completed: 0,
 			canceled: 0,
 			total: 0,
@@ -96,6 +99,7 @@ function parseResponseToCharts(apiResponse, viewType) {
 			for (const motivo of motivos) {
 				const data = motivosData[motivo]
 
+				if (status === 'aberto') data.opened++
 				if (status === 'cancelado') data.canceled++
 				if (status === 'concluido') data.completed++
 
