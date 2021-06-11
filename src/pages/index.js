@@ -10,6 +10,7 @@ export { default as RelatorioLandingPropriedade } from './Gerencia/Relatorios/Pr
 export { default as RelatorioLandingCooperado} from './Gerencia/Relatorios/Cooperado'
 export { default as RelatorioLandingTecnico } from './Gerencia/Relatorios/Tecnico'
 export { default as RelatorioCooperado } from './Gerencia/Relatorio/Cooperado'
+export { default as RelatorioTecnico } from './Gerencia/Relatorio/Tecnico'
 
 // Cooperado
 export { default as CadastroCooperado} from './Cooperado/Cadastro'

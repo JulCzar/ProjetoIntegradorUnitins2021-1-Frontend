@@ -1,29 +1,63 @@
-import React from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import { InputContainer } from '~/common/components'
-import { InputWrapper } from '~/common/styles'
-import * as validate from '~/config/validations'
-import { Button, Calendar, Dropdown} from '~/primereact'
+import { useHistory } from 'react-router-dom'
+
+import { getApiResponseErrors, getInvalidClass } from '~/utils'
+import { Button, Calendar, Dropdown, Toast} from '~/primereact'
+import parseResponseToCharts from './parseResponseToCharts'
 import { ManagementTemplate } from '~/pages/templates'
-import { getInvalidClass } from '~/utils'
+import { InputContainer } from '~/common/components'
+import { api, getToastInstance } from '~/services'
+import * as validate from '~/config/validations'
+import { InputWrapper } from '~/common/styles'
+import { viewTypes } from '../viewTypes'
 
 function RelatorioTecnico() {
 	const { control, errors, handleSubmit, reset } = useForm()
 
-	const [startDate, setStartDate] = React.useState(null)
-	const [endDate, setEndDate] = React.useState(null)
+	const [startDate, setStartDate] = useState(null)
+	const [loading, setLoading] = useState(false)
+  const [tecnicos, setTecnicos] = useState([])
+	const [endDate, setEndDate] = useState(null)
 
-  const [groupOptions] = React.useState([
-		{label: 'Recanto', value: 1},
-		{label: 'Cargueiros', value: 2},
-		{label: 'Brejão', value: 3},
-		{label: 'Veredas', value: 4},
-		{label: 'Itabinhas', value: 5}
-	])
-  const gerarRelatorio = form => {
-    console.log(form) // eslint-disable-line
+	const history = useHistory()
 
-		reset()
+	const toastRef = useRef(null)
+	const toast = getToastInstance(toastRef)
+
+	useEffect(() => {
+		loadTecnicos()
+	}, [])
+
+	async function loadTecnicos() {
+		try {
+			const { data } = await api.get('/tecnico/index')
+
+			setTecnicos(data)
+		} catch ({ response }) {
+			toast.sh
+		}
+	}
+
+  async function gerarRelatorio(form) {
+		const { view, ...params } = form
+		const dataJSON = JSON.stringify(form)
+		const config = { params }
+		
+		try {
+			setLoading(true)
+
+			const { data } = await api.get('/relatorio/tecnico', config)
+			
+			const chartData = parseResponseToCharts(data, view)
+
+			history.push(`/tecnico/relatorio/${btoa(dataJSON)}`, chartData)
+		} catch ({ response }) {
+			toast.showErrors(getApiResponseErrors(response))
+		} finally {
+			setLoading(false)
+			reset()
+		}
   }
 
 	/** @param {'start' | 'end'} key */
@@ -40,7 +74,8 @@ function RelatorioTecnico() {
 	}
 
   return (
-  <ManagementTemplate title='Relatório de Técnico'>
+  <ManagementTemplate title='Relatório de Técnico' loading={loading}>
+		<Toast ref={toastRef}/>
 		<form onSubmit={handleSubmit(gerarRelatorio)}>
 			<InputWrapper columns={2} gap='10px'>
 				<Controller
@@ -89,7 +124,25 @@ function RelatorioTecnico() {
 						showIcon
 						name={name}
 						value={value}
-						options={groupOptions}
+						optionValue='id'
+						options={tecnicos}
+						optionLabel='nome_tecnico'
+						className={getInvalidClass(errors[name])}
+						onChange={evt => onChange(evt.value)}/>
+				</InputContainer>
+			)}/>
+			<Controller
+				name='view'
+				control={control}
+				defaultValue={null}
+				rules={validate.dropdownGeneric}
+				render={({ name, value, onChange }) => (
+				<InputContainer name={name} label='Visualização' error={errors[name]}>
+					<Dropdown
+						showIcon
+						name={name}
+						value={value}
+						options={viewTypes}
 						className={getInvalidClass(errors[name])}
 						onChange={evt => onChange(evt.value)}/>
 				</InputContainer>

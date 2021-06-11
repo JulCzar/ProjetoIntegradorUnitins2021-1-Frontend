@@ -38,4 +38,8 @@ export const Title = styled('h1')`
 export const Block = styled('div')`
 	background: var(--surface-e);
 	border-radius: 4px;
+
+	@media print {
+		flex-direction: column;
+	}
 `

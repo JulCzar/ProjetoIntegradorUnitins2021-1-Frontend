@@ -36,11 +36,11 @@ const Relatorio = () => {
 			</ReportTitle>
 			<Content className='p-grid p-d-flex p-jc-center'>
 				<Block className="p-grid p-col-12 p-mb-3">
-					<ChartContainer className='p-grid p-p-3'>
+					<ChartContainer className='p-grid p-col-6 p-p-3'>
 						<TableTitle className='p-col-12'>Visitas por período</TableTitle>
 						<Chart className='p-col-12' type='line' data={state.lineChartData} options={lineOptions} />
 					</ChartContainer>
-					<ChartContainer className='p-grid p-p-3'>
+					<ChartContainer className='p-grid p-col-6 p-p-3'>
 						<TableTitle className='p-col-12'>Visitas por propriedade</TableTitle>
 						<Chart className='p-col-12' type='pie' data={state.pizzaChartData} options={pieOptions} />
 					</ChartContainer>
@@ -49,7 +49,7 @@ const Relatorio = () => {
 					<TableTitle className='p-col-12'>Estatísticas das Propriedades</TableTitle>
 					<DataTable emptyMessage='Nenhum item encontrado' value={state.tecnicoTableData} className='p-rol-12' rows={5}>
 						<Column field='propriedade' header='Propriedade'/>
-						<Column field='tecnico' header='Técnico'/>
+						<Column field='cooperado' header='Cooperado'/>
 						<Column field='completed' header='Concluídas'/>
 						<Column field='canceled' header='Canceladas'/>
 						<Column field='total' header='Total'/>

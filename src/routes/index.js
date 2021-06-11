@@ -65,6 +65,7 @@ const Routes = function ({ logout }) {
 				<Route path='/cooperados/:id' component={ROUTES.PerfilCooperado}/>
 
 				{/* Técnico */}
+				<Route path='/tecnico/relatorio/:data' component={ROUTES.RelatorioTecnico}/>
 				<Route path='/tecnicos' component={ROUTES.BuscaTecnico} exact/>
 				<Route path='/tecnicos/:id' component={ROUTES.PerfilTecnico}/>
 
