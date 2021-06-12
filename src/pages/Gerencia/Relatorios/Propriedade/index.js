@@ -14,7 +14,9 @@ import parseResponseToCharts from './parseResponseToCharts'
 
 function RelatorioPropriedade() {
 	const { control, errors, handleSubmit, reset } = useForm()
-	const toast = getToastInstance(useRef(null))
+
+	const toastRef = useRef(null)
+	const toast = getToastInstance(toastRef)
 	
 	const [loading, setLoading] = useState(false)
 	const [cooperado, setCooperado] = useState(null)
@@ -96,7 +98,7 @@ function RelatorioPropriedade() {
 
   return (
   <ManagementTemplate title='Relatório de Propriedade' loading={loading}>
-		<Toast ref={toast.ref}/>
+		<Toast ref={toastRef}/>
 		<form onSubmit={handleSubmit(enviar)}>
 			<InputWrapper columns={2} gap='10px'>
 				<Controller
