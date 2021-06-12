@@ -6,12 +6,12 @@ export { default as ListarGrupos } from './Gerencia/Grupos'
 export { default as PerfilAdmin } from './Gerencia/Perfil'
 
 // Relatórios
-export { default as RelatorioLandingPropriedade } from './Gerencia/Relatorios/Propriedade'
-export { default as RelatorioLandingCooperado} from './Gerencia/Relatorios/Cooperado'
-export { default as RelatorioLandingTecnico } from './Gerencia/Relatorios/Tecnico'
-export { default as RelatorioPropriedade } from './Gerencia/Relatorio/Propriedade'
-export { default as RelatorioCooperado } from './Gerencia/Relatorio/Cooperado'
-export { default as RelatorioTecnico } from './Gerencia/Relatorio/Tecnico'
+export { default as RelatorioLandingPropriedade } from './Gerencia/Relatorios/formulario/Propriedade'
+export { default as RelatorioLandingCooperado} from './Gerencia/Relatorios/formulario/Cooperado'
+export { default as RelatorioLandingTecnico } from './Gerencia/Relatorios/formulario/Tecnico'
+export { default as RelatorioPropriedade } from './Gerencia/Relatorios/view/Propriedade'
+export { default as RelatorioCooperado } from './Gerencia/Relatorios/view/Cooperado'
+export { default as RelatorioTecnico } from './Gerencia/Relatorios/view/Tecnico'
 
 // Cooperado
 export { default as CadastroCooperado} from './Cooperado/Cadastro'

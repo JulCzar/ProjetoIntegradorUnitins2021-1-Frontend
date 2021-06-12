@@ -1,5 +1,5 @@
 import { formatDate, getRandomColor } from '~/utils'
-import Visita from '../model/Visita'
+import Visita from '~/pages/Gerencia/Relatorios/model/Visita'
 
 /** @typedef  @param {{visitas: {diaVisita: string,motivos: string, propriedade: string,status: string, cooperado: string}[],tecnico: {associado_em: string, nome: string, sobrenome: string, email: string, phone: string},periodo: {inicio: string, fim: string},}} apiResponse @param {string} viewType */
 function parseResponseToCharts(apiResponse, viewType) {
@@ -58,7 +58,7 @@ function parseResponseToCharts(apiResponse, viewType) {
 		/** @type {{[x:string]: { propriedade: string, tecnico: string, completed: number, canceled: number, total: number }}} */
 		const propriedadesData = propriedades.reduce((acc, propriedade) => ({...acc,[propriedade]: {
 			propriedade,
-			tecnico: '',
+			cooperado: '',
 			opened: 0,
 			completed: 0,
 			canceled: 0,
@@ -66,16 +66,16 @@ function parseResponseToCharts(apiResponse, viewType) {
 		}}), {})
 
 		for (const visita of parsedVisitas) {
-			const { tecnico, propriedade, status } = visita
+			const { cooperado, propriedade, status } = visita
 
 			const data = propriedadesData[propriedade]
 
 			if (status === 'aberto') data.opened++
 			if (status === 'cancelado') data.canceled++
 			if (status === 'concluido') data.completed++
-			
+
 			data.total++
-			data.tecnico = tecnico
+			data.cooperado = cooperado
 		}
 
 		return Object.values(propriedadesData)
@@ -113,9 +113,9 @@ function parseResponseToCharts(apiResponse, viewType) {
 	
 	const parsedVisitas = visitas.map(v => Visita.parseFromApi(v))
 
-	const motivos = [...new Set(parsedVisitas.map(v => v.motivos).flat(Infinity))]
 	const propriedades = [...new Set(parsedVisitas.map(v => v.propriedade))]
-	const colors = motivos.map(getRandomColor)
+	const motivos = [...new Set(parsedVisitas.map(v => v.motivos).flat(Infinity))]
+	const colors = motivos.map(() => getRandomColor())
 	
 	const lineChartData = getLineChartData(parsedVisitas, motivos, colors)
 	const pizzaChartData = getPizzaChartData(parsedVisitas, motivos, colors)

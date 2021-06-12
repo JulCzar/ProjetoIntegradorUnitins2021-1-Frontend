@@ -1,7 +1,8 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useHistory } from 'react-router-dom'
 
+import { viewTypes } from '~/pages/Gerencia/Relatorios/viewTypes'
 import { getApiResponseErrors, getInvalidClass } from '~/utils'
 import { Button, Calendar, Dropdown, Toast} from '~/primereact'
 import parseResponseToCharts from './parseResponseToCharts'
@@ -10,36 +11,58 @@ import { InputContainer } from '~/common/components'
 import { api, getToastInstance } from '~/services'
 import * as validate from '~/config/validations'
 import { InputWrapper } from '~/common/styles'
-import { viewTypes } from '../viewTypes'
 
-function RelatorioTecnico() {
+function RelatorioPropriedade() {
 	const { control, errors, handleSubmit, reset } = useForm()
 
-	const [startDate, setStartDate] = useState(null)
+	const toastRef = useRef(null)
+	const toast = getToastInstance(toastRef)
+	
 	const [loading, setLoading] = useState(false)
-  const [tecnicos, setTecnicos] = useState([])
+	const [cooperado, setCooperado] = useState(null)
+  const [cooperados, setCooperados] = useState([])
+  const [propriedades, setPropriedades] = useState([])
+
+	const [startDate, setStartDate] = useState(null)
 	const [endDate, setEndDate] = useState(null)
 
 	const history = useHistory()
 
-	const toastRef = useRef(null)
-	const toast = getToastInstance(toastRef)
-
 	useEffect(() => {
-		loadTecnicos()
+		loadCooperados()
 	}, [])
 
-	async function loadTecnicos() {
-		try {
-			const { data } = await api.get('/tecnico/index')
+	useEffect(() => {
+		loadPropriedades()
+	}, [cooperado])
 
-			setTecnicos(data)
+	async function loadCooperados() {
+		try {
+			setLoading(true)
+			const { data } = await api.get('/cooperado/index')
+
+			setCooperados(data)
 		} catch ({ response }) {
-			toast.sh
+			toast.showErrors(getApiResponseErrors(response))
+		} finally {
+			setLoading(false)
 		}
 	}
 
-  async function gerarRelatorio(form) {
+	async function loadPropriedades() {
+		try {
+			setLoading(true)
+			const { data } = await api.get(`/propriedades/${cooperado}`)
+
+			setPropriedades(data)
+		} catch ({ response }) {
+			toast.showErrors(getApiResponseErrors(response))
+		} finally {
+			setLoading(false)
+		}
+	}
+
+  async function enviar(form) {
 		const { view, ...params } = form
 		const dataJSON = JSON.stringify(form)
 		const config = { params }
@@ -47,11 +70,11 @@ function RelatorioTecnico() {
 		try {
 			setLoading(true)
 
-			const { data } = await api.get('/relatorio/tecnico', config)
+			const { data } = await api.get('/relatorio/propriedade', config)
 			
 			const chartData = parseResponseToCharts(data, view)
 
-			history.push(`/tecnico/relatorio/${btoa(dataJSON)}`, chartData)
+			history.push(`/propriedade/relatorio/${btoa(dataJSON)}`, chartData)
 		} catch ({ response }) {
 			toast.showErrors(getApiResponseErrors(response))
 		} finally {
@@ -74,9 +97,9 @@ function RelatorioTecnico() {
 	}
 
   return (
-  <ManagementTemplate title='Relatório de Técnico' loading={loading}>
+  <ManagementTemplate title='Relatório de Propriedade' loading={loading}>
 		<Toast ref={toastRef}/>
-		<form onSubmit={handleSubmit(gerarRelatorio)}>
+		<form onSubmit={handleSubmit(enviar)}>
 			<InputWrapper columns={2} gap='10px'>
 				<Controller
 					name='start'
@@ -114,20 +137,42 @@ function RelatorioTecnico() {
 				)}/>
 			</InputWrapper>
 			<Controller
-				name='tecnico'
+				name='cooperado'
 				control={control}
 				defaultValue={null}
-				rules={validate.selectTecnico}
+				rules={validate.selectCooperado}
 				render={({ name, value, onChange }) => (
-				<InputContainer name={name} label='Técnico' error={errors[name]}>
+				<InputContainer name={name} label='Cooperado' error={errors[name]}>
 					<Dropdown
 						showIcon
 						name={name}
 						value={value}
 						optionValue='id'
-						options={tecnicos}
-						optionLabel='nome_tecnico'
+						options={cooperados}
+						optionLabel='nome_cooperado'
 						className={getInvalidClass(errors[name])}
+						onChange={evt => {
+							onChange(evt.value)
+							setCooperado(evt.value)
+						}}/>
+				</InputContainer>
+			)}/>
+			<Controller
+				name='propriedade'
+				control={control}
+				defaultValue={null}
+				rules={validate.selectProperty}
+				render={({ name, value, onChange }) => (
+				<InputContainer name={name} label='Propriedade' error={errors[name]}>
+					<Dropdown
+						showIcon
+						name={name}
+						value={value}
+						optionValue='id'
+						optionLabel='nome'
+						options={propriedades}
+						className={getInvalidClass(errors[name])}
+						placeholder={!cooperado?'Selecione primeiro um cooperado':'Selecione uma propriedade'}
 						onChange={evt => onChange(evt.value)}/>
 				</InputContainer>
 			)}/>
@@ -149,7 +194,8 @@ function RelatorioTecnico() {
 			)}/>
 			<Button type='submit' label='Gerar Relatório'/>
 		</form>
+		
 	</ManagementTemplate>
   )}
 
-export default RelatorioTecnico
+export default RelatorioPropriedade

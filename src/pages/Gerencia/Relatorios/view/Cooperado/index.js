@@ -2,9 +2,9 @@ import { useHistory, useLocation, useParams } from 'react-router'
 import React from 'react'
 
 import { ChartContainer, ReportTitle, TableTitle } from './styles'
-import { lineOptions, pieOptions } from '../data'
 import { Block, Container, Content } from '~/common/styles'
 import { Chart, Column, DataTable } from '~/primereact'
+import { lineOptions, pieOptions } from '../data'
 import { formatDate } from '~/utils'
 
 const DATE_PATTERN = 'dd/MMM/yyyy'

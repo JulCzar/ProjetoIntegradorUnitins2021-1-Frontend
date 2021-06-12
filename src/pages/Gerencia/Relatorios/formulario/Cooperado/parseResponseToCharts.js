@@ -1,23 +1,24 @@
-import { formatDate, getRandomColor } from '~/utils'
-import Visita from '../model/Visita'
 
-/** @typedef  @param {{visitas: {diaVisita: string,motivos: string, propriedade: string,status: string, cooperado: string}[],tecnico: {associado_em: string, nome: string, sobrenome: string, email: string, phone: string},periodo: {inicio: string, fim: string},}} apiResponse @param {string} viewType */
+import Visita from '~/pages/Gerencia/Relatorios/model/Visita'
+import { formatDate, getRandomColor } from '~/utils'
+import { Color } from '~/utils/getRandomColor' // eslint-disable-line
+
+/** @param {{visitas: {diaVisita: string,motivos: string, propriedade: string,status: string, tecnico: string}[],cooperado: {associado_em: string, nome: string, sobrenome: string, email: string, phone: string},periodo: {inicio: string, fim: string},}} apiResponse @param {string} viewType */
 function parseResponseToCharts(apiResponse, viewType) {
-	/** @param {Visita[]} parsedVisitas @param {string[]} motivos @param {Color[]} colors */
-	function getLineChartData(parsedVisitas, motivos, colors) {
+	/** @param {Visita[]} parsedVisitas @param {string[]} propriedades @param {Color[]} colors */
+	function getLineChartData(parsedVisitas, propriedades, colors) {
 		const labels = [...new Set(parsedVisitas.map(v => formatDate(v.diaVisita, viewType)))]
 		const datasets = []
 
-		for (const [i,m] of Object.entries(motivos)) {
+		for (const [i,p] of Object.entries(propriedades)) {
+			const visitsOfP = parsedVisitas.filter(v => v.propriedade === p)
 			/** @type {{[x:string]: number}} */
 			const objectLabels = labels.reduce((acc, l) => ({...acc,[l]: 0}), {})
-			
-			const visitsOfP = parsedVisitas.filter(v => v.motivos.includes(m))
 
 			visitsOfP.forEach(v => ++objectLabels[formatDate(v.diaVisita, viewType)])
 
 			const dataOfP = {
-				label: m,
+				label: p,
 				fill: false,
 				borderColor: colors[+i].getHex(),
 				data: Object.values(objectLabels)
@@ -31,15 +32,14 @@ function parseResponseToCharts(apiResponse, viewType) {
 			datasets
 		}
 	}
-	
-	/** @param {Visita[]} parsedVisitas @param {string[]} motivos @param {Color[]} colors */
-	function getPizzaChartData(parsedVisitas, motivos, colors) {
 
+	/** @param {Visita[]} parsedVisitas @param {string[]} labels @param {Color[]} colors */
+	function getPizzaChartData(parsedVisitas, propriedades, colors) {
+		const labels = propriedades
 		/** @type {{[x:string]: number}} */
-		const objectLabels = motivos.reduce((acc, l) => ({...acc,[l]: 0}), {})
-		const labels = motivos
+		const objectLabels = labels.reduce((acc, l) => ({...acc,[l]: 0}), {})
 
-		parsedVisitas.forEach(v => v.motivos.map(m => ++objectLabels[m]))
+		parsedVisitas.forEach(v => ++objectLabels[v.propriedade])
 		
 		return {
 			labels,
@@ -58,24 +58,22 @@ function parseResponseToCharts(apiResponse, viewType) {
 		/** @type {{[x:string]: { propriedade: string, tecnico: string, completed: number, canceled: number, total: number }}} */
 		const propriedadesData = propriedades.reduce((acc, propriedade) => ({...acc,[propriedade]: {
 			propriedade,
-			cooperado: '',
-			opened: 0,
+			tecnico: '',
 			completed: 0,
 			canceled: 0,
 			total: 0
 		}}), {})
 
 		for (const visita of parsedVisitas) {
-			const { cooperado, propriedade, status } = visita
+			const { tecnico, propriedade, status } = visita
 
 			const data = propriedadesData[propriedade]
 
-			if (status === 'aberto') data.opened++
 			if (status === 'cancelado') data.canceled++
 			if (status === 'concluido') data.completed++
 
 			data.total++
-			data.cooperado = cooperado
+			data.tecnico = tecnico
 		}
 
 		return Object.values(propriedadesData)
@@ -85,7 +83,6 @@ function parseResponseToCharts(apiResponse, viewType) {
 	function getMotivoTableData(parsedVisitas, motivos) {
 		const motivosData = motivos.reduce((acc, m) => ({...acc, [m]: {
 			motivo: m,
-			opened: 0,
 			completed: 0,
 			canceled: 0,
 			total: 0,
@@ -98,7 +95,6 @@ function parseResponseToCharts(apiResponse, viewType) {
 			for (const motivo of motivos) {
 				const data = motivosData[motivo]
 
-				if (status === 'aberto') data.opened++
 				if (status === 'cancelado') data.canceled++
 				if (status === 'concluido') data.completed++
 
@@ -112,13 +108,13 @@ function parseResponseToCharts(apiResponse, viewType) {
 	const { visitas } = apiResponse
 	
 	const parsedVisitas = visitas.map(v => Visita.parseFromApi(v))
-
+	
 	const propriedades = [...new Set(parsedVisitas.map(v => v.propriedade))]
 	const motivos = [...new Set(parsedVisitas.map(v => v.motivos).flat(Infinity))]
-	const colors = motivos.map(() => getRandomColor())
-	
-	const lineChartData = getLineChartData(parsedVisitas, motivos, colors)
-	const pizzaChartData = getPizzaChartData(parsedVisitas, motivos, colors)
+	const colors = propriedades.map(() => getRandomColor())
+
+	const lineChartData = getLineChartData(parsedVisitas, propriedades, colors)
+	const pizzaChartData = getPizzaChartData(parsedVisitas, propriedades, colors)
 	const tecnicoTableData = getTecnicoTableData(parsedVisitas, propriedades)
 	const motivoTableData = getMotivoTableData(parsedVisitas, motivos)
 
