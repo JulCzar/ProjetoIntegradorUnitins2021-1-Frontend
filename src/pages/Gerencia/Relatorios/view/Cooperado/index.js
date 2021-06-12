@@ -1,13 +1,19 @@
 import { useHistory, useLocation, useParams } from 'react-router'
 import React from 'react'
 
-import { ChartContainer, ReportTitle, TableTitle } from './styles'
+import { ChartContainer, DetailsContainer, DetailsTitle, DetailsWrapper, ReportTitle, TableTitle } from './styles'
 import { Block, Container, Content } from '~/common/styles'
 import { Chart, Column, DataTable } from '~/primereact'
 import { lineOptions, pieOptions } from '../data'
 import { formatDate } from '~/utils'
 
 const DATE_PATTERN = 'dd/MMM/yyyy'
+
+const details = [
+	{ key:53454615, label: 'Propriedade', value: 'nome' },
+	{ key:12341234, label: 'Adicionada em', value: 'associado_em' },
+	{ key:12364540, label: 'Telefone', value: 'phone' }
+]
 
 const Relatorio = () => {
 	const [start, setStart] = React.useState(null)
@@ -55,7 +61,7 @@ const Relatorio = () => {
 						<Column field='total' header='Total'/>
 					</DataTable>
 				</Block>
-				<Block className="p-p-3">
+				<Block className='p-mb-3 p-p-3'>
 					<TableTitle className='p-col-12'>Visitas por Tipo</TableTitle>
 					<DataTable emptyMessage='Nenhum item encontrado' value={state.motivoTableData} className='p-rol-12' rows={5}>
 						<Column field='motivo' header='Motivo'/>
@@ -63,6 +69,17 @@ const Relatorio = () => {
 						<Column field='canceled' header='Canceladas'/>
 						<Column field='total' header='Total'/>
 					</DataTable>
+				</Block>
+				<Block className="p-grid p-col-12 p-p-3">
+					<TableTitle className='p-col-12 p-grid'>Dados do Cooperado</TableTitle>
+					<DetailsContainer className='p-col-12 p-grid'>
+						{details.map(d => (
+							<DetailsWrapper className='p-col-6' key={d.key}>
+								<DetailsTitle>{d.label}</DetailsTitle>
+								<div>{state.details[d.value]}</div>
+							</DetailsWrapper>
+						))}
+					</DetailsContainer>
 				</Block>
 			</Content>
 		</Container>

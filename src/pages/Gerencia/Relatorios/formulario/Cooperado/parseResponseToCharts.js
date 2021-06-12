@@ -117,12 +117,26 @@ function parseResponseToCharts(apiResponse, viewType) {
 	const pizzaChartData = getPizzaChartData(parsedVisitas, propriedades, colors)
 	const tecnicoTableData = getTecnicoTableData(parsedVisitas, propriedades)
 	const motivoTableData = getMotivoTableData(parsedVisitas, motivos)
+	const details = {
+		...apiResponse.cooperado,
+		associado_em: formatDate(
+			new Date(
+				apiResponse
+					.cooperado
+					.associado_em
+					.split(' ')
+					.shift()
+				),
+				'dd/MM/yyyy'
+			)
+	}
 
 	return {
 		lineChartData,
 		pizzaChartData,
 		tecnicoTableData,
-		motivoTableData
+		motivoTableData,
+		details
 	}
 }
 

@@ -10,3 +10,12 @@ export const ReportTitle = styled(Title)`
 `
 
 export const ChartContainer = styled('div')``
+
+export const DetailsContainer = styled('div')``
+
+export const DetailsWrapper = styled('div')``
+
+export const DetailsTitle = styled('h3')`
+	font-size: 1.3rem;
+	font-weight: 700;
+`

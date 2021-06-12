@@ -6,8 +6,15 @@ import { lineOptions, pieOptions } from '../data'
 import { Block, Container, Content } from '~/common/styles'
 import { Chart, Column, DataTable } from '~/primereact'
 import { formatDate } from '~/utils'
+import { DetailsContainer, DetailsTitle, DetailsWrapper } from '../Tecnico/styles'
 
 const DATE_PATTERN = 'dd/MMM/yyyy'
+
+const details = [
+	{ key:12344182344, label: 'Adicionada em', value: 'associado_em' },
+	{ key:15234451345, label: 'Cooperado', value: 'nome' },
+	{ key:14454126355, label: 'Técnico Responsável', value: 'tecnico' },
+]
 
 const Relatorio = () => {
 	const [start, setStart] = React.useState(null)
@@ -55,7 +62,7 @@ const Relatorio = () => {
 						<Column field='total' header='Total'/>
 					</DataTable>
 				</Block>
-				<Block className="p-p-3">
+				<Block className="p-mb-3 p-p-3">
 					<TableTitle className='p-col-12'>Visitas por Tipo</TableTitle>
 					<DataTable emptyMessage='Nenhum item encontrado' value={state.motivoTableData} className='p-rol-12'>
 						<Column field='motivo' header='Motivo'/>
@@ -64,6 +71,17 @@ const Relatorio = () => {
 						<Column field='canceled' header='Canceladas'/>
 						<Column field='total' header='Total'/>
 					</DataTable>
+				</Block>
+				<Block className="p-grid p-col-12 p-p-3">
+					<TableTitle className='p-col-12 p-grid'>Dados da Propriedade</TableTitle>
+					<DetailsContainer className='p-col-12 p-grid'>
+						{details.map(d => (
+							<DetailsWrapper className='p-col-6' key={d.key}>
+								<DetailsTitle>{d.label}</DetailsTitle>
+								<div>{state.details[d.value]}</div>
+							</DetailsWrapper>
+						))}
+					</DetailsContainer>
 				</Block>
 			</Content>
 		</Container>

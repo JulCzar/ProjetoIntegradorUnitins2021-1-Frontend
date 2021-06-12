@@ -64,7 +64,9 @@
 	--fc-today-bg-color: #3ab64a2f;
 	--fc-button-active-bg-color: var(var(--primary-color))
 }
-
+@media print {
+	.page-break { page-break-before: always; }
+}
 .fc-dayGridWeek-button {
 	background: var(--surface-0) !important;
 	color: var(--text-color) !important;

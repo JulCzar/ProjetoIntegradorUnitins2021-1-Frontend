@@ -1,7 +1,7 @@
 import { useHistory, useLocation, useParams } from 'react-router'
 import React from 'react'
 
-import { ChartContainer, ReportTitle, TableTitle } from './styles'
+import { ChartContainer, DetailsContainer, DetailsTitle, DetailsWrapper, ReportTitle, TableTitle } from './styles'
 import { lineOptions, pieOptions } from '../data'
 import { Block, Container, Content } from '~/common/styles'
 import { Chart, Column, DataTable } from '~/primereact'
@@ -9,14 +9,21 @@ import { formatDate } from '~/utils'
 
 const DATE_PATTERN = 'dd/MMM/yyyy'
 
+const details = [
+	{ key:4528345798, label: 'Tecnico', value: 'nome' },
+	{ key:4162544156, label: 'Associado desde', value: 'associado_em' },
+	{ key:4315423487, label: 'Total de visitas no período', value: 'total' }
+]
+
 const Relatorio = () => {
 	const [start, setStart] = React.useState(null)
 	const [end, setEnd] = React.useState(null)
-	const history = useHistory()
 	const { state } = useLocation()
+	const history = useHistory()
 	const { data } = useParams()
 
 	React.useEffect(() => {
+		console.log(state)
 		try {
 			const parsedData = atob(data)
 
@@ -56,7 +63,7 @@ const Relatorio = () => {
 						<Column field='total' header='Total'/>
 					</DataTable>
 				</Block>
-				<Block className="p-p-3">
+				<Block className="p-mb-3 p-p-3 page-break">
 					<TableTitle className='p-col-12'>Visitas por Tipo</TableTitle>
 					<DataTable emptyMessage='Nenhum item encontrado' value={state.motivoTableData} className='p-rol-12' rows={5}>
 						<Column field='motivo' header='Motivo'/>
@@ -65,6 +72,17 @@ const Relatorio = () => {
 						<Column field='canceled' header='Canceladas'/>
 						<Column field='total' header='Total'/>
 					</DataTable>
+				</Block>
+				<Block className="p-grid p-col-12 p-p-3">
+					<TableTitle className='p-col-12 p-grid'>Dados do Técnico</TableTitle>
+					<DetailsContainer className='p-col-12 p-grid'>
+						{details.map(d => (
+							<DetailsWrapper className='p-col-6' key={d.key}>
+								<DetailsTitle>{d.label}</DetailsTitle>
+								<div>{state.details[d.value]}</div>
+							</DetailsWrapper>
+						))}
+					</DetailsContainer>
 				</Block>
 			</Content>
 		</Container>
