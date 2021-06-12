@@ -21,14 +21,21 @@ function VisitasMarcadas() {
 	const history = useHistory()
 	const [events, setEvents] = React.useState([])
 
+	const [logged, setLogged] = React.useState(false)
+
 	const [loading, setLoading] = React.useState(false)
 
 	const toastRef = React.useRef(null)
 	const toast = getToastInstance(toastRef)
 
 	React.useEffect(() => {
-
+		const { auth } = store.getState()
+		const { token } = auth
+		
 		updateLogged()
+		store.subscribe(updateLogged)
+		
+		if (!token) return
 		carregarVisitasMarcadas()
 	}, [])
 
@@ -84,9 +91,6 @@ function VisitasMarcadas() {
 		history.push(`/visitas/detalhe/${info.event.id}`)
 	}
 
-	const [logged, setLogged] = React.useState([])
-
-
 	function updateLogged() {
 		const { auth } = store.getState()
 		const { token, user } = auth
@@ -94,6 +98,7 @@ function VisitasMarcadas() {
 		setLogged((token && user))
 	}
 
+	console.log('logged',logged)
 	if (!logged) return <PageNotFound/>
 	
 	return (
@@ -111,14 +116,16 @@ function VisitasMarcadas() {
 							onClick={() => history.push('/visitas/agendar')}
 						/>
 					</div>
-					<FullCalendar
-						events={events}
-						options={{
-							...getCalendarOptions(),
-							dateClick,
-							eventClick
-						}}
-					/>
+					{logged && (
+						<FullCalendar
+							events={events}
+							options={{
+								...getCalendarOptions(),
+								dateClick,
+								eventClick
+							}}
+						/>
+					)}
 				</Block>
 			</CalendarContainer>
 		</ContainerWithTemplate>
