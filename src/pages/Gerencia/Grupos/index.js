@@ -2,12 +2,14 @@ import React from 'react'
 import { useForm } from 'react-hook-form'
 import { Button, Column, confirmPopup, DataTable, Toast } from '~/primereact'
 
-import { permissions } from '~/config/permissions'
+import { permissions as RegisteredPermissions } from '~/config/permissions'
 import { ManagementTemplate } from '~/pages/templates'
 
 import Modal from './components/Modal'
 import { api, getToastInstance } from '~/services'
 import { paginatorTemplate } from '~/common/paginatorTemplate'
+import { PageNotFound } from '~/pages'
+import { store } from '~/store'
 
 function ListarGrupos() {
 	const [grupos, setGrupos] = React.useState([])
@@ -16,12 +18,15 @@ function ListarGrupos() {
 	const [registerModalVisibility, setModalVisibility] = React.useState(false)
 	const [editModalVisibility, setEditModalVisibility] = React.useState(false)
 	const { control, errors, handleSubmit, reset, setValue } = useForm()
+	const [permissions, setPermissions] = React.useState([])
 	
 	const toastRef = React.useRef(null)
 	const toast = getToastInstance(toastRef)
 	
 	React.useEffect(() => {
 		carregarGrupos()
+		updatePermissions()
+		store.subscribe(updatePermissions)
 	}, [])
 
 	async function carregarGrupos() {
@@ -110,6 +115,15 @@ function ListarGrupos() {
 			}
 		})
 	}
+
+	function updatePermissions() {
+		const { auth } = store.getState()
+		const { permissions } = auth
+
+		setPermissions(permissions ?? [])
+	}
+
+	if (!permissions.includes(4)) return <PageNotFound/>
 		
 	return (
 		<ManagementTemplate title='Grupos' loading={loading}>
@@ -138,8 +152,8 @@ function ListarGrupos() {
 			<Modal
 				errors={errors}
 				control={control}
-				options={permissions}
 				headerName='Criar Grupo'
+				options={RegisteredPermissions}
 				visible={registerModalVisibility}
 				onSubmit={handleSubmit(registerGroup)}
 				onHide={() => setModalVisibility(false)}
@@ -150,9 +164,9 @@ function ListarGrupos() {
 			<Modal
 				errors={errors}
 				control={control}
-				options={permissions}
 				headerName='Editar Grupo'
 				visible={editModalVisibility}
+				options={RegisteredPermissions}
 				onSubmit={handleSubmit(editGroup)}
 				formData={editingGroup}
 				onHide={() => setEditModalVisibility(false)}

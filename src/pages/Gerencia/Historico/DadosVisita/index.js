@@ -1,18 +1,22 @@
-import React from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import { InputContainer } from '~/common/components'
-import { InputWrapper } from '~/common/styles'
+import { useParams } from 'react-router'
+import React from 'react'
+
 import { Button, InputText, InputTextarea, Toast } from '~/primereact'
 import { ManagementTemplate } from '~/pages/templates'
+import { InputContainer } from '~/common/components'
 import { api, getToastInstance } from '~/services'
-import { useParams } from 'react-router'
 import { getApiResponseErrors } from '~/utils'
+import { InputWrapper } from '~/common/styles'
+import { PageNotFound } from '~/pages'
 import { format } from 'date-fns'
+import { store } from '~/store'
 
 function DadosVisita() {
 	const [data, setData] = React.useState(null)
 	const [loading, setLoading] = React.useState(false)
 	const { control, reset, setValue } = useForm()
+	const [permissions, setPermissions] = React.useState([])
 
 	const toastRef = React.useRef(null)
 	const toast = getToastInstance(toastRef)
@@ -21,6 +25,8 @@ function DadosVisita() {
 	
 	React.useEffect(() => {
 		loadData()
+		updatePermissions()
+		store.subscribe(updatePermissions)
 	}, [])
 
 	async function loadData() {
@@ -44,6 +50,15 @@ function DadosVisita() {
 			setLoading(false)
 		}
 	}
+
+	function updatePermissions() {
+		const { auth } = store.getState()
+		const { permissions } = auth
+
+		setPermissions(permissions ?? [])
+	}
+
+	if (!permissions.includes(1)) return <PageNotFound/>
 
 	return (
 		<ManagementTemplate title='Detalhes da Visita' loading={loading}>

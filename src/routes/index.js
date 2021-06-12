@@ -58,15 +58,15 @@ const Routes = function ({ logout }) {
 				<Route path='/relatorio/tecnico' component={ROUTES.RelatorioLandingTecnico}/>
 				<Route path='/relatorio/cooperado' component={ROUTES.RelatorioLandingCooperado}/>
 				<Route path='/relatorio/propriedade' component={ROUTES.RelatorioLandingPropriedade}/>
-
-				{/* Cooperado */}
+				<Route path='/tecnico/relatorio/:data' component={ROUTES.RelatorioTecnico}/>
 				<Route path='/cooperados/relatorio/:data' component={ROUTES.RelatorioCooperado}/>
 				<Route path='/propriedade/relatorio/:data' component={ROUTES.RelatorioPropriedade}/>
+
+				{/* Cooperado */}
 				<Route path='/cooperados' component={ROUTES.BuscaCooperado} exact/>
 				<Route path='/cooperados/:id' component={ROUTES.PerfilCooperado}/>
 
 				{/* Técnico */}
-				<Route path='/tecnico/relatorio/:data' component={ROUTES.RelatorioTecnico}/>
 				<Route path='/tecnicos' component={ROUTES.BuscaTecnico} exact/>
 				<Route path='/tecnicos/:id' component={ROUTES.PerfilTecnico}/>
 

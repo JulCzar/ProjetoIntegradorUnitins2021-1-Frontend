@@ -9,7 +9,9 @@ import { ManagementTemplate } from '~/pages/templates'
 import { api, getToastInstance } from '~/services'
 import * as validate from '~/config/validations'
 import { InputWrapper } from '~/common/styles'
+import { PageNotFound } from '~/pages'
 import Modal from './components/Modal'
+import { store } from '~/store'
 
 function Perfil() {
 	// formulários
@@ -26,6 +28,7 @@ function Perfil() {
 	// listas
 	const [cooperadoSuggestions, setCoopSuggestions] = React.useState([])
   const [propriedades, setPropriedades] = React.useState([])
+	const [permissions, setPermissions] = React.useState([])
 	const [cooperados, setCooperados] = React.useState([])
   const [tecnicos, setTecnicos] = React.useState([])
 
@@ -46,10 +49,21 @@ function Perfil() {
 
 	React.useEffect(() => {
 		carregarPerfil()
+		updatePermissions()
+		store.subscribe(updatePermissions)
+
+		if (!permissions.includes(7)) return
 		carregarTecnicos()
 		carregarCooperados()
 		carregarPropriedades()
 	}, [])
+
+	function updatePermissions() {
+		const { auth } = store.getState()
+		const { permissions } = auth
+
+		setPermissions(permissions ?? [])
+	}
 
 	async function carregarPerfil() {
 		try {
@@ -275,189 +289,208 @@ function Perfil() {
 			
 			return normalizedCPF.startsWith(normalizedQuery)
 		})
-
+		
 		setCoopSuggestions(filteredCooperados)
 	}
-
+	
+	if (!(permissions.includes(2) || permissions.includes(7))) return <PageNotFound/>
+	
 	return (
-		<ManagementTemplate loading={loading} title='Perfil'>
+		<ManagementTemplate loading={loading} title={permissions.includes(2)?'Perfil':'Propriedades'}>
 			<Toast ref={toastRef}/>
 			{/* Dados do Cooperado */}
-			<form onSubmit={handleSubmit(editarPerfil)}>
-				<InputWrapper columns={2} gap='10px'>
+			{permissions.includes(2) && (
+				<form onSubmit={handleSubmit(editarPerfil)}>
+					<InputWrapper columns={2} gap='10px'>
+						<Controller
+							name='nome'
+							control={control}
+							rules={validate.name}
+							defaultValue={data?data.nome:''}
+							render={({ name, value, onChange }) => (
+								<InputContainer name={name} error={errors[name]} label='Nome'>
+									<InputText
+										name={name}
+										value={value}
+										disabled={!editing} 
+										className={getInvalidClass(errors[name])}
+										onChange={evt => onChange(evt.target.value)}
+									/>
+								</InputContainer>
+							)}
+						/>
+						<Controller
+							name='sobrenome'
+							control={control}
+							rules={validate.lastname}
+							defaultValue={data?data.sobrenome:''}
+							render={({ name, value, onChange }) => (
+								<InputContainer name={name} error={errors[name]} label='Sobrenome'>
+									<InputText
+										name={name}
+										value={value}
+										disabled={!editing} 
+										className={getInvalidClass(errors[name])}
+										onChange={evt => onChange(evt.target.value)}
+									/>
+								</InputContainer>
+							)}
+						/>
+					</InputWrapper>
 					<Controller
-						name='nome'
+						name='email'
 						control={control}
-						rules={validate.name}
-						defaultValue={data?data.nome:''}
+						rules={validate.email}
+						defaultValue={data?data.email:''}
 						render={({ name, value, onChange }) => (
-							<InputContainer name={name} error={errors[name]} label='Nome'>
+							<InputContainer name={name} error={errors[name]} label='Email'>
 								<InputText
-									name={name}
-									value={value}
-									disabled={!editing} 
-									className={getInvalidClass(errors[name])}
-									onChange={evt => onChange(evt.target.value)}
-								/>
-							</InputContainer>
-						)}
-					/>
-					<Controller
-						name='sobrenome'
-						control={control}
-						rules={validate.lastname}
-						defaultValue={data?data.sobrenome:''}
-						render={({ name, value, onChange }) => (
-							<InputContainer name={name} error={errors[name]} label='Sobrenome'>
-								<InputText
-									name={name}
-									value={value}
-									disabled={!editing} 
-									className={getInvalidClass(errors[name])}
-									onChange={evt => onChange(evt.target.value)}
-								/>
-							</InputContainer>
-						)}
-					/>
-				</InputWrapper>
-				<Controller
-					name='email'
-					control={control}
-					rules={validate.email}
-					defaultValue={data?data.email:''}
-					render={({ name, value, onChange }) => (
-						<InputContainer name={name} error={errors[name]} label='Email'>
-							<InputText
-								name={name}
-								value={value}
-								disabled={!editing}	
-								className={getInvalidClass(errors[name])}
-								onChange={evt => onChange(evt.target.value)}
-							/>
-						</InputContainer>
-					)}
-				/>
-				<InputWrapper columns={2} gap='10px'>
-					<Controller
-						name='phone'
-						control={control}
-						rules={validate.phone}
-						defaultValue={data?data.phone:''}
-						render={({ name, value, onChange }) => (
-							<InputContainer name={name} error={errors[name]} label='Telefone'>
-								<InputMask
 									name={name}
 									value={value}
 									disabled={!editing}	
-									mask='(99) 9 9999-9999'
 									className={getInvalidClass(errors[name])}
 									onChange={evt => onChange(evt.target.value)}
 								/>
 							</InputContainer>
 						)}
 					/>
-					<Controller
-						name='cpf'
-						control={control}
-						rules={validate.cpf}
-						defaultValue={data?data.cpf:''}
-						render={({ name, value, onChange }) => (
-							<InputContainer name={name} error={errors[name]} label='CPF'>
-								<InputMask
-									name={name}
-									value={value}
-									disabled={!editing}
-									mask='999.999.999-99'
-									className={getInvalidClass(errors[name])}
-									onChange={evt => onChange(evt.target.value)}
-								/>
-							</InputContainer>
-						)}
-					/>
-				</InputWrapper>
-				<InputWrapper columns={2} gap='10px'>
-					{(!editing && !!data?.status) && <Button type='button' onClick={confirmDisable} label='Desativar Perfil'/>}
-					{(!editing && !data?.status) && <Button type='button' onClick={confirmEnable} label='Ativar Perfil'/>}
-					{!editing && <Button onClick={() => setEditing(true)} label='Editar Perfil'/>}
-					{editing && <Button onClick={cancelEdit} type='button' label='Cancelar'/>}
-					{editing && <Button label='Salvar'/>}
-				</InputWrapper>
-			</form>
-			
-			<Divider className='p-mt-5'/>
-			{/* Lista de Propriedades */}
-			<CardHeader title='Propriedades'/>
-			<DataTable emptyMessage='Nenhum item encontrado' value={propriedades} className="p-datatable-striped">
-				<Column field="nome" header="Nome"/>
-				<Column field="localidade" header="Localidade"/>
-				<Column
-					className='p-d-flex p-jc-center'
-					header='Ações'
-					body={rowData => (
-						<a onClick={() => handleEdit(rowData)}>Detalhes</a>
-					)}/>
-			</DataTable>
-			<Button className='p-mt-3' onClick={() => setModalVisibility(true)} label='Nova Propriedade'/>
-			
-			{/* Modal de Edição da Propriedade */}
-			<Modal
-				onSubmit={editPropriedadeForm.handleSubmit(editarPropriedade)}
-				control={editPropriedadeForm.control}
-				errors={editPropriedadeForm.errors}
-				headerName='Dados da Propriedade'
-				visible={editingModalVisibility}
-				formData={propriedadeEmEdicao}
-				editable={editingProperty}
-				hideModal={hideModal}
-				tecnicos={tecnicos}
-				buttons={
 					<InputWrapper columns={2} gap='10px'>
-						{!editingProperty && <Button type='button' onClick={e => overlayTransfer.current.toggle(e)} aria-haspopup aria-controls="overlay_panel" label='Transferir Propriedade'/>}
-						{!editingProperty && <Button onClick={() => setEditingProperty(true)} label='Editar'/>}
-						{editingProperty && <Button type='button' onClick={cancelEdit} label='Cancelar'/>}
-						{editingProperty && <Button label='Salvar'/>}
-						
+						<Controller
+							name='phone'
+							control={control}
+							rules={validate.phone}
+							defaultValue={data?data.phone:''}
+							render={({ name, value, onChange }) => (
+								<InputContainer name={name} error={errors[name]} label='Telefone'>
+									<InputMask
+										name={name}
+										value={value}
+										disabled={!editing}	
+										mask='(99) 9 9999-9999'
+										className={getInvalidClass(errors[name])}
+										onChange={evt => onChange(evt.target.value)}
+									/>
+								</InputContainer>
+							)}
+						/>
+						<Controller
+							name='cpf'
+							control={control}
+							rules={validate.cpf}
+							defaultValue={data?data.cpf:''}
+							render={({ name, value, onChange }) => (
+								<InputContainer name={name} error={errors[name]} label='CPF'>
+									<InputMask
+										name={name}
+										value={value}
+										disabled={!editing}
+										mask='999.999.999-99'
+										className={getInvalidClass(errors[name])}
+										onChange={evt => onChange(evt.target.value)}
+									/>
+								</InputContainer>
+							)}
+						/>
 					</InputWrapper>
-				}
-			/>
-			{/* Modal de Cadastro de Propriedade */}
-			<Modal
-				onSubmit={novaPropriedadeForm.handleSubmit(cadastrarPropriedade)}
-				control={novaPropriedadeForm.control}
-				buttons={<Button label='Adicionar'/>}
-				errors={novaPropriedadeForm.errors}
-				headerName='Cadastrar Propriedade'
-				visible={modalVisibility}
-				hideModal={hideModal}
-				tecnicos={tecnicos}
-			/>
-			<OverlayPanel ref={overlayTransfer} showCloseIcon id="overlay_panel" style={{width: '450px'}} className="p-px-3 p-pb-3">
-				<CardHeader title='Transferir Propriedade'/>
-				<p>Informe o CPF do Cooperado que receberá a propriedade</p>
-				<form onSubmit={transferPropriedadeForm.handleSubmit(transferProperty)} className='p-fluid'>
-					<Controller
-						defaultValue=''
-						name='cooperado'
-						rules={{required: 'É Necessário selecionar o Cooperado que receberá a propriedade.'}}
-						control={transferPropriedadeForm.control}
-						render={({name, value, onChange}) => (
-						<InputContainer name={name} error={transferPropriedadeForm.errors[name]}>
-							<AutoComplete
-								name={name}
-								value={value}
-								forceSelection
-								placeholder='CPF'
-								field='nome_cooperado'
-								onChange={e => onChange(e.value)}
-								suggestions={cooperadoSuggestions}
-								completeMethod={completeCooperado}
-								className={getInvalidClass(transferPropriedadeForm.errors[name])}
-							/>
-						</InputContainer>
-					)}/>
-					<Button >Transferir</Button>
+					<InputWrapper columns={2} gap='10px'>
+						{!editing?(
+							<React.Fragment>
+								{!!data?.status && <Button type='button' onClick={confirmDisable} label='Desativar Perfil'/>}
+								{!data?.status && <Button type='button' onClick={confirmEnable} label='Ativar Perfil'/>}
+								<Button onClick={() => setEditing(true)} label='Editar Perfil'/>
+							</React.Fragment>
+						):(
+							<React.Fragment>
+								{editing && <Button onClick={cancelEdit} type='button' label='Cancelar'/>}
+								{editing && <Button label='Salvar'/>}
+							</React.Fragment>
+						)}
+					</InputWrapper>
 				</form>
-			</OverlayPanel>
+			)}
+			
+			{/* Lista de Propriedades */}
+			{(permissions.includes(2) && permissions.includes(7)) && (
+				<React.Fragment>
+					<Divider className='p-mt-5'/>
+					<CardHeader title='Propriedades'/>
+				</React.Fragment>
+			)}
+			{permissions.includes(7) && (
+				<React.Fragment>
+					<DataTable emptyMessage='Nenhum item encontrado' value={propriedades} className="p-datatable-striped">
+						<Column field="nome" header="Nome"/>
+						<Column field="localidade" header="Localidade"/>
+						<Column
+							className='p-d-flex p-jc-center'
+							header='Ações'
+							body={rowData => (
+								<a onClick={() => handleEdit(rowData)}>Detalhes</a>
+							)}/>
+					</DataTable>
+					<Button className='p-mt-3' onClick={() => setModalVisibility(true)} label='Nova Propriedade'/>
+					
+					{/* Modal de Edição da Propriedade */}
+					<Modal
+						onSubmit={editPropriedadeForm.handleSubmit(editarPropriedade)}
+						control={editPropriedadeForm.control}
+						errors={editPropriedadeForm.errors}
+						headerName='Dados da Propriedade'
+						visible={editingModalVisibility}
+						formData={propriedadeEmEdicao}
+						editable={editingProperty}
+						hideModal={hideModal}
+						tecnicos={tecnicos}
+						buttons={
+							<InputWrapper columns={2} gap='10px'>
+								{!editingProperty && <Button type='button' onClick={e => overlayTransfer.current.toggle(e)} aria-haspopup aria-controls="overlay_panel" label='Transferir Propriedade'/>}
+								{!editingProperty && <Button onClick={() => setEditingProperty(true)} label='Editar'/>}
+								{editingProperty && <Button type='button' onClick={cancelEdit} label='Cancelar'/>}
+								{editingProperty && <Button label='Salvar'/>}
+								
+							</InputWrapper>
+						}
+					/>
+					{/* Modal de Cadastro de Propriedade */}
+					<Modal
+						onSubmit={novaPropriedadeForm.handleSubmit(cadastrarPropriedade)}
+						control={novaPropriedadeForm.control}
+						buttons={<Button label='Adicionar'/>}
+						errors={novaPropriedadeForm.errors}
+						headerName='Cadastrar Propriedade'
+						visible={modalVisibility}
+						hideModal={hideModal}
+						tecnicos={tecnicos}
+					/>
+					<OverlayPanel ref={overlayTransfer}  showCloseIcon id="overlay_panel" style={{width: '450px'}} className="p-px-3 p-pb-3">
+						<CardHeader title='Transferir Propriedade'/>
+						<p>Informe o CPF do Cooperado que receberá a propriedade</p>
+						<form onSubmit={transferPropriedadeForm.handleSubmit(transferProperty)} className='p-fluid'>
+							<Controller
+								defaultValue=''
+								name='cooperado'
+								rules={{required: 'É Necessário selecionar o Cooperado que receberá a propriedade.'}}
+								control={transferPropriedadeForm.control}
+								render={({name, value, onChange}) => (
+								<InputContainer name={name} error={transferPropriedadeForm.errors[name]}>
+									<AutoComplete
+										name={name}
+										value={value}
+										forceSelection
+										placeholder='CPF'
+										field='nome_cooperado'
+										onChange={e => onChange(e.value)}
+										suggestions={cooperadoSuggestions}
+										completeMethod={completeCooperado}
+										className={getInvalidClass(transferPropriedadeForm.errors[name])}
+									/>
+								</InputContainer>
+							)}/>
+							<Button >Transferir</Button>
+						</form>
+					</OverlayPanel>
+				</React.Fragment>
+			)}
 		</ManagementTemplate>
 	)
 }

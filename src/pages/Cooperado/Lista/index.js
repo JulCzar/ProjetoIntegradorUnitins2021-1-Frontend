@@ -6,26 +6,21 @@ import { api } from '~/services'
 import { ManagementTemplate} from '~/pages/templates'
 import { getStringNormalized } from '~/utils'
 import { paginatorTemplate } from '~/common/paginatorTemplate'
+import { PageNotFound } from '~/pages'
+import { store } from '~/store'
 
 function Busca() {
 	const [filteredCooperados, setFilteredCooperados] = React.useState([])
+	const [permissions, setPermissions] = React.useState([])
 	const [cooperados, setCooperados] = React.useState([])
 	const [loading, setLoading] = React.useState(false)
 	const [query, setQuery] = React.useState('')
 	const history = useHistory()
 
 	React.useEffect(() => {
-		(async () => {
-			setLoading(true)
-			try {
-				const { data } = await api.get('/cooperado/index')
-				setCooperados(data)
-				setFilteredCooperados(data)
-			} catch (err) {}
-			finally {
-				setLoading(false)
-			}
-		})()
+		loadData()
+		updatePermissions()
+		store.subscribe(updatePermissions)
 	}, [])
 
 	React.useEffect(() => {
@@ -45,11 +40,31 @@ function Busca() {
 		setFilteredCooperados(filteredCooperados)
 	}, [query])
 
+	async function loadData() {
+		setLoading(true)
+		try {
+			const { data } = await api.get('/cooperado/index')
+			setCooperados(data)
+			setFilteredCooperados(data)
+		} finally {
+			setLoading(false)
+		}
+	}
+
+	function updatePermissions() {
+		const { auth } = store.getState()
+		const { permissions } = auth
+
+		setPermissions(permissions ?? [])
+	}
+
 	const getCenteredText = text => (
 		<span className='p-d-flex p-jc-center'>{text}</span>
 	)
 
 	const StatusBody = data => getCenteredText(!data.status?'Inativo':'Ativo')
+
+	if (!(permissions.includes(2) || permissions.includes(7))) return <PageNotFound/>
 
 	return (
 		<ManagementTemplate title='Buscar Cooperado' loading={loading}>		
@@ -75,7 +90,7 @@ function Busca() {
 					<Link to={`/cooperados/${rowData.id}`}>Detalhes</Link>
 				)}/>
 			</DataTable>
-			<Button onClick={() => history.push('/cadastrar/cooperado')} className='p-mt-3' label='Novo'/>
+			{permissions.includes(2) && <Button onClick={() => history.push('/cadastrar/cooperado')} className='p-mt-3' label='Novo'/>}
 		</ManagementTemplate>
 	)
 }

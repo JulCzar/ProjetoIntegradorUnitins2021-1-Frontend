@@ -11,13 +11,17 @@ import { InputContainer } from '~/common/components'
 import { api, getToastInstance } from '~/services'
 import * as validate from '~/config/validations'
 import { InputWrapper } from '~/common/styles'
+import { PageNotFound } from '~/pages'
+import { store } from '~/store'
 
 function RelatorioTecnico() {
-	const { control, errors, handleSubmit, reset } = useForm()
+	const { control, errors, handleSubmit } = useForm()
+	const [loading, setLoading] = useState(false)
+
+	const [permissions, setPermissions] = React.useState([])
+  const [tecnicos, setTecnicos] = useState([])
 
 	const [startDate, setStartDate] = useState(null)
-	const [loading, setLoading] = useState(false)
-  const [tecnicos, setTecnicos] = useState([])
 	const [endDate, setEndDate] = useState(null)
 
 	const history = useHistory()
@@ -27,6 +31,8 @@ function RelatorioTecnico() {
 
 	useEffect(() => {
 		loadTecnicos()
+		updatePermissions()
+		store.subscribe(updatePermissions)
 	}, [])
 
 	async function loadTecnicos() {
@@ -56,7 +62,6 @@ function RelatorioTecnico() {
 			toast.showErrors(getApiResponseErrors(response))
 		} finally {
 			setLoading(false)
-			reset()
 		}
   }
 
@@ -73,83 +78,92 @@ function RelatorioTecnico() {
 		}
 	}
 
+	function updatePermissions() {
+		const { auth } = store.getState()
+		const { permissions } = auth
+		
+		setPermissions(permissions ?? [])
+	}
+
+	if (!permissions.includes(6)) return <PageNotFound/>
+
   return (
-  <ManagementTemplate title='Relatório de Técnico' loading={loading}>
-		<Toast ref={toastRef}/>
-		<form onSubmit={handleSubmit(gerarRelatorio)}>
-			<InputWrapper columns={2} gap='10px'>
+		<ManagementTemplate title='Relatório de Técnico' loading={loading}>
+			<Toast ref={toastRef}/>
+			<form onSubmit={handleSubmit(gerarRelatorio)}>
+				<InputWrapper columns={2} gap='10px'>
+					<Controller
+						name='start'
+						control={control}
+						defaultValue={null}
+						rules={validate.startRelatorio}
+						render={({ name, value, onChange }) => (
+						<InputContainer name={name} label='Inicio' error={errors[name]}>
+							<Calendar
+								showIcon
+								name={name}
+								value={value}
+								mask='99/99/9999'
+								maxDate={endDate}
+								className={getInvalidClass(errors[name])}
+								onChange={handleDateChange(name, onChange)}/>
+						</InputContainer>
+					)}/>
+					<Controller
+						name='end'
+						control={control}
+						defaultValue={null}
+						rules={validate.endRelatorio}
+						render={({ name, value, onChange }) => (
+						<InputContainer name={name} label='Fim' error={errors[name]}>
+							<Calendar
+								showIcon
+								name={name}
+								value={value}
+								mask='99/99/9999'
+								minDate={startDate}
+								className={getInvalidClass(errors[name])}
+								onChange={handleDateChange(name, onChange)}/>
+						</InputContainer>
+					)}/>
+				</InputWrapper>
 				<Controller
-					name='start'
+					name='tecnico'
 					control={control}
 					defaultValue={null}
-					rules={validate.startRelatorio}
+					rules={validate.selectTecnico}
 					render={({ name, value, onChange }) => (
-					<InputContainer name={name} label='Inicio' error={errors[name]}>
-						<Calendar
+					<InputContainer name={name} label='Técnico' error={errors[name]}>
+						<Dropdown
 							showIcon
 							name={name}
 							value={value}
-							mask='99/99/9999'
-							maxDate={endDate}
+							optionValue='id'
+							options={tecnicos}
+							optionLabel='nome_tecnico'
 							className={getInvalidClass(errors[name])}
-							onChange={handleDateChange(name, onChange)}/>
+							onChange={evt => onChange(evt.value)}/>
 					</InputContainer>
 				)}/>
 				<Controller
-					name='end'
+					name='view'
 					control={control}
 					defaultValue={null}
-					rules={validate.endRelatorio}
+					rules={validate.dropdownGeneric}
 					render={({ name, value, onChange }) => (
-					<InputContainer name={name} label='Fim' error={errors[name]}>
-						<Calendar
+					<InputContainer name={name} label='Visualização' error={errors[name]}>
+						<Dropdown
 							showIcon
 							name={name}
 							value={value}
-							mask='99/99/9999'
-							minDate={startDate}
+							options={viewTypes}
 							className={getInvalidClass(errors[name])}
-							onChange={handleDateChange(name, onChange)}/>
+							onChange={evt => onChange(evt.value)}/>
 					</InputContainer>
 				)}/>
-			</InputWrapper>
-			<Controller
-				name='tecnico'
-				control={control}
-				defaultValue={null}
-				rules={validate.selectTecnico}
-				render={({ name, value, onChange }) => (
-				<InputContainer name={name} label='Técnico' error={errors[name]}>
-					<Dropdown
-						showIcon
-						name={name}
-						value={value}
-						optionValue='id'
-						options={tecnicos}
-						optionLabel='nome_tecnico'
-						className={getInvalidClass(errors[name])}
-						onChange={evt => onChange(evt.value)}/>
-				</InputContainer>
-			)}/>
-			<Controller
-				name='view'
-				control={control}
-				defaultValue={null}
-				rules={validate.dropdownGeneric}
-				render={({ name, value, onChange }) => (
-				<InputContainer name={name} label='Visualização' error={errors[name]}>
-					<Dropdown
-						showIcon
-						name={name}
-						value={value}
-						options={viewTypes}
-						className={getInvalidClass(errors[name])}
-						onChange={evt => onChange(evt.value)}/>
-				</InputContainer>
-			)}/>
-			<Button type='submit' label='Gerar Relatório'/>
-		</form>
-	</ManagementTemplate>
+				<Button type='submit' label='Gerar Relatório'/>
+			</form>
+		</ManagementTemplate>
   )}
 
 export default RelatorioTecnico

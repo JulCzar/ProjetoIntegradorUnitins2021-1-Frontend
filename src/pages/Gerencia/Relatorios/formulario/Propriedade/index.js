@@ -11,18 +11,21 @@ import { InputContainer } from '~/common/components'
 import { api, getToastInstance } from '~/services'
 import * as validate from '~/config/validations'
 import { InputWrapper } from '~/common/styles'
+import { PageNotFound } from '~/pages'
+import { store } from '~/store'
 
 function RelatorioPropriedade() {
-	const { control, errors, handleSubmit, reset } = useForm()
+	const { control, errors, handleSubmit } = useForm()
+	const [loading, setLoading] = useState(false)
 
 	const toastRef = useRef(null)
 	const toast = getToastInstance(toastRef)
 	
-	const [loading, setLoading] = useState(false)
-	const [cooperado, setCooperado] = useState(null)
-  const [cooperados, setCooperados] = useState([])
+	const [permissions, setPermissions] = React.useState([])
   const [propriedades, setPropriedades] = useState([])
-
+  const [cooperados, setCooperados] = useState([])
+	
+	const [cooperado, setCooperado] = useState(null)
 	const [startDate, setStartDate] = useState(null)
 	const [endDate, setEndDate] = useState(null)
 
@@ -30,6 +33,8 @@ function RelatorioPropriedade() {
 
 	useEffect(() => {
 		loadCooperados()
+		updatePermissions()
+		store.subscribe(updatePermissions)
 	}, [])
 
 	useEffect(() => {
@@ -79,7 +84,6 @@ function RelatorioPropriedade() {
 			toast.showErrors(getApiResponseErrors(response))
 		} finally {
 			setLoading(false)
-			reset()
 		}
   }
 
@@ -95,6 +99,15 @@ function RelatorioPropriedade() {
 			valueSetter(evt.value)
 		}
 	}
+
+	function updatePermissions() {
+		const { auth } = store.getState()
+		const { permissions } = auth
+		
+		setPermissions(permissions ?? [])
+	}
+
+	if (!permissions.includes(6)) return <PageNotFound/>
 
   return (
   <ManagementTemplate title='Relatório de Propriedade' loading={loading}>

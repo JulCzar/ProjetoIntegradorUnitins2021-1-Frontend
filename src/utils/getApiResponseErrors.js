@@ -1,3 +1,4 @@
+/** @return {string[]} */
 function getApiResponseErrors(thrownException) {
 	const apiResponse = thrownException?.data?.errors
 	

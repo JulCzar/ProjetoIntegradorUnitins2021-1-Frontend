@@ -45,6 +45,7 @@ function Busca() {
 
 		setPermissions(permissions ?? [])
 	}
+	
 	async function loadList() {
 		setLoading(true)
 		try {

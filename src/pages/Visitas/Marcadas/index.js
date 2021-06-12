@@ -1,20 +1,21 @@
-import { differenceInCalendarDays } from 'date-fns'
-import { CardHeader } from '~/common/components'
+import { differenceInMilliseconds } from 'date-fns'
 import { useHistory } from 'react-router'
 import React from 'react'
 
-import { ContainerWithTemplate } from '~/pages/templates'
-import { getCalendarOptions } from './fullcalendarOptions'
-import { CalendarContainer } from './styles'
 import { Button, FullCalendar, Toast } from '~/primereact'
-import { Block } from '~/common/styles'
+import { getCalendarOptions } from './fullcalendarOptions'
+import { ContainerWithTemplate } from '~/pages/templates'
 import { api, getToastInstance } from '~/services'
+import { CardHeader } from '~/common/components'
+import { formatDate, getApiResponseErrors } from '~/utils'
+import { CalendarContainer } from './styles'
+import { Block } from '~/common/styles'
+import { PageNotFound } from '~/pages'
+import { store } from '~/store'
 
 import '@fullcalendar/common/main.css'
 import '@fullcalendar/daygrid/main.css'
 import '@fullcalendar/timegrid/main.css'
-import { store } from '~/store'
-import { getApiResponseErrors } from '~/utils'
 
 function VisitasMarcadas() {
 	const history = useHistory()
@@ -26,6 +27,8 @@ function VisitasMarcadas() {
 	const toast = getToastInstance(toastRef)
 
 	React.useEffect(() => {
+
+		updateLogged()
 		carregarVisitasMarcadas()
 	}, [])
 
@@ -72,7 +75,7 @@ function VisitasMarcadas() {
 	}
 
 	const dateClick = evt => {
-		if (differenceInCalendarDays(evt.date, new Date()) < 0)
+		if (differenceInMilliseconds(evt.date, new Date(formatDate(new Date(), 'yyyy-MM-dd'))) < 0)
 			return toast.showWarn('Não é possível agendar uma visita numa data passada!')
 
 		history.push('/visitas/agendar', evt.date.toJSON())
@@ -80,6 +83,18 @@ function VisitasMarcadas() {
 	const eventClick = info => {
 		history.push(`/visitas/detalhe/${info.event.id}`)
 	}
+
+	const [logged, setLogged] = React.useState([])
+
+
+	function updateLogged() {
+		const { auth } = store.getState()
+		const { token, user } = auth
+
+		setLogged((token && user))
+	}
+
+	if (!logged) return <PageNotFound/>
 	
 	return (
 		<ContainerWithTemplate contentClassName='p-fluid p-mt-5' loading={loading}>

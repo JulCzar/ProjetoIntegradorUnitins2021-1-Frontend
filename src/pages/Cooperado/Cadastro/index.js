@@ -1,16 +1,17 @@
 import React from 'react'
+import { useHistory } from 'react-router'
 import { Controller, useForm } from 'react-hook-form'
 
-import { Button, InputMask, InputText, ListBox, Toast} from '~/primereact'
-import { InputContainer } from '~/common/components'
-import { ManagementTemplate } from '~/pages/templates'
-import { InputWrapper } from '~/common/styles'
-import { api, getToastInstance } from '~/services'
-
-import * as validate from '~/config/validations'
 import { getApiResponseErrors, getInvalidClass, getPhoneObject } from '~/utils'
+import { Button, InputMask, InputText, ListBox, Toast} from '~/primereact'
+import { ManagementTemplate } from '~/pages/templates'
+import { InputContainer } from '~/common/components'
+import { api, getToastInstance } from '~/services'
+import * as validate from '~/config/validations'
+import { InputWrapper } from '~/common/styles'
 import Modal from './components/Modal'
-import { useHistory } from 'react-router'
+import { PageNotFound } from '~/pages'
+import { store } from '~/store'
 
 const Cadastro = () => {
 	const { control, errors, handleSubmit, reset} = useForm()
@@ -18,27 +19,38 @@ const Cadastro = () => {
 
 	const [modalVisibility, setModalVisibility] = React.useState(false)
 	const [propriedades, setProperties] = React.useState([])
+	const [permissions, setPermissions] = React.useState([])
 	const [tecnicos, setTecnicos] = React.useState([])
 	const [loading, setLoading] = React.useState(false)
 	const [propriedadeEmEdicao] = React.useState(null)
 	const history = useHistory()
 	
 	const toastRef = React.useRef(null)
-	const toast = getToastInstance(toastRef)
 
 	const hideModal = () => setModalVisibility(false)
 	const showModal = () => setModalVisibility(true)
 
 	React.useEffect(() => {
 		carregarTecnicos()
+		updatePermissions()
+		store.subscribe(updatePermissions)
 	},[])
+
+	function updatePermissions() {
+		const { auth } = store.getState()
+		const { permissions } = auth
+
+		setPermissions(permissions ?? [])
+	}
+
 	async function carregarTecnicos() {
-		setLoading(true)
 		try {
+			setLoading(true)
 			const { data } = await api.get('/tecnico/index')
 			
 			setTecnicos(data)
 		} catch ({ response }) {
+			const toast = getToastInstance(toastRef)
 			toast.showErrors(getApiResponseErrors(response))
 		} finally {
 			setLoading(false)	
@@ -51,6 +63,7 @@ const Cadastro = () => {
 	}
 
 	async function cadastrar(form) {
+		const toast = getToastInstance(toastRef)
 		if (!propriedades.length) return toast.showWarn('É necessário inserir pelo menos uma propriedade')
 
 		for (const p of propriedades) p.id_tecnico = p.id_tecnico.id
@@ -75,6 +88,8 @@ const Cadastro = () => {
 			setLoading(false)	
 		}
 	}
+
+	if (!permissions.includes(2)) return <PageNotFound/>
 
 	return (
 		<ManagementTemplate title='Cadastro de Cooperado' loading={loading}>

@@ -1,12 +1,14 @@
-import { useHistory, useLocation, useParams } from 'react-router'
+import { useHistory, useLocation } from 'react-router'
 import React from 'react'
 
+import { DetailsContainer, DetailsTitle, DetailsWrapper } from '../Tecnico/styles'
 import { ChartContainer, ReportTitle, TableTitle } from './styles'
-import { lineOptions, pieOptions } from '../data'
 import { Block, Container, Content } from '~/common/styles'
 import { Chart, Column, DataTable } from '~/primereact'
+import { lineOptions, pieOptions } from '../data'
+import { PageNotFound } from '~/pages'
 import { formatDate } from '~/utils'
-import { DetailsContainer, DetailsTitle, DetailsWrapper } from '../Tecnico/styles'
+import { store } from '~/store'
 
 const DATE_PATTERN = 'dd/MMM/yyyy'
 
@@ -17,24 +19,51 @@ const details = [
 ]
 
 const Relatorio = () => {
+	const [permissions, setPermissions] = React.useState([])
+	const [logged, setLogged] = React.useState(false)
 	const [start, setStart] = React.useState(null)
 	const [end, setEnd] = React.useState(null)
-	const history = useHistory()
 	const { state } = useLocation()
-	const { data } = useParams()
+	const history = useHistory()
 
 	React.useEffect(() => {
-		try {
-			const parsedData = atob(data)
+		updateLogged()
+		loadRelatorio()
+		updatePermissions()
+		store.subscribe(() => {
+			updateLogged()
+			updatePermissions()
+		})
+	}, [])
 
-			const { start, end } = JSON.parse(parsedData)
+
+	function loadRelatorio() {
+		try {
+			const { start, end } = state.period
 
 			setStart(new Date(start))
 			setEnd(new Date(end))
 		} catch (error) {
 			history.replace('/error')
 		}
-	}, [])
+	}
+
+	function updatePermissions() {
+		const { auth } = store.getState()
+		const { permissions } = auth
+		
+		setPermissions(permissions ?? [])
+	}
+
+	function updateLogged() {
+		const { auth } = store.getState()
+		const { token, user } = auth
+		
+		setLogged(token && user)
+	}
+
+	if (!logged) return <PageNotFound/>
+	if (!permissions.includes(6)) return <PageNotFound/>
 
 	return (
 		<Container className='p-d-flex p-flex-column p-p-5'>
@@ -45,16 +74,16 @@ const Relatorio = () => {
 				<Block className="p-grid p-col-12 p-mb-3 p-p-3">
 					<ChartContainer className='p-grid p-col-6'>
 						<TableTitle className='p-col-12'>Visitas por período</TableTitle>
-						<Chart className='p-col-12' type='line' data={state.lineChartData} options={lineOptions} />
+						<Chart className='p-col-12' type='line' data={state?.lineChartData} options={lineOptions} />
 					</ChartContainer>
 					<ChartContainer className='p-grid p-col-6'>
 						<TableTitle className='p-col-12'>Visitas por propriedade</TableTitle>
-						<Chart className='p-col-12' type='pie' data={state.pizzaChartData} options={pieOptions} />
+						<Chart className='p-col-12' type='pie' data={state?.pizzaChartData} options={pieOptions} />
 					</ChartContainer>
 				</Block>
 				<Block className='p-mb-3 p-p-3'>
 					<TableTitle className='p-col-12'>Estatísticas das Propriedades</TableTitle>
-					<DataTable emptyMessage='Nenhum item encontrado' value={state.tecnicoTableData} className='p-rol-12'>
+					<DataTable emptyMessage='Nenhum item encontrado' value={state?.tecnicoTableData} className='p-rol-12'>
 						<Column field='tecnico' header='Técnico'/>
 						<Column field='opened' header='Em aberto'/>
 						<Column field='completed' header='Concluídas'/>
@@ -64,7 +93,7 @@ const Relatorio = () => {
 				</Block>
 				<Block className="p-mb-3 p-p-3">
 					<TableTitle className='p-col-12'>Visitas por Tipo</TableTitle>
-					<DataTable emptyMessage='Nenhum item encontrado' value={state.motivoTableData} className='p-rol-12'>
+					<DataTable emptyMessage='Nenhum item encontrado' value={state?.motivoTableData} className='p-rol-12'>
 						<Column field='motivo' header='Motivo'/>
 						<Column field='opened' header='Em aberto'/>
 						<Column field='completed' header='Concluídas'/>

@@ -134,13 +134,17 @@ function parseResponseToCharts(apiResponse, viewType) {
 		),
 		total: parsedVisitas.length
 	}
+
+	const { inicio, fim } = apiResponse.periodo
+	const period = { start: inicio, end: fim }
 	
 	return {
 		lineChartData,
 		pizzaChartData,
 		tecnicoTableData,
 		motivoTableData,
-		details
+		details,
+		period
 	}
 }
 

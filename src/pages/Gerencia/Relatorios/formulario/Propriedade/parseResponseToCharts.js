@@ -126,12 +126,16 @@ function parseResponseToCharts(apiResponse, viewType) {
 		associado_em: formatDate(new Date(apiResponse.propriedade.cadastrada_em.split(' ').shift()), 'dd/MM/yyyy')
 	}
 
+	const { inicio, fim } = apiResponse.periodo
+	const period = { start: inicio, end: fim }
+
 	return {
 		lineChartData,
 		pizzaChartData,
 		tecnicoTableData,
 		motivoTableData,
-		details
+		details,
+		period
 	}
 }
 

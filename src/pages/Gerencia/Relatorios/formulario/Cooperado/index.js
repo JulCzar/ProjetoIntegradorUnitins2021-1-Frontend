@@ -3,7 +3,7 @@ import { Controller, useForm } from 'react-hook-form'
 import { useHistory } from 'react-router'
 
 import { viewTypes } from '~/pages/Gerencia/Relatorios/viewTypes'
-import { getApiResponseErrors, getInvalidClass } from '~/utils'
+import { getApiResponseErrors, getInvalidClass }  from '~/utils'
 import { Button, Calendar, Dropdown, Toast} from '~/primereact'
 import parseResponseToCharts from './parseResponseToCharts'
 import { ManagementTemplate } from '~/pages/templates'
@@ -11,10 +11,13 @@ import { InputContainer } from '~/common/components'
 import { api, getToastInstance } from '~/services'
 import * as validate from '~/config/validations'
 import { InputWrapper } from '~/common/styles'
+import { PageNotFound } from '~/pages'
+import { store } from '~/store'
 
 function RelatorioCooperado() {
-	const { control, errors, handleSubmit, reset } = useForm()
+	const { control, errors, handleSubmit } = useForm()
 	
+	const [permissions, setPermissions] = React.useState([])
   const [cooperados, setCooperados] = useState([])
 	const [startDate, setStartDate] = useState(null)
 	const [endDate, setEndDate] = useState(null)
@@ -28,11 +31,14 @@ function RelatorioCooperado() {
 
 	useEffect(() => {
 		loadCooperados()
+		updatePermissions()
+		store.subscribe(updatePermissions)
 	}, [])
 
 	async function loadCooperados() {
 		try {
 			setLoading(true)
+
 			const { data } = await api.get('/cooperado/index')
 
 			setCooperados(data)
@@ -56,13 +62,10 @@ function RelatorioCooperado() {
 
 			history.push(`/cooperados/relatorio/${btoa(dataJSON)}`, chartData)
 		} catch ({ response }) {
-			
+			toast.showErrors(getApiResponseErrors(response))
 		} finally {
 			setLoading(false)
 		}
-		return 
-		reset()
-		history.push()
   }
 
 	/** @param {'start' | 'end'} key */
@@ -78,83 +81,92 @@ function RelatorioCooperado() {
 		}
 	}
 
+	function updatePermissions() {
+		const { auth } = store.getState()
+		const { permissions } = auth
+		
+		setPermissions(permissions ?? [])
+	}
+
+	if (!permissions.includes(6)) return <PageNotFound/>
+
   return (
-  <ManagementTemplate title='Relatório de Cooperado' loading={loading}>
-		<Toast ref={toastRef}/>
-		<form onSubmit={handleSubmit(gerarRelatorio)}>
-			<InputWrapper columns={2} gap='10px'>
+		<ManagementTemplate title='Relatório de Cooperado' loading={loading}>
+			<Toast ref={toastRef}/>
+			<form onSubmit={handleSubmit(gerarRelatorio)}>
+				<InputWrapper columns={2} gap='10px'>
+					<Controller
+						name='start'
+						control={control}
+						defaultValue={null}
+						rules={validate.startRelatorio}
+						render={({ name, value, onChange }) => (
+						<InputContainer name={name} label='Inicio' error={errors[name]}>
+							<Calendar
+								showIcon
+								name={name}
+								value={value}
+								mask='99/99/9999'
+								maxDate={endDate}
+								className={getInvalidClass(errors[name])}
+								onChange={handleDateChange(name, onChange)}/>
+						</InputContainer>
+					)}/>
+					<Controller
+						name='end'
+						control={control}
+						defaultValue={null}
+						rules={validate.endRelatorio}
+						render={({ name, value, onChange }) => (
+						<InputContainer name={name} label='Fim' error={errors[name]}>
+							<Calendar
+								showIcon
+								name={name}
+								value={value}
+								mask='99/99/9999'
+								minDate={startDate}
+								className={getInvalidClass(errors[name])}
+								onChange={handleDateChange(name, onChange)}/>
+						</InputContainer>
+					)}/>
+				</InputWrapper>
 				<Controller
-					name='start'
+					name='cooperado'
 					control={control}
 					defaultValue={null}
-					rules={validate.startRelatorio}
+					rules={validate.selectCooperado}
 					render={({ name, value, onChange }) => (
-					<InputContainer name={name} label='Inicio' error={errors[name]}>
-						<Calendar
+					<InputContainer name={name} label='Cooperado' error={errors[name]}>
+						<Dropdown
 							showIcon
 							name={name}
 							value={value}
-							mask='99/99/9999'
-							maxDate={endDate}
+							optionValue='id'
+							options={cooperados}
+							optionLabel='nome_cooperado'
 							className={getInvalidClass(errors[name])}
-							onChange={handleDateChange(name, onChange)}/>
+							onChange={evt => onChange(evt.value)}/>
 					</InputContainer>
 				)}/>
 				<Controller
-					name='end'
+					name='view'
 					control={control}
 					defaultValue={null}
-					rules={validate.endRelatorio}
+					rules={validate.dropdownGeneric}
 					render={({ name, value, onChange }) => (
-					<InputContainer name={name} label='Fim' error={errors[name]}>
-						<Calendar
+					<InputContainer name={name} label='Visualização' error={errors[name]}>
+						<Dropdown
 							showIcon
 							name={name}
 							value={value}
-							mask='99/99/9999'
-							minDate={startDate}
+							options={viewTypes}
 							className={getInvalidClass(errors[name])}
-							onChange={handleDateChange(name, onChange)}/>
+							onChange={evt => onChange(evt.value)}/>
 					</InputContainer>
 				)}/>
-			</InputWrapper>
-			<Controller
-				name='cooperado'
-				control={control}
-				defaultValue={null}
-				rules={validate.selectCooperado}
-				render={({ name, value, onChange }) => (
-				<InputContainer name={name} label='Cooperado' error={errors[name]}>
-					<Dropdown
-						showIcon
-						name={name}
-						value={value}
-						optionValue='id'
-						options={cooperados}
-						optionLabel='nome_cooperado'
-						className={getInvalidClass(errors[name])}
-						onChange={evt => onChange(evt.value)}/>
-				</InputContainer>
-			)}/>
-			<Controller
-				name='view'
-				control={control}
-				defaultValue={null}
-				rules={validate.dropdownGeneric}
-				render={({ name, value, onChange }) => (
-				<InputContainer name={name} label='Visualização' error={errors[name]}>
-					<Dropdown
-						showIcon
-						name={name}
-						value={value}
-						options={viewTypes}
-						className={getInvalidClass(errors[name])}
-						onChange={evt => onChange(evt.value)}/>
-				</InputContainer>
-			)}/>
-			<Button type='submit' label='Gerar Relatório'/>
-		</form>
-	</ManagementTemplate>
+				<Button type='submit' label='Gerar Relatório'/>
+			</form>
+		</ManagementTemplate>
   )}
 
 export default RelatorioCooperado
