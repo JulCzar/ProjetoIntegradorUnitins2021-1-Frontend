@@ -4,13 +4,9 @@
  * @returns 
  */
 export default function getToastInstance(toastRef) {
-	/**
-	 * 
-	 * @param {'success' | 'info' | 'warn' | 'error'} severity 
-	 * @param {string} summary 
-	 * @param {string} detail 
-	 * @returns {{severity:'success' | 'info' | 'warn' | 'error', summary: string, detail?: string}}
-	 */
+	const ref = toastRef
+
+	/** @param {'success' | 'info' | 'warn' | 'error'} severity @param {string} summary @param {string} detail @returns {{severity:'success' | 'info' | 'warn' | 'error', summary: string, detail?: string}} */
 	const getToastObjectMessage = (severity, summary, detail = '') => {
 		const message = {
 			severity,
@@ -90,6 +86,7 @@ export default function getToastInstance(toastRef) {
 		showWarns,
 		showErrors,
 		showMultiple,
-		clearAll
+		clearAll,
+		ref
 	}
 }

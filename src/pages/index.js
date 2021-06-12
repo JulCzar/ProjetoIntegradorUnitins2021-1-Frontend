@@ -9,6 +9,7 @@ export { default as PerfilAdmin } from './Gerencia/Perfil'
 export { default as RelatorioLandingPropriedade } from './Gerencia/Relatorios/Propriedade'
 export { default as RelatorioLandingCooperado} from './Gerencia/Relatorios/Cooperado'
 export { default as RelatorioLandingTecnico } from './Gerencia/Relatorios/Tecnico'
+export { default as RelatorioPropriedade } from './Gerencia/Relatorio/Propriedade'
 export { default as RelatorioCooperado } from './Gerencia/Relatorio/Cooperado'
 export { default as RelatorioTecnico } from './Gerencia/Relatorio/Tecnico'
 

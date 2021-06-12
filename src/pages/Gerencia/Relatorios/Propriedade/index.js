@@ -1,29 +1,84 @@
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
+import { useHistory } from 'react-router-dom'
+
 import { InputContainer } from '~/common/components'
 import { InputWrapper } from '~/common/styles'
 import * as validate from '~/config/validations'
-import { Button, Calendar, Dropdown} from '~/primereact'
+import { Button, Calendar, Dropdown, Toast} from '~/primereact'
 import { ManagementTemplate } from '~/pages/templates'
-import { getInvalidClass } from '~/utils'
+import { getApiResponseErrors, getInvalidClass } from '~/utils'
+import { api, getToastInstance } from '~/services'
+import { viewTypes } from '../viewTypes'
+import parseResponseToCharts from './parseResponseToCharts'
 
 function RelatorioPropriedade() {
 	const { control, errors, handleSubmit, reset } = useForm()
+	const toast = getToastInstance(useRef(null))
+	
+	const [loading, setLoading] = useState(false)
+	const [cooperado, setCooperado] = useState(null)
+  const [cooperados, setCooperados] = useState([])
+  const [propriedades, setPropriedades] = useState([])
 
-	const [startDate, setStartDate] = React.useState(null)
-	const [endDate, setEndDate] = React.useState(null)
+	const [startDate, setStartDate] = useState(null)
+	const [endDate, setEndDate] = useState(null)
 
-  const [groupOptions] = React.useState([
-		{label: 'Recanto', value: 1},
-		{label: 'Cargueiros', value: 2},
-		{label: 'Brejão', value: 3},
-		{label: 'Veredas', value: 4},
-		{label: 'Itabirinhas', value: 5}
-	])
-  const enviar = form => {
-    console.log(form) // eslint-disable-line
+	const history = useHistory()
 
-		reset()
+	useEffect(() => {
+		loadCooperados()
+	}, [])
+
+	useEffect(() => {
+		loadPropriedades()
+	}, [cooperado])
+
+	async function loadCooperados() {
+		try {
+			setLoading(true)
+			const { data } = await api.get('/cooperado/index')
+
+			setCooperados(data)
+		} catch ({ response }) {
+			toast.showErrors(getApiResponseErrors(response))
+		} finally {
+			setLoading(false)
+		}
+	}
+
+	async function loadPropriedades() {
+		try {
+			setLoading(true)
+			const { data } = await api.get(`/propriedades/${cooperado}`)
+
+			setPropriedades(data)
+		} catch ({ response }) {
+			toast.showErrors(getApiResponseErrors(response))
+		} finally {
+			setLoading(false)
+		}
+	}
+
+  async function enviar(form) {
+		const { view, ...params } = form
+		const dataJSON = JSON.stringify(form)
+		const config = { params }
+		
+		try {
+			setLoading(true)
+
+			const { data } = await api.get('/relatorio/propriedade', config)
+			
+			const chartData = parseResponseToCharts(data, view)
+
+			history.push(`/propriedade/relatorio/${btoa(dataJSON)}`, chartData)
+		} catch ({ response }) {
+			toast.showErrors(getApiResponseErrors(response))
+		} finally {
+			setLoading(false)
+			reset()
+		}
   }
 
 	/** @param {'start' | 'end'} key */
@@ -40,7 +95,8 @@ function RelatorioPropriedade() {
 	}
 
   return (
-  <ManagementTemplate title='Relatório de Propriedade'>
+  <ManagementTemplate title='Relatório de Propriedade' loading={loading}>
+		<Toast ref={toast.ref}/>
 		<form onSubmit={handleSubmit(enviar)}>
 			<InputWrapper columns={2} gap='10px'>
 				<Controller
@@ -89,9 +145,14 @@ function RelatorioPropriedade() {
 						showIcon
 						name={name}
 						value={value}
-						options={groupOptions}
+						optionValue='id'
+						options={cooperados}
+						optionLabel='nome_cooperado'
 						className={getInvalidClass(errors[name])}
-						onChange={evt => onChange(evt.value)}/>
+						onChange={evt => {
+							onChange(evt.value)
+							setCooperado(evt.value)
+						}}/>
 				</InputContainer>
 			)}/>
 			<Controller
@@ -100,12 +161,31 @@ function RelatorioPropriedade() {
 				defaultValue={null}
 				rules={validate.selectProperty}
 				render={({ name, value, onChange }) => (
-				<InputContainer name={name} label='Cooperado' error={errors[name]}>
+				<InputContainer name={name} label='Propriedade' error={errors[name]}>
 					<Dropdown
 						showIcon
 						name={name}
 						value={value}
-						options={groupOptions}
+						optionValue='id'
+						optionLabel='nome'
+						options={propriedades}
+						className={getInvalidClass(errors[name])}
+						placeholder={!cooperado?'Selecione primeiro um cooperado':'Selecione uma propriedade'}
+						onChange={evt => onChange(evt.value)}/>
+				</InputContainer>
+			)}/>
+			<Controller
+				name='view'
+				control={control}
+				defaultValue={null}
+				rules={validate.dropdownGeneric}
+				render={({ name, value, onChange }) => (
+				<InputContainer name={name} label='Visualização' error={errors[name]}>
+					<Dropdown
+						showIcon
+						name={name}
+						value={value}
+						options={viewTypes}
 						className={getInvalidClass(errors[name])}
 						onChange={evt => onChange(evt.value)}/>
 				</InputContainer>

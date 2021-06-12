@@ -58,7 +58,7 @@ function parseResponseToCharts(apiResponse, viewType) {
 		/** @type {{[x:string]: { propriedade: string, tecnico: string, completed: number, canceled: number, total: number }}} */
 		const propriedadesData = propriedades.reduce((acc, propriedade) => ({...acc,[propriedade]: {
 			propriedade,
-			cooperado: '',
+			tecnico: '',
 			opened: 0,
 			completed: 0,
 			canceled: 0,
@@ -66,16 +66,16 @@ function parseResponseToCharts(apiResponse, viewType) {
 		}}), {})
 
 		for (const visita of parsedVisitas) {
-			const { cooperado, propriedade, status } = visita
+			const { tecnico, propriedade, status } = visita
 
 			const data = propriedadesData[propriedade]
 
 			if (status === 'aberto') data.opened++
 			if (status === 'cancelado') data.canceled++
 			if (status === 'concluido') data.completed++
-
+			
 			data.total++
-			data.cooperado = cooperado
+			data.tecnico = tecnico
 		}
 
 		return Object.values(propriedadesData)
@@ -113,9 +113,9 @@ function parseResponseToCharts(apiResponse, viewType) {
 	
 	const parsedVisitas = visitas.map(v => Visita.parseFromApi(v))
 
-	const propriedades = [...new Set(parsedVisitas.map(v => v.propriedade))]
 	const motivos = [...new Set(parsedVisitas.map(v => v.motivos).flat(Infinity))]
-	const colors = motivos.map(() => getRandomColor())
+	const propriedades = [...new Set(parsedVisitas.map(v => v.propriedade))]
+	const colors = motivos.map(getRandomColor)
 	
 	const lineChartData = getLineChartData(parsedVisitas, motivos, colors)
 	const pizzaChartData = getPizzaChartData(parsedVisitas, motivos, colors)

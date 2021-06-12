@@ -61,6 +61,7 @@ const Routes = function ({ logout }) {
 
 				{/* Cooperado */}
 				<Route path='/cooperados/relatorio/:data' component={ROUTES.RelatorioCooperado}/>
+				<Route path='/propriedade/relatorio/:data' component={ROUTES.RelatorioPropriedade}/>
 				<Route path='/cooperados' component={ROUTES.BuscaCooperado} exact/>
 				<Route path='/cooperados/:id' component={ROUTES.PerfilCooperado}/>
 
