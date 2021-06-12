@@ -98,7 +98,6 @@ function VisitasMarcadas() {
 		setLogged((token && user))
 	}
 
-	console.log('logged',logged)
 	if (!logged) return <PageNotFound/>
 	
 	return (

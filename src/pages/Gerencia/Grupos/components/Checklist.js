@@ -5,6 +5,8 @@ import { ListOfOptions } from '../styles'
 import { CardHeader } from '~/common/components'
 
 function Checklist({ options, value, label, onChange = () => {} }) {
+	const checkboxesRefs = React.useRef([])
+
 	const toggleCheck = ({ target }) => {
 		if(value.includes(target.value))
 			onChange(value.filter(elem => (elem !== target.value)))
@@ -12,24 +14,34 @@ function Checklist({ options, value, label, onChange = () => {} }) {
 			onChange([...value, target.value])
 	}
 
-	const toggleCheckLabel = v => {
+	const toggleCheckLabel = evt => {
+		const { value: v, disabled } = evt.props
+
+		if (disabled) return
+
 		if(value.includes(v))
 			onChange(value.filter(elem => (elem !== v)))
 		else
 			onChange([...value, v])
 	}
 
+	const handleLabelClick = i => toggleCheckLabel(checkboxesRefs.current[i])
+	
 	return (
 		<div className='p-field'>
 			<CardHeader title={label} />
 			<ListOfOptions col={2}>
-				{options.map(o => (
+				{options.map((o, i) => (
 					<div className='p-my-2' key={o.value}>
 						<Checkbox
-							checked={value.includes(o.value)}
 							value={o.value}
-							onChange={toggleCheck}/>
-						<label onClick={() => toggleCheckLabel(o.value)} className='p-ml-1'>{o.label}</label>
+							disabled={o.disabled}
+							onChange={toggleCheck}
+							onClick={toggleCheckLabel}
+							checked={value.includes(o.value)}
+							ref={ref => checkboxesRefs.current[i] = ref}
+						/>
+						<label onClick={() => handleLabelClick(i)} className='p-ml-1'>{o.label}</label>
 					</div>
 				))}
 			</ListOfOptions>
@@ -37,8 +49,9 @@ function Checklist({ options, value, label, onChange = () => {} }) {
 	)
 }
 const label = PropTypes.string
-const value = PropTypes.oneOfType([PropTypes.string, PropTypes.number]) 
-const option = PropTypes.shape({ label, value })
+const value = PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+const disabled = PropTypes.oneOfType([PropTypes.bool, PropTypes.func])
+const option = PropTypes.shape({ label, value, disabled })
 
 Checklist.propTypes = {
 	options: PropTypes.arrayOf(option),

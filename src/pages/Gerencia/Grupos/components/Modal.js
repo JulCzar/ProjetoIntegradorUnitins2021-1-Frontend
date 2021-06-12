@@ -1,24 +1,14 @@
-import React from 'react'
-import PropTypes from 'prop-types'
 import { Controller } from 'react-hook-form'
+import PropTypes from 'prop-types'
+import React from 'react'
 
-import { Dialog, InputText } from '~/primereact'
 import { InputContainer } from '~/common/components'
+import { Dialog, InputText } from '~/primereact'
+import * as validate from '~/config/validations'
 import { getInvalidClass } from '~/utils'
 import Checklist from './Checklist'
-import * as validate from '~/config/validations'
 
-function GroupDialog({
-	headerName,
-	onSubmit,
-	formData,
-	visible,
-	control,
-	options,
-	onHide,
-	errors,
-	buttons
-}) {
+function GroupDialog({ headerName, onSubmit, formData, visible, control, options, onHide, errors, buttons }) {
 	return (
 		<Dialog
 			draggable={false}
@@ -65,7 +55,8 @@ function GroupDialog({
 
 const label = PropTypes.string
 const value = PropTypes.oneOfType([PropTypes.string, PropTypes.number]) 
-const option = PropTypes.shape({ label, value })
+const disabled = PropTypes.oneOfType([PropTypes.bool, PropTypes.func])
+const option = PropTypes.shape({ label, value, disabled })
 
 GroupDialog.propTypes = {
 	headerName: PropTypes.string,

@@ -2,7 +2,7 @@ import React from 'react'
 import { useForm } from 'react-hook-form'
 import { Button, Column, confirmPopup, DataTable, Toast } from '~/primereact'
 
-import { permissions as RegisteredPermissions } from '~/config/permissions'
+import { permissions as registeredPermissions } from '~/config/permissions'
 import { ManagementTemplate } from '~/pages/templates'
 
 import Modal from './components/Modal'
@@ -124,7 +124,8 @@ function ListarGrupos() {
 	}
 
 	if (!permissions.includes(4)) return <PageNotFound/>
-		
+	const options = registeredPermissions.map(p => ({...p, disabled: !permissions.includes(p.value)}))
+	
 	return (
 		<ManagementTemplate title='Grupos' loading={loading}>
 			<Toast ref={toastRef}/>
@@ -152,25 +153,25 @@ function ListarGrupos() {
 			<Modal
 				errors={errors}
 				control={control}
+				options={options}
 				headerName='Criar Grupo'
-				options={RegisteredPermissions}
 				visible={registerModalVisibility}
+				buttons={<Button label='Adicionar'/>}
 				onSubmit={handleSubmit(registerGroup)}
 				onHide={() => setModalVisibility(false)}
-				buttons={<Button label='Adicionar'/>}
 			/>
-
+			
 			{/* Modal de Edição de grupo */}
 			<Modal
 				errors={errors}
 				control={control}
+				options={options}
+				formData={editingGroup}
 				headerName='Editar Grupo'
 				visible={editModalVisibility}
-				options={RegisteredPermissions}
 				onSubmit={handleSubmit(editGroup)}
-				formData={editingGroup}
-				onHide={() => setEditModalVisibility(false)}
 				buttons={<Button label='Salvar'/>}
+				onHide={() => setEditModalVisibility(false)}
 			/>
 		</ManagementTemplate>
 	)
