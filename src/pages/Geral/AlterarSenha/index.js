@@ -71,7 +71,7 @@ function AlterarSenha() {
 							</InputContainer>
 						)}/>
 						<Controller
-							name='senha'
+							name='password'
 							defaultValue=''
 							control={control}
 							rules={validate.password}

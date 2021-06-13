@@ -37,6 +37,7 @@ const Routes = function ({ logout }) {
 				<Route path='/' component={ROUTES.PainelExibicao} exact/>
 				<Route path='/logout' component={ROUTES.Logout}/>
 				<Route path='/login' component={ROUTES.Login}/>
+				<Route path='/about' component={ROUTES.About}/>
 
 				{/* Senha */}
 				<Route path='/senha/recuperar' component={ROUTES.RecuperarSenha}/>

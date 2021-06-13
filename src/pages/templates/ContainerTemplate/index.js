@@ -100,8 +100,9 @@ function ContainerTemplate({
 				</ContainerLimiter>
 			</Content>
 			<Footer>
-				<ContainerLimiter className='p-mx-auto'>
-					SIMOV Coapa - Sistemas de Gerenciamento de Visitas Coapa 2021
+				<ContainerLimiter className='p-mx-auto p-d-flex p-ai-center p-jc-between'>
+					<p>SIMOV Coapa - Sistemas de Gerenciamento de Visitas Coapa 2021</p>
+					<a href='/about'>Sobre o Simov</a>
 				</ContainerLimiter>
 			</Footer>
 		</Container>
