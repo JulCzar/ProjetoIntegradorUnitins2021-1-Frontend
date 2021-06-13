@@ -15,6 +15,39 @@ export const Break = styled('div') `
 	}
 `
 
+export const FABIcon = styled('div')`
+	--size: 50px;
+	--distance: 10px;
+	align-items: center;
+	animation: transform 100ms, box-shadow 100ms;
+	background: var(--primary-color);
+	border-radius: var(--size);
+	bottom: var(--size);
+	box-shadow: 0 0 2px 2px #0003;
+	color: #fff;
+	cursor: pointer;
+	display: flex;
+	justify-content: center;
+	height: var(--size);
+	position: fixed;
+	right: var(--size);
+	width: var(--size);
+	z-index: 9999;
+
+	:active {
+		transform: scale(1.15);
+		box-shadow: 0 0 3px 3px #0004;
+	}
+
+	:hover {
+		transform: scale(1.02);
+	}
+
+	@media print {
+		display: none;
+	}
+`
+
 export const ChartContainer = styled('div')``
 
 export const DetailsContainer = styled('div')``

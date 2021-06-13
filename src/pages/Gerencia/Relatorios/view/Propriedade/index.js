@@ -1,7 +1,7 @@
 import { useHistory, useLocation } from 'react-router'
 import React from 'react'
 
-import { Break, ChartContainer, DetailsContainer, DetailsTitle, DetailsWrapper, ReportTitle, TableTitle } from '../styles'
+import { Break, ChartContainer, DetailsContainer, DetailsTitle, DetailsWrapper, FABIcon, ReportTitle, TableTitle } from '../styles'
 import { Block, Container, Content } from '~/common/styles'
 import { Chart, Column, DataTable } from '~/primereact'
 import { lineOptions, pieOptions } from '../data'
@@ -66,6 +66,7 @@ const Relatorio = () => {
 
 	return (
 		<Container className='p-d-flex p-flex-column p-p-5'>
+			<FABIcon className='fas fa-print' onClick={print}/>
 			<ReportTitle>
 				Relatório - {start?formatDate(start, DATE_PATTERN):''} à {end?formatDate(end, DATE_PATTERN):''}
 			</ReportTitle>

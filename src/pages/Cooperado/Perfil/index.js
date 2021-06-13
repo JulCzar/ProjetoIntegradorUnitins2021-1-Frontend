@@ -52,7 +52,6 @@ function Perfil() {
 		updatePermissions()
 		store.subscribe(updatePermissions)
 
-		if (!permissions.includes(7)) return
 		carregarTecnicos()
 		carregarCooperados()
 		carregarPropriedades()
@@ -61,7 +60,7 @@ function Perfil() {
 	function updatePermissions() {
 		const { auth } = store.getState()
 		const { permissions } = auth
-
+		
 		setPermissions(permissions ?? [])
 	}
 
@@ -94,8 +93,6 @@ function Perfil() {
 			reset()
 
 			Object.entries(data).forEach(([key, value]) => setValue(key, value))
-		} catch (error) {
-			history.push('/error')
 		} finally {
 			setLoading(false)
 		}
@@ -118,8 +115,6 @@ function Perfil() {
 			const { data } = await api.get('/tecnico/index')
 			
 			setTecnicos(data)
-		} catch ({ response }) {
-			toast.showErrors(getApiResponseErrors(response))
 		} finally {
 			setLoading(false)	
 		}
