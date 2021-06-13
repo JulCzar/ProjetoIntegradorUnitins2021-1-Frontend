@@ -7,6 +7,7 @@ import { getStringNormalized } from '~/utils'
 import { PageNotFound } from '~/pages'
 import { api } from '~/services'
 import { store } from '~/store'
+import DTResponsive from '~/common/components/DTResponsive'
 
 function Busca() {
 	const [filteredTecnicos, setFilteredTecnicos] = React.useState([])
@@ -74,24 +75,26 @@ function Busca() {
 				placeholder='Pesquisar por nome ou cpf'
 				onChange={e => setQuery(e.target.value)}
 			/>
-			<DataTable
-				rows={7}
-				paginator={filteredTecnicos.length > 7}
-				value={filteredTecnicos}
-				className="p-datatable-striped"
-				emptyMessage='Nenhum item encontrado'
-			>
-				<Column field="nome_tecnico" header="Nome"/>
-				<Column field="cpf_tecnico" header="CPF"/>
-				<Column header={getCenteredText('Status')} body={StatusBody}/>
-				<Column header='Ações'
-					bodyClassName='p-d-flex p-jc-around'
-					headerClassName='p-d-flex p-jc-center'
-					body={({ id }) => (		
-						<Link to={`/tecnicos/${id}`}>Detalhes</Link>
-					)}
-				/>
-			</DataTable>
+			<DTResponsive>
+				<DataTable
+					rows={7}
+					paginator={filteredTecnicos.length > 7}
+					value={filteredTecnicos}
+					className="p-datatable-striped"
+					emptyMessage='Nenhum item encontrado'
+				>
+					<Column field="nome_tecnico" header="Nome"/>
+					<Column field="cpf_tecnico" header="CPF"/>
+					<Column header={getCenteredText('Status')} body={StatusBody}/>
+					<Column header='Ações'
+						bodyClassName='p-d-flex p-jc-around'
+						headerClassName='p-d-flex p-jc-center'
+						body={({ id }) => (		
+							<Link to={`/tecnicos/${id}`}>Detalhes</Link>
+						)}
+					/>
+				</DataTable>
+			</DTResponsive>
 			<Button onClick={() => history.push('/cadastrar/tecnico')} className='p-mt-3' label='Novo'/>
 		</ManagementTemplate>
 	)

@@ -10,6 +10,7 @@ import { ContainerWithTemplate } from '~/pages/templates'
 import { api, getToastInstance } from '~/services'
 import { paginatorTemplate } from '~/common/paginatorTemplate'
 import { getApiResponseErrors } from '~/utils'
+import DTResponsive from '~/common/components/DTResponsive'
 
 function Painel() {
 	// Estados
@@ -106,23 +107,25 @@ function Painel() {
 					<InputText value={motivoVisita} placeholder='Motivo da Visita' onChange={e => setMotivoVisita(e.target.value)}/>
 					<Calendar value={dataVisita} mask='99/99/9999' placeholder='Selecione o Dia' onChange={e => setDataVisita(e.value)}/>
 				</InputWrapper>
-				<DataTable
-					rows={7}
-					paginator
-					value={visitas}
-					rowsPerPageOptions={[7,15,30]}
-					className='p-datatable-striped'
-					emptyMessage='Nenhum item encontrado'
-					paginatorTemplate={paginatorTemplate}
-				>
-					<Column field="nome_cooperado" header="Cooperado"/>
-					<Column field="nome_propriedade" header="Propriedade"  />
-					<Column field="nome_tecnico" header="Técnico"/>            
-					<Column field="dia_visita" header="Data"/>            
-					<Column field="horario_estimado_visita" header="Hora"/>           
-					<Column field="motivo_visita" header="Motivo da Visita"/>
-					<Column field="status" header="Status"/>            
-				</DataTable>
+				<DTResponsive>
+					<DataTable
+						rows={7}
+						paginator
+						value={visitas}
+						rowsPerPageOptions={[7,15,30]}
+						className='p-datatable-striped'
+						emptyMessage='Nenhum item encontrado'
+						paginatorTemplate={paginatorTemplate}
+					>
+						<Column field="nome_cooperado" header="Cooperado"/>
+						<Column field="nome_propriedade" header="Propriedade"  />
+						<Column field="nome_tecnico" header="Técnico"/>            
+						<Column field="dia_visita" header="Data"/>            
+						<Column field="horario_estimado_visita" header="Hora"/>           
+						<Column field="motivo_visita" header="Motivo da Visita"/>
+						<Column field="status" header="Status"/>            
+					</DataTable>
+				</DTResponsive>
 			</Block>
 		</ContainerWithTemplate>
 	)

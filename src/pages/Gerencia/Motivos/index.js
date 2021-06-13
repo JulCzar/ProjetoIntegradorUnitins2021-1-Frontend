@@ -8,6 +8,7 @@ import { api, getToastInstance } from '~/services'
 import Modal from './components/Modal'
 import { PageNotFound } from '~/pages'
 import { store } from '~/store'
+import DTResponsive from '~/common/components/DTResponsive'
 
 function MotivoVisita() {
 	const toastRef = React.useRef(null)
@@ -125,19 +126,21 @@ function MotivoVisita() {
 	return (
 		<ManagementTemplate loading={loading} title='Motivos de Visita'>
 			<Toast ref={toastRef}/>
-			<DataTable emptyMessage='Nenhum item encontrado' value={motivos} paginator rows={7} rowsPerPageOptions={[7,15,30]} paginatorTemplate={paginatorTemplate}>
-				<Column field="nome" header="Name"/>
-				<Column
-					bodyClassName='p-d-flex p-jc-around'
-					headerStyle={{textAlign: 'center'}}
-					header="Ações"
-					body={rowData => (
-					<React.Fragment>
-						<a onClick={() => handleEdit(rowData)}>Editar</a>
-						<a onClick={(...rest) => confirmDelete(rowData, ...rest)}>Excluir</a>
-					</React.Fragment>
-					)}/>
-			</DataTable>
+			<DTResponsive>
+				<DataTable emptyMessage='Nenhum item encontrado' value={motivos} paginator rows={7} rowsPerPageOptions={[7,15,30]} paginatorTemplate={paginatorTemplate}>
+					<Column field="nome" header="Name"/>
+					<Column
+						bodyClassName='p-d-flex p-jc-around'
+						headerStyle={{textAlign: 'center'}}
+						header="Ações"
+						body={rowData => (
+						<React.Fragment>
+							<a onClick={() => handleEdit(rowData)}>Editar</a>
+							<a onClick={(...rest) => confirmDelete(rowData, ...rest)}>Excluir</a>
+						</React.Fragment>
+						)}/>
+				</DataTable>
+			</DTResponsive>
 			<Button className='p-mt-3' onClick={() => setModalVisibility(true)} label='Criar Novo'/>
 
 			{/* Modal de Cadastro de Motivo */}

@@ -9,6 +9,7 @@ import { api, getToastInstance } from '~/services'
 import { getApiResponseErrors } from '~/utils'
 import { PageNotFound } from '~/pages'
 import { store } from '~/store'
+import DTResponsive from '~/common/components/DTResponsive'
 
 function Visita() {
 	const [visitas, setVisitas] = React.useState([])
@@ -53,25 +54,27 @@ function Visita() {
 	return (
 		<ManagementTemplate title='Histórico de Visitas' loading={loading}>
 			<Toast ref={toastRef}/>
-			<DataTable
-				rows={7}
-				paginator
-				value={visitas}
-				rowsPerPageOptions={[7,15,30]}
-				className="p-datatable-striped"
-				emptyMessage='Nenhum item encontrado'
-				paginatorTemplate={paginatorTemplate}
-			>
-				<Column field="dia_visita" header="Data da Visita"></Column>
-				<Column field="nome_cooperado" header="Cooperado"/>
-				<Column field="nome_tecnico" header="Técnico"/>
-				<Column
-					header="Ações"
-					bodyStyle={{textAlign: 'center'}}
-					headerStyle={{textAlign: 'center'}}
-					body={rowData => <Link to={`/historico/visita/${rowData.id}`}>detalhes</Link>}
-				/>
-			</DataTable>
+			<DTResponsive>
+				<DataTable
+					rows={7}
+					paginator
+					value={visitas}
+					rowsPerPageOptions={[7,15,30]}
+					className="p-datatable-striped"
+					emptyMessage='Nenhum item encontrado'
+					paginatorTemplate={paginatorTemplate}
+				>
+					<Column field="dia_visita" header="Data da Visita"></Column>
+					<Column field="nome_cooperado" header="Cooperado"/>
+					<Column field="nome_tecnico" header="Técnico"/>
+					<Column
+						header="Ações"
+						bodyStyle={{textAlign: 'center'}}
+						headerStyle={{textAlign: 'center'}}
+						body={rowData => <Link to={`/historico/visita/${rowData.id}`}>detalhes</Link>}
+					/>
+				</DataTable>
+			</DTResponsive>
 		</ManagementTemplate>
 	)
 }

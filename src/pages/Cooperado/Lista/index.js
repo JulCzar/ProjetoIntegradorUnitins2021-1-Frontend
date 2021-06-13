@@ -8,6 +8,7 @@ import { getStringNormalized } from '~/utils'
 import { paginatorTemplate } from '~/common/paginatorTemplate'
 import { PageNotFound } from '~/pages'
 import { store } from '~/store'
+import DTResponsive from '~/common/components/DTResponsive'
 
 function Busca() {
 	const [filteredCooperados, setFilteredCooperados] = React.useState([])
@@ -74,22 +75,24 @@ function Busca() {
 				placeholder='Pesquisar por nome ou cpf'
 				onChange={e => setQuery(e.target.value)}
 			/>
-			<DataTable
-				rows={7}
-				paginator
-				value={filteredCooperados}
-				rowsPerPageOptions={[7,15,30]}
-				className="p-datatable-striped"
-				emptyMessage='Nenhum item encontrado'
-				paginatorTemplate={paginatorTemplate}
-			>
-				<Column field="nome_cooperado" header="Nome"/>
-				<Column field="cpf_cooperado" header="CPF"/>
-				<Column header={getCenteredText('Status')} body={StatusBody}/>
-				<Column bodyClassName='p-d-flex p-jc-around' headerClassName='p-d-flex p-jc-center' header='Ações' body={rowData => (
-					<Link to={`/cooperados/${rowData.id}`}>Detalhes</Link>
-				)}/>
-			</DataTable>
+			<DTResponsive>
+				<DataTable
+					rows={7}
+					paginator
+					value={filteredCooperados}
+					rowsPerPageOptions={[7,15,30]}
+					className="p-datatable-striped"
+					emptyMessage='Nenhum item encontrado'
+					paginatorTemplate={paginatorTemplate}
+				>
+					<Column field="nome_cooperado" header="Nome"/>
+					<Column field="cpf_cooperado" header="CPF"/>
+					<Column header={getCenteredText('Status')} body={StatusBody}/>
+					<Column bodyClassName='p-d-flex p-jc-around' headerClassName='p-d-flex p-jc-center' header='Ações' body={rowData => (
+						<Link to={`/cooperados/${rowData.id}`}>Detalhes</Link>
+					)}/>
+				</DataTable>
+			</DTResponsive>
 			{permissions.includes(2) && <Button onClick={() => history.push('/cadastrar/cooperado')} className='p-mt-3' label='Novo'/>}
 		</ManagementTemplate>
 	)
