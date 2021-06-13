@@ -64,7 +64,7 @@ function ContainerTemplate({
 		<Container>
 			<Toast ref={toastRef}/>
 			{loading && <Loading/>}
-			<Header>
+			<Header className='hide-on-print'>
 				<ContainerLimiter className='p-d-flex p-mx-auto p-jc-between p-ai-center'>
 					<img draggable={false} src={logo} alt='Logo do sistema SIMOV' height='50'/>
 						<HeaderMenu>
@@ -99,7 +99,7 @@ function ContainerTemplate({
 					{children}
 				</ContainerLimiter>
 			</Content>
-			<Footer>
+			<Footer className='hide-on-print'>
 				<ContainerLimiter className='p-mx-auto p-d-flex p-ai-center p-jc-between'>
 					<p>SIMOV Coapa - Sistemas de Gerenciamento de Visitas Coapa 2021</p>
 					<a href='/about'>Sobre o Simov</a>

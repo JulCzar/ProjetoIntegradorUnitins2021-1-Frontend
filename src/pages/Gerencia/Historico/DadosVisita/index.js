@@ -19,6 +19,7 @@ function DadosVisita() {
 	const [permissions, setPermissions] = React.useState([])
 
 	const toastRef = React.useRef(null)
+	const formRef = React.useRef(null)
 	const toast = getToastInstance(toastRef)
 	
 	const { id } = useParams()
@@ -58,12 +59,16 @@ function DadosVisita() {
 		setPermissions(permissions ?? [])
 	}
 
+	function printRegistry() {
+		print(formRef.current)
+	}
+
 	if (!permissions.includes(1)) return <PageNotFound/>
 
 	return (
 		<ManagementTemplate title='Detalhes da Visita' loading={loading}>
 			<Toast ref={toastRef}/>
-			<form>
+			<form ref={formRef}>
 				<Controller
 					name='cooperado'
 					control={control}
@@ -154,7 +159,7 @@ function DadosVisita() {
 						</InputContainer>
 					)}
 				/>
-				<Button type='button' label='Imprimir'/>
+				<Button className='hide-on-print' type='button' onClick={printRegistry} label='Imprimir'/>
 			</form>
 		</ManagementTemplate>
 	)

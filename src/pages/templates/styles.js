@@ -53,6 +53,10 @@ export const HeaderMenu = styled('div')`
 			display: unset;
 		}
 	}
+
+	@media print {
+		display: none;
+	}
 `
 
 export const ContainerLimiter = styled('div')`

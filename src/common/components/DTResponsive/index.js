@@ -9,8 +9,14 @@ const Landscape = styled('div')`
 			display:none;
 		}
 	}
+	@media print {
+		display: block;
+	}
 `
 const Portrait = styled('div')`
+	@media print {
+		display: none;
+	}
 	@media (min-width: 599px) {
 		display: none;
 	}

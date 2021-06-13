@@ -13,4 +13,8 @@ export const PanelMenuContainer = styled('div')`
 	.p-panelmenu-panel {
 		box-shadow: none;
 	}
+
+	@media print {
+		display: none
+	}
 `
