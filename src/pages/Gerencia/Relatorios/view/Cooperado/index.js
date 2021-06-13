@@ -1,7 +1,7 @@
 import { useHistory, useLocation } from 'react-router'
 import React from 'react'
 
-import { ChartContainer, DetailsContainer, DetailsTitle, DetailsWrapper, ReportTitle, TableTitle } from './styles'
+import { Break, ChartContainer, DetailsContainer, DetailsTitle, DetailsWrapper, ReportTitle, TableTitle } from '../styles'
 import { Block, Container, Content } from '~/common/styles'
 import { Chart, Column, DataTable } from '~/primereact'
 import { lineOptions, pieOptions } from '../data'
@@ -71,16 +71,17 @@ const Relatorio = () => {
 			<Content className='p-grid p-d-flex p-jc-center'>
 				<Block className="p-grid p-col-12 p-mb-3">
 					<ChartContainer className='p-grid p-col-6 p-p-3'>
-						<TableTitle className='p-col-12'>Visitas por período</TableTitle>
+						<TableTitle>Visitas por período</TableTitle>
 						<Chart className='p-col-12' type='line' data={state?.lineChartData} options={lineOptions} />
 					</ChartContainer>
 					<ChartContainer className='p-grid p-col-6 p-p-3'>
-						<TableTitle className='p-col-12'>Visitas por propriedade</TableTitle>
+						<TableTitle>Visitas por propriedade</TableTitle>
 						<Chart className='p-col-12' type='pie' data={state?.pizzaChartData} options={pieOptions} />
 					</ChartContainer>
 				</Block>
+				<Break/>
 				<Block className='p-mb-3 p-p-3'>
-					<TableTitle className='p-col-12'>Estatísticas das Propriedades</TableTitle>
+					<TableTitle>Estatísticas das Propriedades</TableTitle>
 					<DataTable emptyMessage='Nenhum item encontrado' value={state?.tecnicoTableData} className='p-rol-12' rows={5}>
 						<Column field='propriedade' header='Propriedade'/>
 						<Column field='tecnico' header='Técnico'/>
@@ -90,7 +91,7 @@ const Relatorio = () => {
 					</DataTable>
 				</Block>
 				<Block className='p-mb-3 p-p-3'>
-					<TableTitle className='p-col-12'>Visitas por Tipo</TableTitle>
+					<TableTitle>Visitas por Tipo</TableTitle>
 					<DataTable emptyMessage='Nenhum item encontrado' value={state?.motivoTableData} className='p-rol-12' rows={5}>
 						<Column field='motivo' header='Motivo'/>
 						<Column field='completed' header='Concluídas'/>

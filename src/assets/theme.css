@@ -65,6 +65,9 @@
 	--fc-button-active-bg-color: var(var(--primary-color))
 }
 @media print {
+	* {
+		break-inside: avoid !important;
+	}
 	.page-break { page-break-before: always; }
 }
 .fc-dayGridWeek-button {
