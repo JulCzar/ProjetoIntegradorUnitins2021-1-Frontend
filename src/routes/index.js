@@ -40,7 +40,7 @@ const Routes = function ({ logout }) {
 
 				{/* Senha */}
 				<Route path='/senha/recuperar' component={ROUTES.RecuperarSenha}/>
-				<Route path='/senha/alterar' component={ROUTES.AlterarSenha}/>
+				<Route path='/senha/alterar/:token' component={ROUTES.AlterarSenha}/>
 
 				{/* Cadastros */}
 				<Route path='/cadastrar/tecnico' component={ROUTES.CadastroTecn}/>

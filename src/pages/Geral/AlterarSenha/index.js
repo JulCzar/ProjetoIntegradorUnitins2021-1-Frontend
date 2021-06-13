@@ -1,12 +1,14 @@
-import React from 'react'
-import { CardHeader, InputContainer, passwordFooter, passwordHeader } from '~/common/components'
-import { Card, Container, Content } from '~/common/styles'
-import { Button, Password, Toast } from '~/primereact'
-import styled from 'styled-components'
-import { getInvalidClass, verifyPassword } from '~/utils'
+import { useHistory, useParams } from 'react-router-dom'
 import { Controller, useForm } from 'react-hook-form'
-import { getToastInstance } from '~/services'
+import styled from 'styled-components'
+import React from 'react'
+
+import { CardHeader, InputContainer, passwordFooter, passwordHeader } from '~/common/components'
+import { getApiResponseErrors, getInvalidClass, verifyPassword } from '~/utils'
+import { Button, InputText, Password, Toast } from '~/primereact'
+import { Card, Container, Content } from '~/common/styles'
 import * as validate from '~/config/validations'
+import { getToastInstance } from '~/services'
 
 const Alert = styled('div')`
 	font-size: .75rem;
@@ -14,30 +16,60 @@ const Alert = styled('div')`
 `
 
 function AlterarSenha() {
-	const { errors, control, handleSubmit, reset } = useForm()
+	const { errors, control, handleSubmit } = useForm()
+	const [loading, setLoading] = React.useState(false)
+	const { token } = useParams()
+	const history = useHistory()
 
 	const toastRef = React.useRef(null)
 	const toast = getToastInstance(toastRef)
 
-	const request = form => {
-		const { senha, passwordConfirm } = form
+	async function request(form) {
+		const { email, senha, passwordConfirm } = form
 		const passwordCheck = verifyPassword(senha, passwordConfirm)
 		
 		if (!passwordCheck.isValid) return toast.showInfos(passwordCheck.errors)
 		
-		// eslint-disable-next-line no-console
-		toast.showSuccess('Sua Senha foi redefinida com sucesso!')
-		reset()
+		try {
+			setLoading(true)
+			const params = { senha, token, email }
+			const config = { params }
+
+			await api.post('/alterar', config)
+
+			toast.showSuccess('Sua senha foi alterada!')
+			toast.showInfo('Redirecionando para a tela inicial...')
+			setTimeout(() => history.push('/'), 1000)
+		} catch ({ response }) {
+			toast.showErrors(getApiResponseErrors(response))
+		} finally {
+			setLoading(false)
+		}
 	}
 
 	return (
-		<Container className='p-d-flex'>
+		<Container className='p-d-flex' loading={loading}>
 			<Toast ref={toastRef} />
 			<Content className='p-grid p-d-flex p-jc-center p-ai-center'>
 				<Card className='p-fluid' width='450px'>
 					<CardHeader title='Alterar Senha'/>
 					<Alert>Informe uma senha e confirme para que possamos realizar as devidas alterações em nosso sistema.</Alert>
 					<form onSubmit={handleSubmit(request)}>
+					<Controller
+							name='email'
+							defaultValue=''
+							control={control}
+							rules={validate.password}
+							render={({ name, value, onChange }) => (
+							<InputContainer label='Email' name={name} error={errors[name]}>
+								<InputText
+									name={name}
+									value={value}
+									className={getInvalidClass(errors[name])}
+									onChange={evt => onChange(evt.target.value)}
+								/>
+							</InputContainer>
+						)}/>
 						<Controller
 							name='senha'
 							defaultValue=''
