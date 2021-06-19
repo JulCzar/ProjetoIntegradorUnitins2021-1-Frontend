@@ -11,6 +11,12 @@ import { api, getToastInstance } from '~/services'
 import * as validate from '~/config/validations'
 import { confirmDialog } from 'primereact/confirmdialog'
 
+const status = Object.freeze({
+	COMPLETE: 'concluido',
+	CANCELED: 'cancelado',
+	ONGOING: 'aberto'
+})
+
 function DetalhesVisita() {
 	/** @type {[{cultura:string,relatorio:string,imagens:File[]}[], React.Dispatch<React.SetStateAction<{cultura:string,relatorio:string,imagens:File[]}[]>]} */
 	const [talhoes, setTalhoes] = React.useState([])
@@ -90,34 +96,34 @@ function DetalhesVisita() {
 		}
 	}
 
-	async function salvar(form) {
-		const { motivos } = form
+	async function conclude() {
+		console.log('conclude')
+		const { motivos } = data
 
-		const data = new FormData()
-		data.set('motivo_visita', motivos.join(', '))
-		data.set('horaEstimada', visitHour.toJSON())
-		data.set('dia_visita', visitDay.toJSON())
-		data.set('status', 'concluido')
+		const visitData = new FormData()
+		visitData.set('motivo_visita', motivos.join(', '))
+		visitData.set('horaEstimada', visitHour.toJSON())
+		visitData.set('dia_visita', visitDay.toJSON())
+		visitData.set('status', status.COMPLETE) 
 
 		for (const [i, talhao] of Object.entries(talhoes)) {
-			const item = `talhoes[${i}]`
 			const { imagens, relatorio, cultura } = talhao
-			data.set(`${item}[cultura]`, cultura)
-			data.set(`${item}[relatorio]`, relatorio)
+			
+			const item = `talhoes[${i}]`
+			visitData.set(`${item}[cultura]`, cultura)
+			visitData.set(`${item}[relatorio]`, relatorio)
 
 			for (const [j, img] of Object.entries(imagens))
-				data.append(`imagem[${i}][${j}]`, img)
+				visitData.append(`imagem[${i}][${j}]`, img)
 		}
 
 		try {
 			setLoading(true)
 			
-			await api.post(`/visitas/${id}`, data)
+			await api.post(`/visitas/${id}`, visitData)
 
 			loadData()
 			toast.showSuccess('Salvo!')
-
-			setTimeout(history.goBack, 1000)
 		} catch ({ response }) {
 			toast.showErrors(getApiResponseErrors(response))
 		} finally {
@@ -126,7 +132,33 @@ function DetalhesVisita() {
 		}	
 	}
 
+	async function saveChanges(form) {
+		console.log('saveChanges')
+		const { motivos } = form
+
+		const data = new FormData()
+		data.set('motivo_visita', motivos.join(', '))
+		data.set('horaEstimada', visitHour.toJSON())
+		data.set('dia_visita', visitDay.toJSON())
+		
+		try {
+			setLoading(true)
+			
+			await api.post(`/visitas/${id}`, data)
+
+			loadData()
+			toast.showSuccess('Salvo!')
+		} catch ({ response }) {
+			const errors = getApiResponseErrors(response)
+			toast.showErrors(errors)
+		} finally {
+			setLoading(false)
+			setEditing(false)
+		}
+	}
+
 	async function cancelarVisita() {
+		console.log('cancelarVisitas')
 		if (!observacao) return toast.showError('Você precisa Informar um motivo de cancelamento no campo de observações')
 		const { motivos } = data
 
@@ -135,7 +167,7 @@ function DetalhesVisita() {
 		visitData.set('horaEstimada', visitHour.toJSON())
 		visitData.set('dia_visita', visitDay.toJSON())
 		visitData.set('observacao', observacao)
-		visitData.set('status', 'cancelado')
+		visitData.set('status', status.CANCELED)
 
 		try {
 			setLoading(true)
@@ -214,11 +246,11 @@ function DetalhesVisita() {
 			contentClassName='p-mt-5 p-grid'
 			contentContainerClassName='p-d-flex p-ai-start p-flex-wrap p-grid p-col-12'
 		>
-			<div className='p-p-1 p-col-12 p-lg-8'>
+			<Toast ref={toastRef} />
+			<div className='p-p-1 p-col'>
 				<Block className='p-p-3 p-fluid'>
-					<Toast ref={toastRef} />
 					<CardHeader title='Detalhes da Visita'/>
-					<form onSubmit={handleSubmit(salvar)}>
+					<form onSubmit={handleSubmit(saveChanges)}>
 						<InputContainer name='cooperado' label='Cooperado'>
 							<InputText
 								disabled
@@ -322,40 +354,45 @@ function DetalhesVisita() {
 							)}
 						/>
 						<InputWrapper type='button' columns={!editing?3:2} gap='10px'>
-							{data.status === 'aberto' && (
-								!editing? (
-									<React.Fragment>
-										<Button type='button' onClick={confirmCancel} label='Cancelar Visita'/>
-										<Button type='button' onClick={() => setEditing(true)} label='Editar Visita'/>
-										<Button label='Concluir Visita'/>
-									</React.Fragment>
-								):(
-									<React.Fragment>
-										<Button type='button' onClick={cancelEdit} label='Cancelar'/>
-										<Button type='button' onClick={() => setEditing(false)} label='Salvar Alterações'/>
-									</React.Fragment>
-								)
+							{data.status === status.ONGOING && (
+								<React.Fragment>
+									{!editing && (
+										<React.Fragment>
+											<Button type='button' onClick={confirmCancel} label='Cancelar Visita'/>
+											<Button type='button' onClick={() => setEditing(true)} label='Alterar detalhes'/>
+											<Button type='button' onClick={conclude} label='Concluir Visita'/>
+										</React.Fragment>
+									)}
+									{editing && (
+										<React.Fragment>
+											<Button type='button' onClick={cancelEdit} label='Cancelar'/>
+											<Button label='Salvar Alterações'/>
+										</React.Fragment>
+									)}
+								</React.Fragment>
 							)}
 						</InputWrapper>
 					</form>
 				</Block>
 			</div>
 
-			<div className='p-p-1 p-col-12 p-lg-4'>
-				<Block className='p-p-3 p-fluid'>
-					<CardHeader title='Talhões'/>
-					<ListBox
-						options={talhoes}
-						optionLabel='cultura'
-						onChange={evt => confirmEdit(evt)}
-					/>
-					<Button
-						type='button'
-						className='p-my-3'
-						onClick={() => setModalVisibility(true)}
-					>Inserir detalhes de um talhão</Button>
-				</Block>
-			</div>
+			{data.status === status.ONGOING && (
+				<div className='p-p-1 p-col-12 p-lg-4'>
+					<Block className='p-p-3 p-fluid'>
+						<CardHeader title='Talhões'/>
+						<ListBox
+							options={talhoes}
+							optionLabel='cultura'
+							onChange={evt => confirmEdit(evt)}
+						/>
+						<Button
+							type='button'
+							className='p-my-3'
+							onClick={() => setModalVisibility(true)}
+						>Inserir detalhes de um talhão</Button>
+					</Block>
+				</div>
+			)}
 
 			{/* Edit Talhao Dialog */}
 			<Dialog

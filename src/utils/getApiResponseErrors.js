@@ -1,8 +1,8 @@
 /** @return {string[]} */
-function getApiResponseErrors(thrownException) {
+function getApiResponseErrors(thrownException, defaultMessage = 'Houve um erro ao processar a requisição') {
 	const apiResponse = thrownException?.data?.errors
 	
-	if (!apiResponse) return ['Houve um erro ao processar a requisição']
+	if (!apiResponse) return [defaultMessage]
 
 	return Object.values(apiResponse).flat()
 }

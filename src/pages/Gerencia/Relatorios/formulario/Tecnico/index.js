@@ -41,7 +41,7 @@ function RelatorioTecnico() {
 
 			setTecnicos(data)
 		} catch ({ response }) {
-			toast.sh
+			toast.showErrors(getApiResponseErrors(response))
 		}
 	}
 

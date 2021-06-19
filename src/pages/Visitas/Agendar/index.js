@@ -133,108 +133,115 @@ function AgendarVisita() {
 	}
 
 	return (
-		<ContainerWithTemplate loading={loading} contentClassName='p-mt-5'>
+		<ContainerWithTemplate
+			loading={loading}
+			contentClassName='p-mt-5 p-grid'
+			contentContainerClassName='p-d-flex p-ai-start p-flex-wrap p-grid p-col-12'
+		>
 			<Toast ref={toastRef}/>
-			<Block className='p-p-3 p-fluid'>
-				<CardHeader title='Agendar Visita'/>
-				<form onSubmit={handleSubmit(agendar)}>
-					<Controller
-						name='cooperado'
-						control={control}
-						defaultValue={null}
-						rules={validate.selectCooperado}
-						render={({ name, value, onChange }) => (
-							<InputContainer name={name} label='Cooperado' error={errors[name]}>
-								<AutoComplete
-									dropdown
-									value={value}
-									field='nome_cooperado'
-									suggestions={cooperadosFiltrados}
-									completeMethod={filtrarCooperado}
-									className={getInvalidClass(errors[name])}
-									onSelect={evt => {
-										setCooperado(evt.value)
-										onChange(evt.value)
-									}}
-								/>
-							</InputContainer>
-						)}
-					/>
-					<Controller
-						name='propriedade'
-						control={control}
-						defaultValue={null}
-						rules={validate.selectProperty}
-						render={({ name, value, onChange }) => (
-							<InputContainer name={name} label='Propriedade' error={errors[name]}>
-								<Dropdown
-									value={value}
-									options={propriedades.map(p => ({label: p.nome, value: p}))}
-									onChange={e => onChange(e.value)}
-									className={getInvalidClass(errors[name])}/>
-							</InputContainer>
-						)}/>
-					<InputWrapper columns={2} gap='10px'>
+			<div className='p-p-1 p-col'>
+				<Block className='p-p-3 p-fluid'>
+					<CardHeader title='Agendar Visita'/>
+					<form onSubmit={handleSubmit(agendar)}>
 						<Controller
-							name='data'
+							name='cooperado'
 							control={control}
-							rules={validate.day}
 							defaultValue={null}
+							rules={validate.selectCooperado}
 							render={({ name, value, onChange }) => (
-								<InputContainer label='Data' name='data' error={errors.data}>
-								<Calendar
-									showIcon
-									value={value}
-									mask='99/99/9999'
-									minDate={new Date()}
-									className={getInvalidClass(errors[name])}
-									onChange={e => {
-										setVisitDay(e.value)
-										onChange(e.value)
-									}}
-								/>
-							</InputContainer>
-						)}/>
-						<Controller
-							name='horaEstimada'
-							control={control}
-							rules={validate.hour}
-							defaultValue={null}
-							render={({ name, value, onChange }) => (
-								<InputContainer label='Hora Estimada' name={name} error={errors[name]}>
-									<Calendar
-										showIcon
-										timeOnly
-										mask='99:99'
+								<InputContainer name={name} label='Cooperado' error={errors[name]}>
+									<AutoComplete
+										dropdown
 										value={value}
-										onChange={e => {
-											setVisitHour(e.value)
-											onChange(e.value)
-										}}
+										field='nome_cooperado'
+										suggestions={cooperadosFiltrados}
+										completeMethod={filtrarCooperado}
 										className={getInvalidClass(errors[name])}
+										onSelect={evt => {
+											setCooperado(evt.value)
+											onChange(evt.value)
+										}}
 									/>
 								</InputContainer>
-						)}/>
-					</InputWrapper>
-					<Controller
-						name='motivos'
-						control={control}
-						defaultValue={null}
-						rules={validate.selectReason}
-						render={({ name, value, onChange }) => (
-							<InputContainer label='Motivo da Visita' name={name} error={errors[name]}>
-								<MultiSelect
-									filter
-									value={value}
-									onChange={e => onChange(e.value)}
-									className={getInvalidClass(errors[name])}
-									options={motivos.map(m => ({label: m.nome, value: m}))}
-								/>
-							</InputContainer>
-						)}/>
-					<Button label='Agendar Visita' />
-				</form>
-			</Block>
+							)}
+						/>
+						<Controller
+							name='propriedade'
+							control={control}
+							defaultValue={null}
+							rules={validate.selectProperty}
+							render={({ name, value, onChange }) => (
+								<InputContainer name={name} label='Propriedade' error={errors[name]}>
+									<Dropdown
+										value={value}
+										placeholder={!cooperado?'Selecione um cooperado para listar as propriedades':'Selecione uma propriedade'}
+										options={propriedades.map(p => ({label: p.nome, value: p}))}
+										onChange={e => onChange(e.value)}
+										className={getInvalidClass(errors[name])}/>
+								</InputContainer>
+							)}/>
+						<InputWrapper columns={2} gap='10px'>
+							<Controller
+								name='data'
+								control={control}
+								rules={validate.day}
+								defaultValue={null}
+								render={({ name, value, onChange }) => (
+									<InputContainer label='Data' name='data' error={errors.data}>
+									<Calendar
+										showIcon
+										value={value}
+										mask='99/99/9999'
+										minDate={new Date()}
+										className={getInvalidClass(errors[name])}
+										onChange={e => {
+											setVisitDay(e.value)
+											onChange(e.value)
+										}}
+									/>
+								</InputContainer>
+							)}/>
+							<Controller
+								name='horaEstimada'
+								control={control}
+								rules={validate.hour}
+								defaultValue={null}
+								render={({ name, value, onChange }) => (
+									<InputContainer label='Hora Estimada' name={name} error={errors[name]}>
+										<Calendar
+											showIcon
+											timeOnly
+											mask='99:99'
+											value={value}
+											onChange={e => {
+												setVisitHour(e.value)
+												onChange(e.value)
+											}}
+											className={getInvalidClass(errors[name])}
+										/>
+									</InputContainer>
+							)}/>
+						</InputWrapper>
+						<Controller
+							name='motivos'
+							control={control}
+							defaultValue={null}
+							rules={validate.selectReason}
+							render={({ name, value, onChange }) => (
+								<InputContainer label='Motivo da Visita' name={name} error={errors[name]}>
+									<MultiSelect
+										filter
+										value={value}
+										onChange={e => onChange(e.value)}
+										className={getInvalidClass(errors[name])}
+										options={motivos.map(m => ({label: m.nome, value: m}))}
+									/>
+								</InputContainer>
+							)}/>
+						<Button label='Agendar Visita' />
+					</form>
+				</Block>
+			</div>
 		</ContainerWithTemplate>
 	)
 }
