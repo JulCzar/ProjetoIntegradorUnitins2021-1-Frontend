@@ -2,7 +2,7 @@ import { useHistory, useLocation } from 'react-router'
 import React from 'react'
 
 import { Break, ChartContainer, DetailsContainer, DetailsTitle, DetailsWrapper, FABIcon, ReportTitle, TableTitle } from '../styles'
-import { Block, Container, Content } from '~/common/styles'
+import { Block, ChartWrapper, Container, Content } from '~/common/styles'
 import { Chart, Column, DataTable } from '~/primereact'
 import PageNotFound from '~/pages/Geral/PageNotFound'
 import { lineOptions, pieOptions } from '../data'
@@ -69,17 +69,17 @@ const Relatorio = () => {
 			<ReportTitle>
 				Relatório - {start?formatDate(start, DATE_PATTERN):''} à {end?formatDate(end, DATE_PATTERN):''}
 			</ReportTitle>
-			<Content className='p-grid p-d-flex p-jc-center'>
-				<Block className="p-grid p-col-12 p-mb-3">
-					<ChartContainer className='p-grid p-col-6 p-p-3'>
+			<Content className='p-grid p-d-flex p-flex-wrap p-jc-center'>
+				<ChartWrapper className="p-grid p-col-12 p-mb-3">
+					<ChartContainer className='p-grid p-col p-p-3'>
 						<TableTitle>Visitas por período</TableTitle>
 						<Chart className='p-col-12' type='line' data={state?.lineChartData} options={lineOptions} />
 					</ChartContainer>
-					<ChartContainer className='p-grid p-col-6 p-p-3'>
+					<ChartContainer className='p-grid p-col p-p-3'>
 						<TableTitle>Visitas por propriedade</TableTitle>
 						<Chart className='p-col-12' type='pie' data={state?.pizzaChartData} options={pieOptions} />
 					</ChartContainer>
-				</Block>
+				</ChartWrapper>
 				<Break/>
 				<Block className='p-mb-3 p-p-3'>
 					<TableTitle>Estatísticas das Propriedades</TableTitle>
@@ -92,7 +92,7 @@ const Relatorio = () => {
 						<Column field='total' header='Total'/>
 					</DataTable>
 				</Block>
-				<Block className="p-mb-3 p-p-3 page-break">
+				<Block className="p-mb-3 p-p-3">
 					<TableTitle>Visitas por Tipo</TableTitle>
 					<DataTable emptyMessage='Nenhum item encontrado' value={state?.motivoTableData} className='p-rol-12' rows={5}>
 						<Column field='motivo' header='Motivo'/>

@@ -63,7 +63,7 @@ function ManagementTemplate({
 		>
 			<FullWidth className='p-mt-5'>
 				<Block className='p-grid'>
-					<PanelMenuContainer className='p-col-4 p-md-3'>
+					<PanelMenuContainer className='hide-on-print p-col-4 p-md-3'>
 						<PanelMenu
 							model={menuItems.map(getNavigableMenu)}
 							onChange={handleTabChange}/>

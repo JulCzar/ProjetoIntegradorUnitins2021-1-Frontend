@@ -11,7 +11,9 @@ export const ReportTitle = styled(Title)`
 
 export const Break = styled('div') `
 	@media print {
-		page-break-before: always !important;
+		page-break-before: always;
+		break-inside: avoid;
+		break-before: always; 
 	}
 `
 
@@ -48,7 +50,9 @@ export const FABIcon = styled('div')`
 	}
 `
 
-export const ChartContainer = styled('div')``
+export const ChartContainer = styled('div')`
+	height: 100%;
+`
 
 export const DetailsContainer = styled('div')``
 

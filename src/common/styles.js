@@ -43,3 +43,15 @@ export const Block = styled('div')`
 		flex-direction: column;
 	}
 `
+
+export const ChartWrapper = styled(Block)`
+	@media (max-width: 800px) {
+		flex-direction: column;
+	}
+
+	@media (orientation: Portrait) {
+		@media print {
+			flex-direction: column;
+		}
+	}
+`

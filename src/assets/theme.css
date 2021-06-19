@@ -65,14 +65,11 @@
 	--fc-button-active-bg-color: var(var(--primary-color))
 }
 @media print {
-	* {
-		break-inside: avoid !important;
-	}
 	.p-col-1, .p-col-2, .p-col-3, .p-col-4, .p-col-5, .p-col-6, .p-col-7, .p-col-8, .p-col-9,.p-col-10, .p-col-11, .p-col-12 {
 		width: 100%;
 	}
 	.hide-on-print { display: none }
-	.page-break { page-break-before: always; }
+	.page-break { page-break-before: always; break-inside: avoid; break-before: always; }
 }
 .fc-dayGridWeek-button {
 	background: var(--surface-0) !important;
