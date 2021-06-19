@@ -55,6 +55,10 @@ function RelatorioPropriedade() {
 	}
 
 	async function loadPropriedades() {
+		// O cooperado nunca será zero, então evita que a pesquisa lance um erro
+		// por pesquisar propriedades do cooperado com id nulo
+		if (!cooperado) return
+
 		try {
 			setLoading(true)
 			const { data } = await api.get(`/propriedades/${cooperado}`)
