@@ -10,6 +10,8 @@ import { Block, InputWrapper } from '~/common/styles'
 import { api, getToastInstance } from '~/services'
 import * as validate from '~/config/validations'
 import { confirmDialog } from 'primereact/confirmdialog'
+import { ImagemCultura } from './styles'
+import { RAW_URL } from '~/config/HTTP'
 
 const status = Object.freeze({
 	COMPLETE: 'concluido',
@@ -26,9 +28,8 @@ function DetalhesVisita() {
 	
 	const [visitDay, setVisitDay] = React.useState(null)
 	const [visitHour, setVisitHour] = React.useState(null)
-	const [data, setData] = React.useState({observacao: ''})
+	const [data, setData] = React.useState(null)
 	const [editingTalhao, setEditingTalhao] = React.useState(null)
-	const [observacao, setObservacao] = React.useState(null)
 	
 	const { control, handleSubmit, errors, setValue, reset } = useForm()
 	const talhaoEditForm = useForm()
@@ -65,22 +66,21 @@ function DetalhesVisita() {
 		try {
 			const { data: resp } = await api.get(`/visita/${id}`)
 			const { dia_visita: date, horario_estimado_visita: time } = resp
-
-			resp.motivos = resp.motivo_visita.split(',').map(i => i.trim())
-			resp.data = new Date(`${date}T${time}.000Z`)
 			
-			resp.horaEstimada = resp.data
-			setVisitDay(resp.data)
-			setVisitHour(resp.data)
-			setMotivosSelecionados(resp.motivos)
-			setObservacao(resp.observacao)
-			setData(resp)
-
-			reset()
-
-			Object.entries(resp).forEach(([key, value]) => {
-				if (value) setValue(key, value)
-			})
+			const modifiedData = {
+				...resp,
+				motivos: resp.motivo_visita.split(',').map(i => i.trim()),
+				data: new Date(`${date}T${time}.000Z`),
+				talhoes: resp.talhoes.map(t => ({...t, foto_talhao: t.foto_talhao.map(i => ({
+					...i,
+					imagem: `${RAW_URL}/storage/${i.imagem}`
+				}))}))
+			}
+			
+			setVisitDay(modifiedData.data)
+			setVisitHour(modifiedData.data)
+			setMotivosSelecionados(modifiedData.motivos)
+			setData(modifiedData)
 		} catch ({ response }) {
 			toast.showErrors(getApiResponseErrors(response))
 		} 
@@ -97,11 +97,8 @@ function DetalhesVisita() {
 	}
 
 	async function conclude() {
-		console.log('conclude')
-		const { motivos } = data
-
 		const visitData = new FormData()
-		visitData.set('motivo_visita', motivos.join(', '))
+		visitData.set('motivo_visita', data.motivos.join(', '))
 		visitData.set('horaEstimada', visitHour.toJSON())
 		visitData.set('dia_visita', visitDay.toJSON())
 		visitData.set('status', status.COMPLETE) 
@@ -133,20 +130,20 @@ function DetalhesVisita() {
 	}
 
 	async function saveChanges(form) {
-		console.log('saveChanges')
 		const { motivos } = form
 
 		const data = new FormData()
 		data.set('motivo_visita', motivos.join(', '))
 		data.set('horaEstimada', visitHour.toJSON())
 		data.set('dia_visita', visitDay.toJSON())
+		data.set('observacao', form.observacao)
 		
 		try {
 			setLoading(true)
 			
 			await api.post(`/visitas/${id}`, data)
 
-			loadData()
+			carregarDadosVisita()
 			toast.showSuccess('Salvo!')
 		} catch ({ response }) {
 			const errors = getApiResponseErrors(response)
@@ -158,19 +155,17 @@ function DetalhesVisita() {
 	}
 
 	async function cancelarVisita() {
-		console.log('cancelarVisitas')
-		if (!observacao) return toast.showError('Você precisa Informar um motivo de cancelamento no campo de observações')
+		if (!data.observacao) return toast.showError('Você precisa Informar um motivo de cancelamento no campo de observações')
 		const { motivos } = data
 
 		const visitData = new FormData()
-		visitData.set('motivo_visita', motivos.join(', '))
-		visitData.set('horaEstimada', visitHour.toJSON())
-		visitData.set('dia_visita', visitDay.toJSON())
-		visitData.set('observacao', observacao)
 		visitData.set('status', status.CANCELED)
 
 		try {
 			setLoading(true)
+			visitData.set('motivo_visita', motivos.join(', '))
+			visitData.set('horaEstimada', visitHour.toJSON())
+			visitData.set('dia_visita', visitDay.toJSON())
 			
 			await api.post(`/visitas/${id}`, visitData)
 
@@ -250,133 +245,151 @@ function DetalhesVisita() {
 			<div className='p-p-1 p-col'>
 				<Block className='p-p-3 p-fluid'>
 					<CardHeader title='Detalhes da Visita'/>
-					<form onSubmit={handleSubmit(saveChanges)}>
-						<InputContainer name='cooperado' label='Cooperado'>
-							<InputText
-								disabled
-								value={data?.cooperado || ''}/>
-						</InputContainer>
-						<InputContainer name='propriedade' label='Propriedade'>
-							<InputText
-								disabled
-								value={data?.propriedade||''}
-							/>
-						</InputContainer>
-						<InputWrapper columns={2} gap='10px'>
+					{!!data && (
+						<form onSubmit={handleSubmit(saveChanges)}>
+							<InputContainer name='cooperado' label='Cooperado'>
+								<InputText
+									disabled
+									value={data.cooperado ?? ''}/>
+							</InputContainer>
+							<InputContainer name='propriedade' label='Propriedade'>
+								<InputText
+									disabled
+									value={data.propriedade ?? ''}
+								/>
+							</InputContainer>
+							<InputWrapper columns={2} gap='10px'>
+								<Controller
+									name='data'
+									control={control}
+									defaultValue={new Date(data.data)}
+									render={({ name, value, onChange }) => (
+										<InputContainer name={name} label='Data'>
+											<Calendar
+												disabled={!editing}
+												showIcon={editing}
+												id={name}
+												name={name}
+												value={value}
+												mask='99/99/9999'
+												minDate={new Date()}
+												onChange={evt => {
+													setVisitDay(evt.value)
+													onChange(evt.value)
+												}}
+											/>
+										</InputContainer>
+									)}
+								/>
+								<Controller
+									name='horaEstimada'
+									control={control}
+									defaultValue={new Date(data.data)}
+									render={({ name, value, onChange }) => (
+										<InputContainer name={name} label='Hora Estimada'>
+											<Calendar
+												timeOnly
+												id={name}
+												name={name}
+												mask='99:99'
+												value={value}
+												showIcon={editing}
+												onChange={evt => {
+													setVisitHour(evt.value)
+													onChange(evt.value)
+												}}
+												disabled={!editing}
+											/>
+										</InputContainer>
+									)}
+								/>
+							</InputWrapper>
 							<Controller
-								name='data'
+								name='motivos'
 								control={control}
-								defaultValue={data?new Date(data.data):null}
-								render={({ name, value, onChange }) => (
-									<InputContainer name={name} label='Data'>
-										<Calendar
-											disabled={!editing}
-											showIcon={editing}
+								rules={validate.selectReason}
+								defaultValue={data.motivos}
+								render={({ name, onChange }) => (
+									<InputContainer name={name} label='Motivo da Visita' error={errors[name]}>
+										<MultiSelect
+											filter
 											id={name}
 											name={name}
-											value={value}
-											mask='99/99/9999'
-											minDate={new Date()}
+											value={motivosSelecionados}
+											options={motivos}
+											optionValue='nome'
+											optionLabel='nome'
+											disabled={!editing}
 											onChange={evt => {
-												setVisitDay(evt.value)
 												onChange(evt.value)
+												setMotivosSelecionados(evt.value)
 											}}
+											className={getInvalidClass(errors[name])}
 										/>
 									</InputContainer>
 								)}
 							/>
 							<Controller
-								name='horaEstimada'
+								name='observacao'
 								control={control}
-								defaultValue={data?new Date(data.data):null}
+								defaultValue={data.observacao}
 								render={({ name, value, onChange }) => (
-									<InputContainer name={name} label='Hora Estimada'>
-										<Calendar
-											timeOnly
+									<InputContainer name={name} label='Observações'>
+										<InputTextarea
 											id={name}
+											autoResize
 											name={name}
-											mask='99:99'
-											value={value}
-											showIcon={editing}
-											onChange={evt => {
-												setVisitHour(evt.value)
-												onChange(evt.value)
-											}}
+											value={value ?? ''}
 											disabled={!editing}
+											onChange={evt => onChange(evt.target.value)}
 										/>
 									</InputContainer>
 								)}
 							/>
-						</InputWrapper>
-						<Controller
-							name='motivos'
-							control={control}
-							rules={validate.selectReason}
-							defaultValue={data?data.motivos:[]}
-							render={({ name, onChange }) => (
-								<InputContainer name={name} label='Motivo da Visita' error={errors[name]}>
-									<MultiSelect
-										filter
-										id={name}
-										name={name}
-										value={motivosSelecionados}
-										options={motivos}
-										optionValue='nome'
-										optionLabel='nome'
-										disabled={!editing}
-										onChange={evt => {
-											onChange(evt.value)
-											setMotivosSelecionados(evt.value)
-										}}
-										className={getInvalidClass(errors[name])}
-									/>
-								</InputContainer>
-							)}
-						/>
-						<Controller
-							name='observacao'
-							control={control}
-							defaultValue={data?data.observacao:''}
-							render={({ name, value, onChange }) => (
-								<InputContainer name={name} label='Observações'>
-									<InputTextarea
-										id={name}
-										autoResize
-										name={name}
-										value={value}
-										disabled={!editing}
-										onChange={evt => {
-											onChange(evt.target.value)
-											setObservacao(evt.target.value)
-										}}
-									/>
-								</InputContainer>
-							)}
-						/>
-						<InputWrapper type='button' columns={!editing?3:2} gap='10px'>
-							{data.status === status.ONGOING && (
-								<React.Fragment>
-									{!editing && (
-										<React.Fragment>
-											<Button type='button' onClick={confirmCancel} label='Cancelar Visita'/>
-											<Button type='button' onClick={() => setEditing(true)} label='Alterar detalhes'/>
-											<Button type='button' onClick={conclude} label='Concluir Visita'/>
-										</React.Fragment>
-									)}
-									{editing && (
-										<React.Fragment>
-											<Button type='button' onClick={cancelEdit} label='Cancelar'/>
-											<Button label='Salvar Alterações'/>
-										</React.Fragment>
-									)}
-								</React.Fragment>
-							)}
-						</InputWrapper>
-					</form>
+							<InputWrapper type='button' columns={!editing?3:2} gap='10px'>
+								{data.status === status.ONGOING && (
+									<React.Fragment>
+										{!editing && (
+											<React.Fragment>
+												<Button type='button' onClick={confirmCancel} label='Cancelar Visita'/>
+												<Button type='button' onClick={() => setEditing(true)} label='Alterar detalhes'/>
+												<Button type='button' onClick={conclude} label='Concluir Visita'/>
+											</React.Fragment>
+										)}
+										{editing && (
+											<React.Fragment>
+												<Button type='button' onClick={cancelEdit} label='Cancelar'/>
+												<Button label='Salvar Alterações'/>
+											</React.Fragment>
+										)}
+									</React.Fragment>
+								)}
+							</InputWrapper>
+						</form>)}
 				</Block>
 			</div>
 
-			{data.status === status.ONGOING && (
+			{data?.status !== status.ONGOING && 
+				!!data?.talhoes?.length && (
+					<div className='p-p-1 p-col-12'>
+						<Block className='p-p-3 p-fluid'>
+							<React.Fragment>
+								<h1 className='page-break'>Culturas</h1>
+								{data.talhoes.map(i => (
+									<div key={JSON.stringify(i)}>
+										<h2>{i.cultura}</h2>
+										<div>{i.relatorio}</div>
+										{i.foto_talhao.map(img => (
+											<ImagemCultura key={JSON.stringify(img)} src={img.imagem}/>
+										))}
+									</div>
+								))}
+							</React.Fragment>
+						</Block>
+					</div>
+				)}
+
+			{data?.status === status.ONGOING && (
 				<div className='p-p-1 p-col-12 p-lg-4'>
 					<Block className='p-p-3 p-fluid'>
 						<CardHeader title='Talhões'/>
