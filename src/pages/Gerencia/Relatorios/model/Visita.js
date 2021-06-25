@@ -1,5 +1,5 @@
 export default class Visita {
-	/** @param {Date} diaVisita @param {string[]} motivos @param {string} propriedade @param {string} status @param {string} tecnico @param {string} coopreado*/
+	/** @param {{diaVisita: Date,motivos:string[],propriedade:string,status:string,tecnico:string,cooperado:string}} param1 */
 	constructor({diaVisita, motivos, propriedade, status, tecnico, cooperado}) {
 		this.propriedade = propriedade
 		this.cooperado = cooperado??''

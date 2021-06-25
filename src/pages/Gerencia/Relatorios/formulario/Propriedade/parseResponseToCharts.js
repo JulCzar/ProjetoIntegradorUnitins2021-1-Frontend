@@ -1,5 +1,6 @@
 import { formatDate, getRandomColor } from '~/utils'
 import Visita from '~/pages/Gerencia/Relatorios/model/Visita'
+import { compareAsc } from 'date-fns'
 
 /** @typedef  @param {{visitas: {diaVisita: string,motivos: string, propriedade: string,status: string, cooperado: string}[],tecnico: {associado_em: string, nome: string, sobrenome: string, email: string, phone: string},periodo: {inicio: string, fim: string},}} apiResponse @param {string} viewType */
 function parseResponseToCharts(apiResponse, viewType) {
@@ -111,7 +112,7 @@ function parseResponseToCharts(apiResponse, viewType) {
 
 	const { visitas } = apiResponse
 	
-	const parsedVisitas = visitas.map(v => Visita.parseFromApi(v))
+	const parsedVisitas = visitas.map(v => Visita.parseFromApi(v)).sort((v1, v2) => compareAsc(v1.diaVisita, v2.diaVisita))
 
 	const motivos = [...new Set(parsedVisitas.map(v => v.motivos).flat(Infinity))]
 	const propriedades = [...new Set(parsedVisitas.map(v => v.propriedade))]
