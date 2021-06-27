@@ -1,4 +1,4 @@
-import { Route, HashRouter } from 'react-router-dom'
+import { Route, BrowserRouter, Switch } from 'react-router-dom'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
@@ -31,7 +31,8 @@ const Routes = function ({ logout }) {
 		}
 	}
 	return (
-		<HashRouter>
+		<BrowserRouter>
+			<Switch>
 			{/* Genéricas */}
 			<Route path='/' component={ROUTES.PainelExibicao} exact/>
 			<Route path='/logout' component={ROUTES.Logout}/>
@@ -77,7 +78,8 @@ const Routes = function ({ logout }) {
 
 			{/* Page Not Found, Precisa ser a ultima rota! */}
 			<Route path='*' component={ROUTES.PageNotFound}/>
-		</HashRouter>
+			</Switch>
+		</BrowserRouter>
 	)
 }
 
